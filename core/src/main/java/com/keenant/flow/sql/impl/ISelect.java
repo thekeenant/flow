@@ -17,6 +17,12 @@ public class ISelect implements Select {
     }
 
     @Override
+    public Select cpy() {
+        return new ISelect(table)
+                .where(filter);
+    }
+
+    @Override
     public Select where(Filter filter) {
         this.filter = filter;
         return this;

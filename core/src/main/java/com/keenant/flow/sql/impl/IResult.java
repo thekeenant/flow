@@ -31,7 +31,9 @@ public class IResult implements Result {
 
     @Override
     public EagerCursor safeEagerCursor() {
-        return new SafeEagerCursor(statement, resultSet);
+        SafeEagerCursor cursor = new SafeEagerCursor(statement, resultSet);
+        cursor.populateAndClose();
+        return cursor;
     }
 
     @Override

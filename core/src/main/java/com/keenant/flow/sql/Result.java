@@ -14,6 +14,15 @@ public interface Result extends AutoCloseable {
      */
     EagerCursor eagerCursor();
 
+    /**
+     * Create a cursor to traverse records that were fetched all at once.
+     * This is an alternative to {@link #eagerCursor()}, but it should, in addition,
+     * support databases that do not have eager fetching.
+     *
+     * The cost to this is both in time and memory.
+     *
+     * @return the new cursor
+     */
     EagerCursor safeEagerCursor();
 
     /**

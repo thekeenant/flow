@@ -1,7 +1,13 @@
 package com.keenant.flow.sql.impl;
 
 import com.keenant.flow.sql.Exp;
+import com.keenant.flow.sql.Filter;
+import com.keenant.flow.sql.QueryPart;
+import com.keenant.flow.sql.SQLDialect;
 import com.keenant.flow.sql.impl.exp.*;
+import com.keenant.flow.sql.impl.filter.CompareFilter;
+import com.keenant.flow.sql.impl.filter.CompareFilter.Comparator;
+import com.keenant.flow.sql.impl.filter.NotFilter;
 
 public abstract class AbstractExp implements Exp {
     @Override
@@ -50,7 +56,12 @@ public abstract class AbstractExp implements Exp {
     }
 
     @Override
-    public Exp not() {
-        return null;
+    public Filter eq(Exp other) {
+        return new CompareFilter(this, other, Comparator.EQUALS);
+    }
+
+    @Override
+    public Filter not() {
+        return new NotFilter(this);
     }
 }

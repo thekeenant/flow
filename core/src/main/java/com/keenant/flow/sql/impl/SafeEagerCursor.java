@@ -27,16 +27,7 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
         this.resultSet = resultSet;
     }
 
-    private boolean hasRecord(int record) {
-        populate();
-        return record >= 1 && record <= records.size();
-    }
-
-    private Object[] getCurrentRecord() {
-        return records.get(current - 1);
-    }
-
-    public void populate() {
+    void populateAndClose() {
         if (records == null || labels == null) {
             Map<String, Integer> labels = new HashMap<>();
             List<Object[]> records = new ArrayList<>();
@@ -61,24 +52,30 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
 
             this.records = records;
             this.labels = labels;
+            close();
         }
+    }
+
+    private boolean hasRecord(int record) {
+        return record >= 1 && record <= records.size();
+    }
+
+    private Object[] getCurrentRecord() {
+        return records.get(current - 1);
     }
 
     @Override
     public void moveTo(int record) throws NoSuchElementException {
-        populate();
         current = record;
     }
 
     @Override
     public void moveToFirst() {
-        populate();
         current = 1;
     }
 
     @Override
     public void moveToLast() {
-        populate();
         current = records.size();
     }
 
@@ -123,7 +120,7 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
     @Override
     public boolean moveNext() {
         current++;
-        return true;
+        return hasRecord(current);
     }
 
     @Override

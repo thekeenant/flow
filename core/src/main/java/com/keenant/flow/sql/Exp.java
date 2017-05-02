@@ -6,6 +6,8 @@ package com.keenant.flow.sql;
 public interface Exp {
     QueryPart build(SQLDialect dialect);
 
+    // Functions
+
     Exp distinct();
 
     Exp asc();
@@ -24,5 +26,9 @@ public interface Exp {
 
     Exp lcase();
 
-    Exp not();
+    // Filters
+
+    Filter eq(Exp other);
+
+    Filter not();
 }
