@@ -14,6 +14,8 @@ public interface Result extends AutoCloseable {
      */
     EagerCursor eagerCursor();
 
+    EagerCursor safeEagerCursor();
+
     /**
      * Create a cursor to traverse returned generated fields.
      * @return the new cursor.

@@ -4,7 +4,6 @@ import com.keenant.flow.Datasource;
 import com.keenant.flow.exception.DatasourceException;
 import com.keenant.flow.sql.Query;
 import com.keenant.flow.sql.SQLDatabase;
-import com.keenant.flow.sql.SQLDialect;
 import com.keenant.flow.sql.jdbc.QueryConfig;
 
 import java.sql.*;
@@ -15,11 +14,6 @@ public class ISQLDatabase implements SQLDatabase {
 
     public ISQLDatabase() {
 
-    }
-
-    @Override
-    public SQLDialect getDialect() {
-        return null;
     }
 
     @Override

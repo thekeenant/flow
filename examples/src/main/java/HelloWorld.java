@@ -17,8 +17,11 @@ public class HelloWorld {
         db.open();
 
         ISelect select = new ISelect(new FieldExp("users"));
+        select.where(new CompareFilter(new FieldExp("name"),new ParamExp("Keenan"), Comparator.EQUALS));
 
-        try (Stream<Cursor> cursor = select.fetchLazy(db).stream()) {
+        System.out.println(select.build(SQLDialect.SQLITE));
+
+        try (Stream<Cursor> cursor = select.fetch(db, SQLDialect.MYSQL).stream()) {
             int sum = cursor.mapToInt(record -> record.getInt(1).orElse(0)).sum();
             System.out.println(sum);
         }

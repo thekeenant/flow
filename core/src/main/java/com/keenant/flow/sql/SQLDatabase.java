@@ -10,8 +10,6 @@ import java.util.List;
  * a pool of connections for example.
  */
 public interface SQLDatabase extends Datasource {
-    SQLDialect getDialect();
-
     Query prepareQuery(String sql, List<Object> params, QueryConfig config);
 
     default Query prepareQuery(QueryPart part, QueryConfig config) {

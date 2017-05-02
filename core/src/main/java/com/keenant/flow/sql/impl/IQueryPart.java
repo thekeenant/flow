@@ -27,4 +27,9 @@ public class IQueryPart implements QueryPart {
     public List<Object> getParams() {
         return params;
     }
+
+    @Override
+    public String toString() {
+        return "IQueryPart(sql=" + getSql() + ", params=" + getParams() + ")";
+    }
 }

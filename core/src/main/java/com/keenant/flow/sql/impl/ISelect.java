@@ -45,25 +45,32 @@ public class ISelect implements Select {
         return new IQueryPart(sql.toString(), params);
     }
 
-    private Result execute(SQLDatabase database, QueryConfig config) {
-        return database.prepareQuery(build(database.getDialect()), config).execute();
+    private Result execute(SQLDatabase database, SQLDialect dialect, QueryConfig config) {
+        return database.prepareQuery(build(dialect), config).execute();
     }
 
     @Override
-    public EagerCursor fetch(SQLDatabase database) {
-        QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                .type(QueryType.SCROLL_INSENSITIVE)
-                .build();
-
-        return execute(database, config).eagerCursor();
+    public EagerCursor fetch(SQLDatabase database, SQLDialect dialect) {
+        if (dialect.supportsScrolling()) {
+            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
+                    .type(QueryType.SCROLL_INSENSITIVE)
+                    .build();
+            return execute(database, dialect, config).eagerCursor();
+        }
+        else {
+            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
+                    .type(QueryType.FORWARD_ONLY)
+                    .build();
+            return execute(database, dialect, config).safeEagerCursor();
+        }
     }
 
     @Override
-    public Cursor fetchLazy(SQLDatabase database) {
+    public Cursor fetchLazy(SQLDatabase database, SQLDialect dialect) {
         QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
                 .type(QueryType.FORWARD_ONLY)
                 .build();
 
-        return execute(database, config).lazyCursor();
+        return execute(database, dialect, config).lazyCursor();
     }
 }

@@ -30,6 +30,11 @@ public class IResult implements Result {
     }
 
     @Override
+    public EagerCursor safeEagerCursor() {
+        return new SafeEagerCursor(statement, resultSet);
+    }
+
+    @Override
     public Cursor generatedCursor() throws IllegalStateException {
         if (generated == null)
             throw new IllegalStateException("No generated records/fields");

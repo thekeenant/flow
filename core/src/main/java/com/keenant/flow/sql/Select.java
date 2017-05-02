@@ -5,7 +5,7 @@ public interface Select {
 
     QueryPart build(SQLDialect dialect);
 
-    EagerCursor fetch(SQLDatabase database);
+    EagerCursor fetch(SQLDatabase database, SQLDialect dialect);
 
-    Cursor fetchLazy(SQLDatabase database);
+    Cursor fetchLazy(SQLDatabase database, SQLDialect dialect);
 }
