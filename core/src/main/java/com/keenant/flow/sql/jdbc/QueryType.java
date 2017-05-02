@@ -1,4 +1,4 @@
-package com.keenant.flow.jdbc;
+package com.keenant.flow.sql.jdbc;
 
 import java.sql.ResultSet;
 
