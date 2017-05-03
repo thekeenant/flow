@@ -1,7 +1,7 @@
 package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
-import com.keenant.flow.impl.exp.WildcardExp;
+import com.keenant.flow.impl.exp.ListExp;
 import com.keenant.flow.jdbc.QueryConfig;
 import com.keenant.flow.jdbc.QueryMode;
 import com.keenant.flow.jdbc.QueryType;
@@ -13,7 +13,8 @@ import java.util.List;
 
 public class ISelect implements Select {
     private Exp table;
-    private FieldList fields;
+    private boolean distinct;
+    private ListExp fields;
     private Filter filter;
     private Exp order;
 
@@ -30,6 +31,12 @@ public class ISelect implements Select {
     }
 
     @Override
+    public Select distinct(boolean distinct) {
+        this.distinct = distinct;
+        return this;
+    }
+
+    @Override
     public Select table(Exp table) {
         this.table = table;
         return this;
@@ -37,7 +44,7 @@ public class ISelect implements Select {
 
     @Override
     public Select fields(Collection<Exp> fields) {
-        this.fields = new FieldList(fields);
+        this.fields = new ListExp(fields);
         return this;
     }
 
@@ -61,7 +68,7 @@ public class ISelect implements Select {
     @Override
     public QueryPart build(SQLDialect dialect) {
         QueryPart tablePart = table.build(dialect);
-        QueryPart fieldsPart = fields == null ? new WildcardExp().build(dialect) : fields.build(dialect);
+        QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
         QueryPart filterPart = filter == null ? null : filter.build(dialect);
         QueryPart orderPart = order == null ? null : order.build(dialect);
 
@@ -70,6 +77,10 @@ public class ISelect implements Select {
 
 
         sql.append("SELECT ");
+
+        if (distinct) {
+            sql.append("DISTINCT ");
+        }
 
         sql.append(fieldsPart.getSql());
         params.addAll(fieldsPart.getParams());

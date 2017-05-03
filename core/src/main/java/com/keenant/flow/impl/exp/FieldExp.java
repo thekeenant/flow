@@ -7,13 +7,23 @@ import com.keenant.flow.impl.IQueryPart;
 
 public class FieldExp extends AbstractExp {
     private final String field;
+    private String column;
 
     public FieldExp(String field) {
         this.field = field;
     }
 
+    public FieldExp(String field, String column) {
+        this(field);
+        this.column = column;
+    }
+
     @Override
     public QueryPart build(SQLDialect dialect) {
-        return new IQueryPart(dialect.wrapField(field));
+        String sql = dialect.wrapField(field);
+        if (column != null) {
+            sql += "." + dialect.wrapField(field);
+        }
+        return new IQueryPart(sql);
     }
 }

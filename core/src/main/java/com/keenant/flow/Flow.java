@@ -5,16 +5,22 @@ import com.keenant.flow.impl.IInsert;
 import com.keenant.flow.impl.ISQLDatabase;
 import com.keenant.flow.impl.ISelect;
 import com.keenant.flow.impl.exp.AbsExp;
+import com.keenant.flow.impl.exp.InlineExp;
 import com.keenant.flow.impl.exp.MaxExp;
-import com.keenant.flow.impl.exp.WildcardExp;
 
 public class Flow {
+    private static final Exp WILDCARD = new InlineExp("*");
+
     public static DefaultConnector connector(String url) {
         return new DefaultConnector(url);
     }
 
     public static DatabaseContext database(SQLDialect dialect, Connector connector) {
         return new ISQLDatabase(dialect, connector);
+    }
+
+    public static DatabaseContext database(SQLDialect dialect, String url) {
+        return database(dialect, connector(url));
     }
 
     public static Select selectFrom(Exp table) {
@@ -27,8 +33,12 @@ public class Flow {
 
     // Todo: So many functions...
 
-    public static WildcardExp wildcard() {
-        return new WildcardExp();
+    public static Exp wildcard() {
+        return WILDCARD;
+    }
+
+    public static Exp inline(String sql) {
+        return new InlineExp(sql);
     }
 
     public static AbsExp abs(Exp exp) {

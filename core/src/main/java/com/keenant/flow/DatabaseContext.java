@@ -3,6 +3,7 @@ package com.keenant.flow;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.QueryConfig;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,6 +15,10 @@ public interface DatabaseContext extends AutoCloseable {
 
     default Query prepareQuery(QueryPart part, QueryConfig config) {
         return prepareQuery(part.getSql(), part.getParams(), config);
+    }
+    
+    default Query prepareQuery(String sql, QueryConfig config) {
+      return prepareQuery(sql, Collections.emptyList(), config);
     }
 
     SelectScoped selectFrom(Exp table);

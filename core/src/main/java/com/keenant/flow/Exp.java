@@ -13,8 +13,6 @@ public interface Exp {
 
     // Functions
 
-    Exp distinct();
-
     Exp asc();
 
     Exp desc();

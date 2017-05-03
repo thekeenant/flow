@@ -14,6 +14,8 @@ public interface Select {
      */
     Select cpy();
 
+    Select distinct(boolean distinct);
+
     Select table(Exp table);
 
     Select fields(Collection<Exp> fields);

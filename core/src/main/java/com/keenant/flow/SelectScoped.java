@@ -24,6 +24,9 @@ public interface SelectScoped extends Select {
     SelectScoped cpy();
 
     @Override
+    SelectScoped distinct(boolean distinct);
+
+    @Override
     SelectScoped table(Exp table);
 
     @Override

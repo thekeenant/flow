@@ -10,11 +10,6 @@ import com.keenant.flow.impl.filter.NotFilter;
 
 public abstract class AbstractExp implements Exp {
     @Override
-    public Exp distinct() {
-        return null;
-    }
-
-    @Override
     public Exp asc() {
         return new OrderExp(this, Order.ASC);
     }

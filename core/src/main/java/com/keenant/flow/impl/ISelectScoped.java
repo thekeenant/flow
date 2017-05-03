@@ -51,6 +51,12 @@ public class ISelectScoped implements SelectScoped {
     }
 
     @Override
+    public SelectScoped distinct(boolean distinct) {
+        select.distinct(distinct);
+        return this;
+    }
+
+    @Override
     public SelectScoped table(Exp table) {
         select.table(table);
         return this;
