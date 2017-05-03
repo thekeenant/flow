@@ -3,15 +3,18 @@
 A simple SQL database library for Java that takes advantage of some of the awesome
 functional features found in Java 8. It is designed to be:
 
-* **Efficient**: Flow is a light-weight abstraction of JDBC that isn't too complex.
-* **Simple**: Just add Flow as a dependency to your project and you are set. No fancy IDE
-  or setup is required. No code generation is needed. It is just a Java library.
 * **Powerful**: Flow does not limit you, you can still do anything you want with your database,
   even if that means writing raw SQL queries! With a single line you can perform complex operations 
   on a database, taking advantage of Java 8's `Stream`, and functional programming features.
-* **Familiar**: Operations in Java using Flow resemble SQL to some degree. This makes 
-* **Safe**: It is easy to make Flow do precisely what you want. Any exceptions you may
-  encounter with Flow are designed to be easily handled and resolved.
+* **Simple**: Just add Flow as a dependency to your project and you are set. No fancy IDE
+  or setup is required. No code generation is needed. It is just a Java library.
+* **Familiar**: Operations in Java using Flow resemble SQL to some degree. This makes working with
+  databases fun and easy!
+* **Safe**: Making Flow do precisely what you want is straightforward. It's easy to recognize errors
+  in queries during development and fix them before they cost your project or company time and/or money.
+* **Efficient**: Flow is a light-weight abstraction of JDBC. Thus, it inherently has increased time
+  and memory complexity. We have yet to test Flow against other libraries, but our goal here is 
+  to make queries stay within 5-10% the memory usage and performance of JDBC.
 
 Flow is not complete. It also lacks documentation, and as such, features will break upon every 
 version iteration until a full release.
@@ -26,7 +29,7 @@ Supported:
 * Insert query
     * Multi insert
 
-* Databases
+* Databases (Tested)
     * SQLite
 
 Planned:
