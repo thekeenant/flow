@@ -7,21 +7,21 @@ import java.util.Collection;
 
 public class ISelectScoped implements SelectScoped {
     private final Select select;
-    private final SQLDatabase database;
+    private final DatabaseContext database;
     private final SQLDialect dialect;
 
-    private ISelectScoped(Select select, SQLDatabase database, SQLDialect dialect) {
+    private ISelectScoped(Select select, DatabaseContext database, SQLDialect dialect) {
         this.select = select;
         this.database = database;
         this.dialect = dialect;
     }
 
-    public ISelectScoped(Exp table, SQLDatabase database, SQLDialect dialect) {
+    public ISelectScoped(Exp table, DatabaseContext database, SQLDialect dialect) {
         this(new ISelect(table), database, dialect);
     }
 
     @Override
-    public SQLDatabase getDatabase() {
+    public DatabaseContext getDatabase() {
         return database;
     }
 
@@ -86,12 +86,12 @@ public class ISelectScoped implements SelectScoped {
     }
 
     @Override
-    public EagerCursor fetch(SQLDatabase database, SQLDialect dialect) {
+    public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
         return select.fetch(database, dialect);
     }
 
     @Override
-    public Cursor fetchLazy(SQLDatabase database, SQLDialect dialect) throws DatabaseException {
+    public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) throws DatabaseException {
         return select.fetchLazy(database, dialect);
     }
 }

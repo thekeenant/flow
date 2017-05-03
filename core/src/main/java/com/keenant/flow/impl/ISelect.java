@@ -96,12 +96,12 @@ public class ISelect implements Select {
         return new IQueryPart(sql.toString(), params);
     }
 
-    private Result execute(SQLDatabase database, SQLDialect dialect, QueryConfig config) {
+    private Result execute(DatabaseContext database, SQLDialect dialect, QueryConfig config) {
         return database.prepareQuery(build(dialect), config).execute();
     }
 
     @Override
-    public EagerCursor fetch(SQLDatabase database, SQLDialect dialect) {
+    public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
         if (dialect.supportsScrolling()) {
             QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
                     .type(QueryType.SCROLL_INSENSITIVE)
@@ -117,7 +117,7 @@ public class ISelect implements Select {
     }
 
     @Override
-    public Cursor fetchLazy(SQLDatabase database, SQLDialect dialect) {
+    public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) {
         QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
                 .type(QueryType.FORWARD_ONLY)
                 .build();

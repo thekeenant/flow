@@ -94,7 +94,7 @@ public class IInsert implements Insert {
     }
 
     @Override
-    public void execute(SQLDatabase database, SQLDialect dialect) {
+    public void execute(DatabaseContext database, SQLDialect dialect) {
         QueryPart part = build(dialect);
         QueryConfig config = QueryConfig.builder(QueryMode.UPDATE).build();
 

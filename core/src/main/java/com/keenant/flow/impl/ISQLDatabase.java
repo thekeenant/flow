@@ -4,16 +4,13 @@ import com.keenant.flow.*;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.QueryConfig;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ISQLDatabase implements SQLDatabase {
+public class ISQLDatabase implements DatabaseContext {
     private final SQLDialect dialect;
     private final Connector connector;
-
-    private Connection connection;
 
     public ISQLDatabase(SQLDialect dialect, Connector connector) {
         this.dialect = dialect;
@@ -23,7 +20,7 @@ public class ISQLDatabase implements SQLDatabase {
     @Override
     public Query prepareQuery(String sql, List<Object> params, QueryConfig config) {
         try {
-            PreparedStatement statement = connection.prepareStatement(sql, config.getType().getValue(), config.getConcurrency().getValue());
+            PreparedStatement statement = connector.acquire().prepareStatement(sql, config.getType().getValue(), config.getConcurrency().getValue());
             for (int i = 0; i < params.size(); i++) {
                 statement.setObject(i + 1, params.get(i));
             }
@@ -46,18 +43,7 @@ public class ISQLDatabase implements SQLDatabase {
     }
 
     @Override
-    public SQLDatabase open() throws DatabaseException {
-        connection = connector.connect();
-        return this;
-    }
-
-    @Override
-    public void close() throws DatabaseException {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-        connection = null;
+    public void close() {
+        connector.disposeAll();
     }
 }

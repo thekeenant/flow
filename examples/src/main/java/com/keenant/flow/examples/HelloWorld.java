@@ -1,5 +1,6 @@
 package com.keenant.flow.examples;
 
+import static com.keenant.flow.Flow.*;
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.FieldExp;
 
@@ -17,11 +18,11 @@ public class HelloWorld {
 
     private static void test() {
         // A connector provides a database connection
-        Connector connector = Flow.connector("jdbc:sqlite:sample.db");
+        Connector connector = connector("jdbc:sqlite:sample.db");
 
         // An SQLDatabase interfaces with a database connection
         // Note: Try-with-resources used here to easily close the db after usage
-        try (SQLDatabase db = Flow.open(SQLDialect.SQLITE, connector)) {
+        try (DatabaseContext db = database(SQLDialect.SQLITE, connector)) {
             // Here we assume that a table named "users" exists
             FieldExp users = new FieldExp("users");
 

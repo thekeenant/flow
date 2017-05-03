@@ -6,13 +6,10 @@ import com.keenant.flow.jdbc.QueryConfig;
 import java.util.List;
 
 /**
- * Represents a database connection that can be opened and closed.
+ * Represents a database which can be accessed and manipulated. Any number of connections may be
+ * made to the underlying database.
  */
-public interface SQLDatabase extends AutoCloseable {
-    SQLDatabase open() throws DatabaseException;
-
-    void close() throws DatabaseException;
-
+public interface DatabaseContext extends AutoCloseable {
     Query prepareQuery(String sql, List<Object> params, QueryConfig config);
 
     default Query prepareQuery(QueryPart part, QueryConfig config) {
@@ -22,4 +19,7 @@ public interface SQLDatabase extends AutoCloseable {
     SelectScoped selectFrom(Exp table);
 
     InsertScoped insertInto(Exp table);
+
+    @Override
+    void close() throws DatabaseException;
 }

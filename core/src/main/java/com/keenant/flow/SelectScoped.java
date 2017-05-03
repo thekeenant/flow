@@ -8,7 +8,7 @@ import java.util.Collection;
  * A select query which is targeted for a specific database with a specific dialect.
  */
 public interface SelectScoped extends Select {
-    SQLDatabase getDatabase();
+    DatabaseContext getDatabase();
 
     SQLDialect getDialect();
 

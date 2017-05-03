@@ -6,16 +6,16 @@ import com.keenant.flow.impl.exp.ParamExp;
 
 public class IInsertScoped implements InsertScoped {
     private final Insert insert;
-    private final SQLDatabase database;
+    private final DatabaseContext database;
     private final SQLDialect dialect;
 
-    private IInsertScoped(Insert insert, SQLDatabase database, SQLDialect dialect) {
+    private IInsertScoped(Insert insert, DatabaseContext database, SQLDialect dialect) {
         this.insert = insert;
         this.database = database;
         this.dialect = dialect;
     }
 
-    public IInsertScoped(Exp exp, SQLDatabase database, SQLDialect dialect) {
+    public IInsertScoped(Exp exp, DatabaseContext database, SQLDialect dialect) {
         this(new IInsert(exp), database, dialect);
     }
 
@@ -57,7 +57,7 @@ public class IInsertScoped implements InsertScoped {
     }
 
     @Override
-    public void execute(SQLDatabase database, SQLDialect dialect) {
+    public void execute(DatabaseContext database, SQLDialect dialect) {
         insert.execute(database, dialect);
     }
 }

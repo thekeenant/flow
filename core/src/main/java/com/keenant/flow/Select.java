@@ -43,7 +43,7 @@ public interface Select {
      * @return the cursor
      * @throws DatabaseException if the execution fails
      */
-    EagerCursor fetch(SQLDatabase database, SQLDialect dialect) throws DatabaseException;
+    EagerCursor fetch(DatabaseContext database, SQLDialect dialect) throws DatabaseException;
 
     /**
      * Execute the query lazily, fetching each record one by one.
@@ -52,5 +52,5 @@ public interface Select {
      * @return the lazy cursor
      * @throws DatabaseException if the execution fails
      */
-    Cursor fetchLazy(SQLDatabase database, SQLDialect dialect) throws DatabaseException;
+    Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) throws DatabaseException;
 }

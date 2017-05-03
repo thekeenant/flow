@@ -15,5 +15,5 @@ public interface Insert {
 
     QueryPart build(SQLDialect dialect);
 
-    void execute(SQLDatabase database, SQLDialect dialect);
+    void execute(DatabaseContext database, SQLDialect dialect);
 }
