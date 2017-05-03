@@ -11,26 +11,6 @@ public interface Exp {
      */
     QueryPart build(SQLDialect dialect);
 
-    // Functions
-
-    Exp asc();
-
-    Exp desc();
-
-    Exp abs();
-
-    Exp sum();
-
-    Exp max();
-
-    Exp min();
-
-    Exp ucase();
-
-    Exp lcase();
-
-    Exp length();
-
     // Filters
 
     Filter filter();
@@ -44,6 +24,14 @@ public interface Exp {
     Filter equal(Exp other);
 
     Filter equal(Object other);
+
+    Filter equalIgnoreCase(Exp other);
+
+    Filter equalIgnoreCase(Object other);
+
+    Filter notEqualIgnoreCase(Exp other);
+
+    Filter notEqualIgnoreCase(Object other);
 
     Filter neq(Exp other);
 

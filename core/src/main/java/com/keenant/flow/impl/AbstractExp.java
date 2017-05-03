@@ -1,59 +1,13 @@
 package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
-import com.keenant.flow.impl.exp.*;
+import com.keenant.flow.impl.exp.LCaseExp;
+import com.keenant.flow.impl.exp.ParamExp;
 import com.keenant.flow.impl.filter.CompareFilter;
 import com.keenant.flow.impl.filter.ExpFilter;
 import com.keenant.flow.impl.filter.NotFilter;
 
 public abstract class AbstractExp implements Exp {
-    @Override
-    public Exp asc() {
-        return new OrderExp(this, Order.ASC);
-    }
-
-    @Override
-    public Exp desc() {
-        return new OrderExp(this, Order.DESC);
-    }
-
-    @Override
-    public Exp abs() {
-        return new AbsExp(this);
-    }
-
-    @Override
-    public Exp sum() {
-        return new SumExp(this);
-    }
-
-    @Override
-    public Exp max() {
-        return new MaxExp(this);
-    }
-
-    @Override
-    public Exp min() {
-        return new MinExp(this);
-    }
-
-    @Override
-    public Exp ucase() {
-        return new UCaseExp(this);
-    }
-
-    @Override
-    public Exp lcase() {
-        return new LCaseExp(this);
-    }
-
-    @Override
-    public Exp length() {
-        return new LengthExp(this);
-    }
-
-    // Filters
-
     @Override
     public Filter filter() {
         return new ExpFilter(this);
@@ -82,6 +36,26 @@ public abstract class AbstractExp implements Exp {
     @Override
     public Filter equal(Object other) {
         return eq(other);
+    }
+
+    @Override
+    public Filter equalIgnoreCase(Exp other) {
+        return new LCaseExp(this).eq(new LCaseExp(this));
+    }
+
+    @Override
+    public Filter equalIgnoreCase(Object other) {
+        return equalIgnoreCase(new ParamExp(other));
+    }
+
+    @Override
+    public Filter notEqualIgnoreCase(Exp other) {
+        return new LCaseExp(this).neq(new LCaseExp(this));
+    }
+
+    @Override
+    public Filter notEqualIgnoreCase(Object other) {
+        return notEqualIgnoreCase(new ParamExp(other));
     }
 
     @Override

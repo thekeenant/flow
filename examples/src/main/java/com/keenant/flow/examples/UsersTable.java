@@ -1,8 +1,9 @@
 package com.keenant.flow.examples;
 
-import com.keenant.flow.DatabaseContext;
-import com.keenant.flow.SelectScoped;
+import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.Field;
+
+import java.util.stream.Stream;
 
 import static com.keenant.flow.Flow.*;
 
@@ -12,40 +13,39 @@ public class UsersTable {
     private static final Field NAME = USERS.column("name");
     private static final Field AGE = USERS.column("age");
 
-    private DatabaseContext database;
+    public static void main(String[] args) throws Exception {
+        try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
+            // Raw query
+            try (Cursor cursor = db.fetch("SELECT AVG(LENGTH(name)) FROM users")) {
+                double value = cursor.next().getNonNullDouble(1);
+                System.out.println("Average Name Length: " + value);
+            }
 
-    public UsersTable(DatabaseContext database) {
-        this.database = database;
-    }
+            // Flow query
+            try (Cursor cursor = db.selectFrom(USERS).fields(avg(length(NAME))).fetch()) {
+                double value = cursor.next().getNonNullDouble(1);
+                System.out.println("Average Name Length: " + value);
+            }
 
-    private SelectScoped select() {
-        return database.selectFrom(USERS);
-    }
-    
-    public int numElderly() {
-        return select()
-                .fields(count())
-                .where(AGE.gte(75))
-                .fetch()
-                .first()
-                .getNonNullNumber(1)
-                .intValue();
-    }
+            // Raw stream
+            String sql = "SELECT name, age FROM users WHERE id < ? ORDER BY age ASC";
+            try (Stream<Cursor> stream = db.fetch(sql, 50).stream()) {
+                stream.forEach(current -> {
+                    String name = current.getString("name").orElse("(No Name)");
+                    int age = current.getNonNullInt("age");
+                    System.out.println(name + " is " + age + " years old");
+                });
+            }
 
-    public int oldestAge() {
-        return select()
-                .fields(max(AGE))
-                .fetch()
-                .first()
-                .getNonNullInt(1);
-    }
-
-    public double averageNameLength() {
-        return select()
-                .fields(avg(length(NAME)))
-                .fetch()
-                .first()
-                .getNonNullNumber(1)
-                .doubleValue();
+            // Flow stream
+            SelectScoped query = db.selectFrom(USERS).fields(NAME, AGE).where(ID.lt(50)).order(orderAsc(AGE));
+            try (Stream<Cursor> stream = query.fetch().stream()) {
+                stream.forEach(current -> {
+                    String name = current.getString("name").orElse("(No Name)");
+                    int age = current.getNonNullInt("age");
+                    System.out.println(name + " is " + age + " years old");
+                });
+            }
+        }
     }
 }
