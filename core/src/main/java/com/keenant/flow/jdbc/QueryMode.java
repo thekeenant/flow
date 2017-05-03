@@ -1,13 +1,16 @@
 package com.keenant.flow.jdbc;
 
+/**
+ * There are two types of queries in JDBC, which have subtypes.
+ */
 public enum QueryMode {
-    /**
-     * Any type of database update such as a delete, create, update.
-     */
-    UPDATE,
-
     /**
      * A select query to the database.
      */
-    FETCH
+    FETCH,
+
+    /**
+     * Any type of database update such as a delete, create, update.
+     */
+    UPDATE;
 }

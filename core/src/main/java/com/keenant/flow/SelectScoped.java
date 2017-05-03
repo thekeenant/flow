@@ -12,11 +12,21 @@ public interface SelectScoped extends Select {
 
     SQLDialect getDialect();
 
+    QueryPart build();
+
+    EagerCursor fetch() throws DatabaseException;
+
+    Cursor fetchLazy() throws DatabaseException;
+
+    // Override Select
+
     @Override
     SelectScoped cpy();
 
+    @Override
     SelectScoped table(Exp table);
 
+    @Override
     SelectScoped fields(Collection<Exp> fields);
 
     @Override
@@ -27,10 +37,4 @@ public interface SelectScoped extends Select {
 
     @Override
     SelectScoped order(Exp order);
-
-    QueryPart build();
-
-    EagerCursor fetch() throws DatabaseException;
-
-    Cursor fetchLazy() throws DatabaseException;
 }

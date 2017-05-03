@@ -3,6 +3,12 @@ package com.keenant.flow;
 import com.keenant.flow.exception.DatabaseException;
 
 public interface InsertScoped extends Insert {
+    QueryPart build();
+
+    void execute() throws DatabaseException;
+
+    // Override Insert
+
     @Override
     InsertScoped cpy();
 
@@ -14,8 +20,4 @@ public interface InsertScoped extends Insert {
 
     @Override
     InsertScoped newRecord();
-
-    QueryPart build();
-
-    void execute() throws DatabaseException;
 }

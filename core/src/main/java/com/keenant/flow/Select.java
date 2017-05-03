@@ -4,6 +4,9 @@ import com.keenant.flow.exception.DatabaseException;
 
 import java.util.Collection;
 
+/**
+ * A select query.
+ */
 public interface Select {
     /**
      * Create a copy of this object.

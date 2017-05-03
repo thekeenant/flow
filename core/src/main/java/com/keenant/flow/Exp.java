@@ -4,6 +4,11 @@ package com.keenant.flow;
  * A DSL (SQL) expression.
  */
 public interface Exp {
+    /**
+     * Construct the SQL query part
+     * @param dialect the SQL dialect to use
+     * @return the SQL query component
+     */
     QueryPart build(SQLDialect dialect);
 
     // Functions

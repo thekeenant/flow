@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
- * Represents a record/row in the database.
+ * Represents something that may currently point to a record/row in the database.
  */
 public interface Record {
     /**

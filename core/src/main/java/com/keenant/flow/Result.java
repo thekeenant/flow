@@ -1,5 +1,8 @@
 package com.keenant.flow;
 
+/**
+ * The result of an SQL query. This is roughly equivalent to a {@link java.sql.ResultSet} in the JDBC.
+ */
 public interface Result extends AutoCloseable {
     /**
      * Create a cursor to traverse records that were fetched.

@@ -21,8 +21,16 @@ public interface Cursor extends Record, AutoCloseable {
      */
     Cursor next() throws NoSuchElementException;
 
+    /**
+     * Create a stream from this cursor.
+     * @return the stream
+     */
     Stream<Cursor> stream();
 
+    /**
+     * Create an iterator from this cursor.
+     * @return the iterator
+     */
     Iterator<Cursor> iterator();
 
     @Override

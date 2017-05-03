@@ -15,10 +15,6 @@ public class FieldList extends AbstractExp {
         this.fields = fields;
     }
 
-    public FieldList cpy() {
-        return new FieldList(new ArrayList<>(fields));
-    }
-
     @Override
     public QueryPart build(SQLDialect dialect) {
         StringBuilder sql = new StringBuilder();
