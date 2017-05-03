@@ -4,6 +4,7 @@ import static com.keenant.flow.Flow.*;
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.FieldExp;
 
+import java.sql.*;
 import java.util.stream.Stream;
 
 public class HelloWorld {
@@ -14,6 +15,18 @@ public class HelloWorld {
 
     public static void main(String[] args) throws Exception {
         test();
+    }
+
+    private static void testJdbc() {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:sample.db")) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+            ResultSet results = statement.executeQuery();
+            while (results.next()) {
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void test() {

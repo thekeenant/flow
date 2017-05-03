@@ -1,5 +1,8 @@
 # Flow
 
+_A successor to the Quest database library ([v1](https://github.com/thekeenant/quest), 
+[v2](https://github.com/thekeenant/quest-v2))._
+
 A simple SQL database library for Java that takes advantage of some of the awesome
 functional features found in Java 8. It is designed to be:
 
