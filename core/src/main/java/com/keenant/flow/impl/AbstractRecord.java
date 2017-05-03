@@ -124,6 +124,66 @@ public abstract class AbstractRecord implements Record {
     }
 
     @Override
+    public Optional<Double> getDouble(int index) throws NoSuchElementException, ClassCastException {
+        return get(index).map(obj -> (Double) obj);
+    }
+
+    @Override
+    public Optional<Double> getDouble(String label) throws NoSuchElementException, ClassCastException {
+        return getDouble(getFieldIndex(label));
+    }
+
+    @Override
+    public double getNonNullDouble(int index) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getDouble(index).orElseThrow(IllegalStateException::new);
+    }
+
+    @Override
+    public double getNonNullDouble(String label) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getNonNullDouble(getFieldIndex(label));
+    }
+
+    @Override
+    public Optional<Float> getFloat(int index) throws NoSuchElementException, ClassCastException {
+        return get(index).map(obj -> (Float) obj);
+    }
+
+    @Override
+    public Optional<Float> getFloat(String label) throws NoSuchElementException, ClassCastException {
+        return getFloat(getFieldIndex(label));
+    }
+
+    @Override
+    public float getNonNullFloat(int index) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getFloat(index).orElseThrow(IllegalStateException::new);
+    }
+
+    @Override
+    public float getNonNullFloat(String label) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getNonNullFloat(getFieldIndex(label));
+    }
+
+    @Override
+    public Optional<Long> getLong(int index) throws NoSuchElementException, ClassCastException {
+        return get(index).map(obj -> (Long) obj);
+    }
+
+    @Override
+    public Optional<Long> getLong(String label) throws NoSuchElementException, ClassCastException {
+        return getLong(getFieldIndex(label));
+    }
+
+    @Override
+    public long getNonNullLong(int index) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getLong(index).orElseThrow(IllegalStateException::new);
+    }
+
+    @Override
+    public long getNonNullLong(String label) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getNonNullLong(getFieldIndex(label));
+    }
+
+    @Override
     public Optional<Boolean> getBoolean(int index) throws NoSuchElementException, ClassCastException {
         return get(index).map(obj -> (Boolean) obj);
     }

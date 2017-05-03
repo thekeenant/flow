@@ -81,6 +81,30 @@ public interface Record {
 
     int getNonNullInt(String label) throws NoSuchElementException, ClassCastException, IllegalStateException;
 
+    Optional<Double> getDouble(int index) throws NoSuchElementException, ClassCastException;
+
+    Optional<Double> getDouble(String label) throws NoSuchElementException, ClassCastException;
+
+    double getNonNullDouble(int index) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    double getNonNullDouble(String label) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    Optional<Float> getFloat(int index) throws NoSuchElementException, ClassCastException;
+
+    Optional<Float> getFloat(String label) throws NoSuchElementException, ClassCastException;
+
+    float getNonNullFloat(int index) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    float getNonNullFloat(String label) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    Optional<Long> getLong(int index) throws NoSuchElementException, ClassCastException;
+
+    Optional<Long> getLong(String label) throws NoSuchElementException, ClassCastException;
+
+    long getNonNullLong(int index) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    long getNonNullLong(String label) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
     Optional<Boolean> getBoolean(int index) throws NoSuchElementException, ClassCastException;
 
     Optional<Boolean> getBoolean(String label) throws NoSuchElementException, ClassCastException;

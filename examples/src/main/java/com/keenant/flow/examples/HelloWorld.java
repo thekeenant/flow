@@ -6,7 +6,7 @@ import com.keenant.flow.impl.exp.Field;
 import java.sql.*;
 import java.util.Iterator;
 
-import static com.keenant.flow.Flow.database;
+import static com.keenant.flow.Flow.*;
 
 public class HelloWorld {
     private static Field USERS = new Field("users");
@@ -31,13 +31,12 @@ public class HelloWorld {
     }
 
     private static void test() {
-
-        // An SQLDatabase interfaces with a database connection
-        // Note: Try-with-resources used here to easily close the db after usage
         try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
-            try (Cursor cursor = db.fetch("SELECT * FROM users WHERE id = ? OR id = ?", 1, 2)) {
-                // ...
-            }
+            UsersTable users = new UsersTable(db);
+
+            System.out.println(users.numElderly());
+            System.out.println(users.averageNameLength());
+            System.out.println(users.oldestAge());
         }
 
     }

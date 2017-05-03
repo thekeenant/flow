@@ -13,12 +13,8 @@ import java.util.List;
 public class InlineExp extends AbstractExp {
     private final QueryPart part;
 
-    public InlineExp(String sql, List<Object> params) {
-        this.part = new IQueryPart(sql, params);
-    }
-
-    public InlineExp(String sql, Object... params) {
-        this.part = new IQueryPart(sql, params);
+    public InlineExp(String sql) {
+        this.part = new IQueryPart(sql);
     }
 
     @Override

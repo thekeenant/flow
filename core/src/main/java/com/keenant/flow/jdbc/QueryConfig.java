@@ -4,7 +4,7 @@ package com.keenant.flow.jdbc;
  * Configuration for creating and executing an SQL query. Use the {@link #builder(QueryMode)} method to
  * build a new config.
  */
-public class QueryConfig {
+public final class QueryConfig {
     private final QueryMode mode;
     private final QueryType type;
     private final QueryConcurrency concurrency;
