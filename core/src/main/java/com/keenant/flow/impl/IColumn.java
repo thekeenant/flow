@@ -1,14 +1,14 @@
 package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
-import com.keenant.flow.impl.exp.FieldExp;
+import com.keenant.flow.impl.exp.Field;
 
-public class IColumn<T, U> extends FieldExp implements Column<T, U> {
-    private final FieldExp table;
+public class IColumn<T, U> extends Field implements Column<T, U> {
+    private final Field table;
     private final String name;
     private final Transformer<T, U> transformer;
 
-    public IColumn(FieldExp table, String name, Transformer<T, U> transformer) {
+    public IColumn(Field table, String name, Transformer<T, U> transformer) {
         super(table, name);
         this.table = table;
         this.name = name;
@@ -16,7 +16,7 @@ public class IColumn<T, U> extends FieldExp implements Column<T, U> {
     }
 
     @Override
-    public FieldExp getTable() {
+    public Field getTable() {
         return table;
     }
 

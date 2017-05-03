@@ -3,8 +3,6 @@ package com.keenant.flow.impl;
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.ListExp;
 import com.keenant.flow.jdbc.QueryConfig;
-import com.keenant.flow.jdbc.QueryMode;
-import com.keenant.flow.jdbc.QueryType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,26 +111,11 @@ public class ISelect implements Select {
 
     @Override
     public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
-        if (dialect.supportsScrolling()) {
-            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                    .type(QueryType.SCROLL_INSENSITIVE)
-                    .build();
-            return execute(database, dialect, config).eagerCursor();
-        }
-        else {
-            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                    .type(QueryType.FORWARD_ONLY)
-                    .build();
-            return execute(database, dialect, config).safeEagerCursor();
-        }
+        return database.fetch(build(dialect));
     }
 
     @Override
     public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) {
-        QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                .type(QueryType.FORWARD_ONLY)
-                .build();
-
-        return execute(database, dialect, config).lazyCursor();
+        return database.fetchLazy(build(dialect));
     }
 }

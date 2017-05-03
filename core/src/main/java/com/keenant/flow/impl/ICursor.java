@@ -1,7 +1,7 @@
 package com.keenant.flow.impl;
 
-import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.Cursor;
+import com.keenant.flow.exception.DatabaseException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -127,8 +127,6 @@ public class ICursor extends AbstractRecord implements Cursor {
         }
 
         Integer index = labelToIndex.get(label);
-
-        System.out.println(label);
 
         if (index == null) {
             throw new NoSuchElementException();

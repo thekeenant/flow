@@ -3,6 +3,7 @@ package com.keenant.flow;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.QueryConfig;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +20,26 @@ public interface DatabaseContext extends AutoCloseable {
     
     default Query prepareQuery(String sql, QueryConfig config) {
       return prepareQuery(sql, Collections.emptyList(), config);
+    }
+
+    EagerCursor fetch(String sql, List<Object> params);
+
+    default EagerCursor fetch(QueryPart part) {
+        return fetch(part.getSql(), part.getParams());
+    }
+
+    default EagerCursor fetch(String sql, Object... params) {
+        return fetch(sql, Arrays.asList(params));
+    }
+
+    Cursor fetchLazy(String sql, List<Object> params);
+
+    default Cursor fetchLazy(QueryPart part) {
+        return fetchLazy(part.getSql(), part.getParams());
+    }
+
+    default Cursor fetchLazy(String sql, Object... params) {
+        return fetchLazy(sql, Arrays.asList(params));
     }
 
     SelectScoped selectFrom(Exp table);

@@ -3,6 +3,8 @@ package com.keenant.flow.impl;
 import com.keenant.flow.*;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.QueryConfig;
+import com.keenant.flow.jdbc.QueryMode;
+import com.keenant.flow.jdbc.QueryType;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -30,6 +32,30 @@ public class IDatabaseContext implements DatabaseContext {
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
+    }
+
+    @Override
+    public EagerCursor fetch(String sql, List<Object> params) {
+        if (dialect.supportsScrolling()) {
+            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
+                    .type(QueryType.SCROLL_INSENSITIVE)
+                    .build();
+            return prepareQuery(sql, params, config).execute().eagerCursor();
+        }
+        else {
+            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
+                    .type(QueryType.FORWARD_ONLY)
+                    .build();
+            return prepareQuery(sql, params, config).execute().safeEagerCursor();
+        }
+    }
+
+    @Override
+    public Cursor fetchLazy(String sql, List<Object> params) {
+        QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
+                .type(QueryType.FORWARD_ONLY)
+                .build();
+        return prepareQuery(sql, params, config).execute().lazyCursor();
     }
 
     @Override

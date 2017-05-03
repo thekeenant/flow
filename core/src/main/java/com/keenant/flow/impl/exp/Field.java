@@ -5,20 +5,20 @@ import com.keenant.flow.SQLDialect;
 import com.keenant.flow.impl.AbstractExp;
 import com.keenant.flow.impl.IQueryPart;
 
-public class FieldExp extends AbstractExp {
+public class Field extends AbstractExp {
     private final String field;
     private String column;
 
-    public FieldExp(String field) {
+    public Field(String field) {
         this.field = field;
     }
 
-    public FieldExp(String field, String column) {
+    public Field(String field, String column) {
         this(field);
         this.column = column;
     }
 
-    public FieldExp(FieldExp field, String column) {
+    public Field(Field field, String column) {
         if (field.isQualified())
             throw new IllegalArgumentException("Base field cannot already be qualified");
 

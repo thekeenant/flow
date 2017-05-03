@@ -9,14 +9,14 @@ import com.keenant.flow.impl.IQueryPart;
  * An expression that is a single parameter/object.
  */
 public class ParamExp extends AbstractExp {
-    private final Object param;
+    private final QueryPart part;
 
     public ParamExp(Object param) {
-        this.param = param;
+        this.part = new IQueryPart("?", param);
     }
 
     @Override
     public QueryPart build(SQLDialect dialect) {
-        return new IQueryPart("?", param);
+        return part;
     }
 }
