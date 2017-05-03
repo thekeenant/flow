@@ -45,6 +45,14 @@ public interface Exp {
 
     Filter equal(Object other);
 
+    Filter neq(Exp other);
+
+    Filter neq(Object other);
+
+    Filter notEqual(Exp other);
+
+    Filter notEqual(Object other);
+
     Filter lt(Exp other);
 
     Filter lt(Object other);

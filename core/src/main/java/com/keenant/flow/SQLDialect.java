@@ -3,7 +3,7 @@ package com.keenant.flow;
 import java.util.function.Function;
 
 public class SQLDialect {
-    public static final SQLDialect SQLITE = new SQLDialect("SQLite", str -> str, false);
+    public static final SQLDialect SQLITE = new SQLDialect("SQLite", str -> '"' + str + '"', false);
     public static final SQLDialect MYSQL = new SQLDialect("MySQL", str -> '`' + str + '`', false);
 
     private final String name;

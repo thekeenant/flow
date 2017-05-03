@@ -8,11 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ISQLDatabase implements DatabaseContext {
+public class IDatabaseContext implements DatabaseContext {
     private final SQLDialect dialect;
     private final Connector connector;
 
-    public ISQLDatabase(SQLDialect dialect, Connector connector) {
+    public IDatabaseContext(SQLDialect dialect, Connector connector) {
         this.dialect = dialect;
         this.connector = connector;
     }
@@ -39,7 +39,7 @@ public class ISQLDatabase implements DatabaseContext {
 
     @Override
     public InsertScoped insertInto(Exp table) {
-        return new IInsertScoped(table, this, dialect).newRecord();
+        return new IInsertScoped(table, this, dialect);
     }
 
     @Override

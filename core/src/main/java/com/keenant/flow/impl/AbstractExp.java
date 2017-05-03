@@ -1,8 +1,6 @@
 package com.keenant.flow.impl;
 
-import com.keenant.flow.Comparator;
-import com.keenant.flow.Exp;
-import com.keenant.flow.Filter;
+import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.*;
 import com.keenant.flow.impl.filter.CompareFilter;
 import com.keenant.flow.impl.filter.ExpFilter;
@@ -84,6 +82,26 @@ public abstract class AbstractExp implements Exp {
     @Override
     public Filter equal(Object other) {
         return eq(other);
+    }
+
+    @Override
+    public Filter neq(Exp other) {
+        return new CompareFilter(this, other, Comparator.NOT_EQUAL);
+    }
+
+    @Override
+    public Filter neq(Object other) {
+        return neq(new ParamExp(other));
+    }
+
+    @Override
+    public Filter notEqual(Exp other) {
+        return neq(other);
+    }
+
+    @Override
+    public Filter notEqual(Object other) {
+        return neq(other);
     }
 
     @Override

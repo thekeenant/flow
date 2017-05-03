@@ -66,16 +66,25 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
 
     @Override
     public void moveTo(int record) throws NoSuchElementException {
+        if (!hasRecord(record)) {
+            throw new NoSuchElementException();
+        }
         current = record;
     }
 
     @Override
-    public void moveToFirst() {
+    public void moveToFirst() throws NoSuchElementException {
+        if (!hasRecord(1)) {
+            throw new NoSuchElementException();
+        }
         current = 1;
     }
 
     @Override
-    public void moveToLast() {
+    public void moveToLast() throws NoSuchElementException {
+        if (!hasRecord(1)) {
+            throw new NoSuchElementException();
+        }
         current = records.size();
     }
 
@@ -86,13 +95,13 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
     }
 
     @Override
-    public Cursor first() {
+    public Cursor first() throws NoSuchElementException {
         moveToFirst();
         return this;
     }
 
     @Override
-    public Cursor last() {
+    public Cursor last() throws NoSuchElementException {
         moveToLast();
         return this;
     }

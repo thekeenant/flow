@@ -1,9 +1,6 @@
 package com.keenant.flow;
 
-import com.keenant.flow.impl.DefaultConnector;
-import com.keenant.flow.impl.IInsert;
-import com.keenant.flow.impl.ISQLDatabase;
-import com.keenant.flow.impl.ISelect;
+import com.keenant.flow.impl.*;
 import com.keenant.flow.impl.exp.AbsExp;
 import com.keenant.flow.impl.exp.InlineExp;
 import com.keenant.flow.impl.exp.MaxExp;
@@ -16,7 +13,7 @@ public class Flow {
     }
 
     public static DatabaseContext database(SQLDialect dialect, Connector connector) {
-        return new ISQLDatabase(dialect, connector);
+        return new IDatabaseContext(dialect, connector);
     }
 
     public static DatabaseContext database(SQLDialect dialect, String url) {

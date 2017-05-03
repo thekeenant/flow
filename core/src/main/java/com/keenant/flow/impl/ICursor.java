@@ -110,24 +110,29 @@ public class ICursor extends AbstractRecord implements Cursor {
 
     @Override
     public int getFieldIndex(String label) throws IllegalArgumentException, NoSuchElementException {
-        if (label == null)
+        if (label == null) {
             throw new IllegalArgumentException();
+        }
 
         if (labelToIndex == null) {
             try {
                 labelToIndex = new HashMap<>();
-                for (int i = 1; i < resultSet.getMetaData().getColumnCount(); i++) {
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
                     labelToIndex.put(resultSet.getMetaData().getColumnLabel(i), i);
                 }
             } catch (SQLException e) {
+                throw new DatabaseException(e);
                 // Todo
             }
         }
 
         Integer index = labelToIndex.get(label);
 
-        if (index == null)
+        System.out.println(label);
+
+        if (index == null) {
             throw new NoSuchElementException();
+        }
 
         return index;
     }

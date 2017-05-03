@@ -2,10 +2,14 @@ package com.keenant.flow.impl;
 
 import com.keenant.flow.QueryPart;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class IQueryPart implements QueryPart {
+    public static final IQueryPart EMPTY = new IQueryPart("", Collections.emptyList());
+
     private final String sql;
     private final List<Object> params;
 
@@ -26,6 +30,15 @@ public class IQueryPart implements QueryPart {
     @Override
     public List<Object> getParams() {
         return params;
+    }
+
+    @Override
+    public QueryPart join(String sql, List<Object> params) {
+        String joinedSql = this.sql + sql;
+        List<Object> joinedParams = new ArrayList<>();
+        joinedParams.addAll(params);
+        joinedParams.addAll(params);
+        return new IQueryPart(joinedSql, joinedParams);
     }
 
     @Override

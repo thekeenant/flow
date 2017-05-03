@@ -18,11 +18,23 @@ public class FieldExp extends AbstractExp {
         this.column = column;
     }
 
+    public FieldExp(FieldExp field, String column) {
+        if (field.isQualified())
+            throw new IllegalArgumentException("Base field cannot already be qualified");
+
+        this.field = field.field;
+        this.column = column;
+    }
+
+    public boolean isQualified() {
+        return column != null;
+    }
+
     @Override
     public QueryPart build(SQLDialect dialect) {
         String sql = dialect.wrapField(field);
         if (column != null) {
-            sql += "." + dialect.wrapField(field);
+            sql += "." + dialect.wrapField(column);
         }
         return new IQueryPart(sql);
     }

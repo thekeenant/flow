@@ -1,6 +1,8 @@
 package com.keenant.flow.impl;
 
+import com.keenant.flow.Column;
 import com.keenant.flow.Record;
+import com.keenant.flow.Transformer;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -9,6 +11,43 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public abstract class AbstractRecord implements Record {
+    @Override
+    public <T, U> Optional<U> get(Column<T, U> column) throws NoSuchElementException, ClassCastException {
+        return get(getFieldIndex(column.getName()), column);
+    }
+
+    @Override
+    public <T, U> U getNonNull(Column<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getNonNull(getFieldIndex(column.getName()), column);
+    }
+
+    @Override
+    public <T, U> Optional<U> get(int field, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException {
+        Object sourceObj = get(field).orElse(null);
+        return transformer.toOptional(sourceObj);
+    }
+
+    @Override
+    public <T, U> Optional<U> get(String label, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException {
+        return get(getFieldIndex(label), transformer);
+    }
+
+    @Override
+    public <T, U> U getNonNull(int field, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        Object sourceObj = getNonNull(field);
+        return transformer.toOptional(sourceObj).orElseThrow(IllegalStateException::new);
+    }
+
+    @Override
+    public <T, U> U getNonNull(String label, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException, IllegalStateException {
+        return getNonNull(getFieldIndex(label),  transformer);
+    }
+
+    @Override
+    public Optional<Object> get(int index) throws NoSuchElementException {
+        return null;
+    }
+
     @Override
     public Optional<Object> get(String label) throws NoSuchElementException {
         return get(getFieldIndex(label));

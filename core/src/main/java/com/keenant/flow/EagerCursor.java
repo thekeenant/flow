@@ -8,13 +8,13 @@ import java.util.NoSuchElementException;
 public interface EagerCursor extends Cursor {
     void moveTo(int record) throws NoSuchElementException;
 
-    void moveToFirst();
+    void moveToFirst() throws NoSuchElementException;
 
-    void moveToLast();
+    void moveToLast() throws NoSuchElementException;
 
     Cursor move(int record) throws NoSuchElementException;
 
-    Cursor first();
+    Cursor first() throws NoSuchElementException;
 
-    Cursor last();
+    Cursor last() throws NoSuchElementException;
 }

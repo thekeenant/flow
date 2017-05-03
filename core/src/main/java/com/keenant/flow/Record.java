@@ -37,6 +37,18 @@ public interface Record {
      */
     int getFieldIndex(String label) throws IllegalArgumentException, NoSuchElementException;
 
+    <T, U> Optional<U> get(Column<T, U> column) throws NoSuchElementException, ClassCastException;
+
+    <T, U> U getNonNull(Column<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    <T, U> Optional<U> get(int field, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException;
+
+    <T, U> Optional<U> get(String label, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException;
+
+    <T, U> U getNonNull(int field, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
+    <T, U> U getNonNull(String label, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException, IllegalStateException;
+
     Optional<Object> get(int index) throws NoSuchElementException;
 
     Optional<Object> get(String label) throws NoSuchElementException;
