@@ -22,17 +22,18 @@ version iteration until a full release.
 ## Roadmap
 
 Supported:
+
 * Select query
     * Specify fields
     * Filters
     * Order
 * Insert query
     * Multi insert
-
 * Databases (Tested)
     * SQLite
 
 Planned:
+* Column API (for pseudo type-safe queries)
 * Update query
 * Delete query
 * Create table query
