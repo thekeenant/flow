@@ -46,50 +46,63 @@ Planned:
 
 ## Introduction
 
-For now you must provide a database connection yourself. Below is a simple SQLite example.
+Connecting to a database is easy...
+
+> _Note: We assume you have statically imported `com.keenant.flow.Flow.*`.
+> This makes things much less verbose._
 
 ```java
-public class Example {
-    private static final Field USERS = field("users");
-    private static final Field ID = USERS.column("id");
-    private static final Field NAME = USERS.column("name");
-    private static final Field AGE = USERS.column("age");
+DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")
 
-    public static void main(String[] args) throws Exception {
-        try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
-            // Raw query
-            try (Cursor cursor = db.fetch("SELECT AVG(LENGTH(name)) FROM users")) {
-                double value = cursor.next().getNonNullDouble(1);
-                System.out.println("Average Name Length: " + value);
-            }
+// access/manipulate 'db' here...
 
-            // Flow query
-            try (Cursor cursor = db.selectFrom(USERS).fields(avg(length(NAME))).fetch()) {
-                double value = cursor.next().getNonNullDouble(1);
-                System.out.println("Average Name Length: " + value);
-            }
+db.close(); // finally, close the connection(s) to the database
+```
 
-            // Raw stream
-            String sql = "SELECT name, age FROM users WHERE id < ? ORDER BY age ASC";
-            try (Stream<Cursor> stream = db.fetch(sql, 50).stream()) {
-                stream.forEach(current -> {
-                    String name = current.getString("name").orElse("(No Name)");
-                    int age = current.getNonNullInt("age");
-                    System.out.println(name + " is " + age + " years old");
-                });
-            }
+We tell Flow that this database speaks SQLite (as opposed to MySQL, or Postres for example).
+Behind the scenes, the `database(...)` method constructs a default `Connector` implementation
+that provides one single connection to a database based on the URL provided. Don't forget to 
+close the database connection when you are done. This can be done with try-with-resources if
+your prefer.
 
-            // Flow stream
-            SelectScoped query = db.selectFrom(USERS).fields(NAME, AGE).where(ID.lt(50)).order(orderAsc(AGE));
-            try (Stream<Cursor> stream = query.fetch().stream()) {
-                stream.forEach(current -> {
-                    String name = current.getString("name").orElse("(No Name)");
-                    int age = current.getNonNullInt("age");
-                    System.out.println(name + " is " + age + " years old");
-                });
-            }
-        }
+Let's perform a simple raw SQL query.
+
+> _Note: Try-with-resources in Java 8 makes it easy to cleanly close objects that implement `AutoCloseable`.
+> If you are not using try-with-resources, you must manually call `.close()` on the cursor once you are done._
+
+```java
+try (Cursor cursor = db.fetch("SELECT name FROM users WHERE id < ? AND name = ?", 10, "Jonathan")) {
+    while (cursor.moveNext()) {
+        String name = cursor.getNonNullString(1);
+        System.out.println(name);
     }
 }
-
 ```
+
+This looks similar to JDBC's ResultSet, and it should. In order to maintain the performance of JDBC,
+Flow keeps this lower level interface available.
+
+The above example, as a stream...
+
+```java
+try (Stream<Cursor> stream = db.fetch("SELECT name FROM users WHERE id < ? AND name = ?", 10, "Jonathan").stream()) {
+    stream.map(record -> record.getNonNullString(1)).forEach(System.out::println);
+}
+```
+
+This is pretty nifty, but with Flow you can forget about raw SQL queries. This makes it easier and safer
+to access and change database records.
+
+```java
+// These should probably be static, final somewhere in a "table"-like class.
+Field users = field("users");
+Field id = users.column("id");
+Field name = users.column("name");
+
+SelectScoped select = db.selectFrom(users).fields(name).where(id.lt(50).and(name.eq("Jonathan")));
+try (Stream<Cursor> stream = select.fetch().stream()) {
+    stream.map(record -> record.getNonNullString(1)).forEach(System.out::println);
+}
+```
+
+That's all for now folks.
