@@ -96,8 +96,8 @@ to access and change database records.
 ```java
 // These should probably be static, final somewhere in a "table"-like class.
 Field users = field("users");
-Field id = users.column("id");
-Field name = users.column("name");
+Column<Integer> id = column(users, "id", Integer.class);
+Column<String> name = column(users, "name", String.class);
 
 SelectScoped select = db.selectFrom(users).fields(name).where(id.lt(50).and(name.eq("Jonathan")));
 try (Stream<Cursor> stream = select.fetch().stream()) {
@@ -105,4 +105,22 @@ try (Stream<Cursor> stream = select.fetch().stream()) {
 }
 ```
 
-That's all for now folks.
+Filters were used above in the `where` clause: `id.lt(50).and(name.eq("Jonathan"))`. They are pretty
+straightforward. Here are some examples, with comments showing their SQL equivalent:
+
+```java
+// name = 'Adam'
+Filter adam = name.eq("Adam");
+
+// age <= 21
+Filter young = age.lte(21);
+
+// name = 'Adam' AND age <= 21
+Filter youngAdam = adam.and(young);
+
+// (name = 'Adam' AND age <= 21) OR age > 75
+Filter youngAdamOrElderly = youngAdam.or(age.gt(75));
+
+// LENGTH(name) >= 10
+Filter longNames = length(name).gte(10);
+```

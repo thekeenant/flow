@@ -1,9 +1,18 @@
 package com.keenant.flow;
 
-import com.keenant.flow.impl.exp.Field;
+public interface Column<T> extends MappedColumn<T, T>  {
+    @Override
+    default T from(T object) {
+        return object;
+    }
 
-public interface Column<T, U> extends Exp, Transformer<T, U> {
-    Field getTable();
+    @Override
+    default T to(T sourceObject) {
+        return sourceObject;
+    }
 
-    String getName();
+    @Override
+    default Class<T> getSourceType() {
+        return getType();
+    }
 }

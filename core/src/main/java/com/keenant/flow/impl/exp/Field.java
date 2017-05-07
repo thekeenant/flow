@@ -26,12 +26,6 @@ public class Field extends AbstractExp {
         this.column = column;
     }
 
-    public Field column(String column) {
-        if (isQualified())
-            throw new IllegalArgumentException("Base field cannot already be qualified");
-        return new Field(field, column);
-    }
-
     public boolean isQualified() {
         return column != null;
     }

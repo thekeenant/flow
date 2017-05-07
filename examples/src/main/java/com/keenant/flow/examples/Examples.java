@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 
 import static com.keenant.flow.Flow.*;
 
-public class UsersTable {
+public class Examples {
     private static final Field USERS = field("users");
-    private static final Field ID = USERS.column("id");
-    private static final Field NAME = USERS.column("name");
-    private static final Field AGE = USERS.column("age");
+    private static final Column<Integer> ID = column(USERS, "id", Integer.class);
+    private static final Column<String> NAME = column(USERS, "name", String.class);
+    private static final Column<Integer> AGE = column(USERS, "age", Integer.class);
 
     public static void main(String[] args) throws Exception {
         try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
@@ -46,6 +46,21 @@ public class UsersTable {
                     System.out.println(name + " is " + age + " years old");
                 });
             }
+
+            // name = 'Adam'
+            Filter adam = NAME.eq("Adam");
+
+            // age <= 21
+            Filter young = AGE.lte(21);
+
+            // name = 'Adam' AND age <= 21
+            Filter youngAdam = adam.and(young);
+
+            // (name = 'Adam' AND age < 21) OR age > 75
+            Filter youngAdamOrElderly = youngAdam.or(AGE.gt(75));
+
+            // LENGTH(name) >= 10
+            Filter longNames = length(NAME).gte(10);
         }
     }
 }

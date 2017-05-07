@@ -1,6 +1,6 @@
 package com.keenant.flow.impl;
 
-import com.keenant.flow.Column;
+import com.keenant.flow.MappedColumn;
 import com.keenant.flow.Record;
 import com.keenant.flow.Transformer;
 
@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public abstract class AbstractRecord implements Record {
     @Override
-    public <T, U> Optional<U> get(Column<T, U> column) throws NoSuchElementException, ClassCastException {
+    public <T, U> Optional<U> get(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException {
         return get(getFieldIndex(column.getName()), column);
     }
 
     @Override
-    public <T, U> U getNonNull(Column<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException {
+    public <T, U> U getNonNull(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException {
         return getNonNull(getFieldIndex(column.getName()), column);
     }
 
@@ -41,11 +41,6 @@ public abstract class AbstractRecord implements Record {
     @Override
     public <T, U> U getNonNull(String label, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException, IllegalStateException {
         return getNonNull(getFieldIndex(label),  transformer);
-    }
-
-    @Override
-    public Optional<Object> get(int index) throws NoSuchElementException {
-        return null;
     }
 
     @Override

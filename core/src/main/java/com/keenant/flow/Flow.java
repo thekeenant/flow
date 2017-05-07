@@ -31,6 +31,10 @@ public class Flow {
 
     // Todo: So many functions...
 
+    public static <T> Column<T> column(Field table, String name, Class<T> type) {
+        return new IColumn<>(table, name, type);
+    }
+
     public static Exp wildcard() {
         return WILDCARD;
     }

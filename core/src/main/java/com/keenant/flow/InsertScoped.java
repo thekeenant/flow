@@ -1,13 +1,24 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exception.DatabaseException;
 
-/**
- * An insert query which is targeted for a specific database with a specific dialect.
- */
 public interface InsertScoped extends Insert {
-    @Override
-    InsertSelectScoped select(Select select);
+    QueryPart build();
+
+    void execute() throws DatabaseException;
 
     @Override
-    InsertRecordScoped newRecord();
+    InsertScoped cpy();
+
+    @Override
+    InsertScoped table(Exp table);
+
+    @Override
+    InsertScoped with(String field, Exp value);
+
+    @Override
+    InsertScoped with(String field, Object value);
+
+    @Override
+    InsertScoped newRecord();
 }
