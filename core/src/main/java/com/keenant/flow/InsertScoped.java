@@ -2,9 +2,10 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 
-public interface InsertScoped extends Insert {
-    QueryPart build();
-
+public interface InsertScoped extends ScopedQueryPartBuilder, Insert {
+    /**
+     * @see Insert#build(SQLDialect)
+     */
     void execute() throws DatabaseException;
 
     @Override

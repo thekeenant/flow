@@ -58,6 +58,16 @@ public class IInsertScoped implements InsertScoped {
     }
 
     @Override
+    public DatabaseContext getDatabase() {
+        return database;
+    }
+
+    @Override
+    public SQLDialect getDialect() {
+        return dialect;
+    }
+
+    @Override
     public QueryPart build(SQLDialect dialect) {
         return insert.build(dialect);
     }

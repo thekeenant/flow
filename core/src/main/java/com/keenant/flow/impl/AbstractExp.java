@@ -19,6 +19,11 @@ public abstract class AbstractExp implements Exp {
     }
 
     @Override
+    public Filter like(Exp other) {
+        return new CompareFilter(this, other, Comparator.LIKE);
+    }
+
+    @Override
     public Filter eq(Exp other) {
         return new CompareFilter(this, other, Comparator.EQUALS);
     }

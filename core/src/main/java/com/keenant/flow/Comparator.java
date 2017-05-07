@@ -6,15 +6,16 @@ public enum Comparator {
     LESS("<"),
     LESS_OR_EQUAL("<="),
     GREATER(">"),
-    GREATER_OR_EQUAL(">=");
+    GREATER_OR_EQUAL(">="),
+    LIKE("LIKE");
 
-    private final String symbol;
+    private final String sql;
 
-    Comparator(String symbol) {
-        this.symbol = symbol;
+    Comparator(String sql) {
+        this.sql = sql;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getSql() {
+        return sql;
     }
 }

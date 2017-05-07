@@ -8,33 +8,16 @@ import java.util.Collection;
 /**
  * A select query which is targeted for a specific database with a specific dialect.
  */
-public interface SelectScoped extends Select {
+public interface SelectScoped extends ScopedQueryPartBuilder, Select {
     /**
-     * @return the database associated with this query
-     */
-    DatabaseContext getDatabase();
-
-    /**
-     * @return the dialect associated with this query
-     */
-    SQLDialect getDialect();
-
-    /**
-     * See {@link Select#build(SQLDialect)}.
-     */
-    QueryPart build();
-
-    /**
-     * See {@link Select#fetch(DatabaseContext, SQLDialect)}.
+     * @see Select#fetch(DatabaseContext, SQLDialect)
      */
     EagerCursor fetch() throws DatabaseException;
 
     /**
-     * See {@link Select#fetchLazy(DatabaseContext, SQLDialect)}.
+     * @see Select#fetchLazy(DatabaseContext, SQLDialect)
      */
     Cursor fetchLazy() throws DatabaseException;
-
-    // we override Select, modifying the returned object to an instance of SelectScoped
 
     @Override
     SelectScoped cpy();

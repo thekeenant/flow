@@ -21,7 +21,7 @@ public interface DatabaseContext extends AutoCloseable {
     Query prepareQuery(String sql, List<Object> params, QueryConfig config);
 
     /**
-     * See {@link #prepareQuery(String, List, QueryConfig)}.
+     * @see #prepareQuery(String, List, QueryConfig)
      */
     default Query prepareQuery(QueryPart part, QueryConfig config) {
         return prepareQuery(part.getSql(), part.getParams(), config);
@@ -36,14 +36,14 @@ public interface DatabaseContext extends AutoCloseable {
     EagerCursor fetch(String sql, List<Object> params);
 
     /**
-     * See {@link #fetch(String, List)}.
+     * @see #fetch(String, List)
      */
     default EagerCursor fetch(QueryPart part) {
         return fetch(part.getSql(), part.getParams());
     }
 
     /**
-     * See {@link #fetch(String, List)}.
+     * @see #fetch(String, List)
      */
     default EagerCursor fetch(String sql, Object... params) {
         return fetch(sql, Arrays.asList(params));
@@ -59,14 +59,14 @@ public interface DatabaseContext extends AutoCloseable {
     Cursor fetchLazy(String sql, List<Object> params);
 
     /**
-     * See {@link #fetchLazy(String, List)}.
+     * @see #fetchLazy(String, List)
      */
     default Cursor fetchLazy(QueryPart part) {
         return fetchLazy(part.getSql(), part.getParams());
     }
 
     /**
-     * See {@link #fetchLazy(String, List)}.
+     * @see #fetchLazy(String, List)
      */
     default Cursor fetchLazy(String sql, Object... params) {
         return fetchLazy(sql, Arrays.asList(params));

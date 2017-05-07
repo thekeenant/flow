@@ -16,22 +16,28 @@ public interface Exp extends QueryPartBuilder {
 
     /**
      * @param other the right-hand-side
+     * @return the LIKE filter
+     */
+    Filter like(Exp other);
+
+    /**
+     * @param other the right-hand-side
      * @return equality filter
      */
     Filter eq(Exp other);
 
     /**
-     * See {@link #eq(Exp)}.
+     * @see #eq(Exp)
      */
     Filter eq(Object other);
 
     /**
-     * See {@link #eq(Exp)}.
+     * @see #eq(Exp)
      */
     Filter equal(Exp other);
 
     /**
-     * See {@link #eq(Exp)}.
+     * @see #eq(Exp)
      */
     Filter equal(Object other);
 
@@ -42,7 +48,7 @@ public interface Exp extends QueryPartBuilder {
     Filter equalIgnoreCase(Exp other);
 
     /**
-     * See {@link #equalIgnoreCase(Exp)}.
+     * @see #equalIgnoreCase(Exp)
      */
     Filter equalIgnoreCase(Object other);
 
@@ -53,7 +59,7 @@ public interface Exp extends QueryPartBuilder {
     Filter notEqualIgnoreCase(Exp other);
 
     /**
-     * See {@link #notEqualIgnoreCase(Exp)}.
+     * @see #notEqualIgnoreCase(Exp)
      */
     Filter notEqualIgnoreCase(Object other);
 
@@ -64,17 +70,17 @@ public interface Exp extends QueryPartBuilder {
     Filter neq(Exp other);
 
     /**
-     * See {@link #neq(Exp)}.
+     * @see #neq(Exp)
      */
     Filter neq(Object other);
 
     /**
-     * See {@link #neq(Exp)}.
+     * @see #neq(Exp)
      */
     Filter notEqual(Exp other);
 
     /**
-     * See {@link #neq(Exp)}.
+     * @see #neq(Exp)
      */
     Filter notEqual(Object other);
 
@@ -85,17 +91,17 @@ public interface Exp extends QueryPartBuilder {
     Filter lt(Exp other);
 
     /**
-     * See {@link #lt(Exp)}.
+     * @see #lt(Exp)
      */
     Filter lt(Object other);
 
     /**
-     * See {@link #lt(Exp)}.
+     * @see #lt(Exp)
      */
     Filter lessThan(Exp other);
 
     /**
-     * See {@link #lt(Exp)}.
+     * @see #lt(Exp)
      */
     Filter lessThan(Object other);
 
@@ -106,17 +112,17 @@ public interface Exp extends QueryPartBuilder {
     Filter gt(Exp other);
 
     /**
-     * See {@link #gt(Exp)}.
+     * @see #gt(Exp)
      */
     Filter gt(Object other);
 
     /**
-     * See {@link #gt(Exp)}.
+     * @see #gt(Exp)
      */
     Filter greaterThan(Exp other);
 
     /**
-     * See {@link #gt(Exp)}.
+     * @see #gt(Exp)
      */
     Filter greaterThan(Object other);
 
@@ -127,17 +133,17 @@ public interface Exp extends QueryPartBuilder {
     Filter lte(Exp other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter lte(Object other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter lessThanEqual(Exp other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter lessThanEqual(Object other);
 
@@ -148,17 +154,17 @@ public interface Exp extends QueryPartBuilder {
     Filter gte(Exp other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter gte(Object other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter greaterThanEqual(Exp other);
 
     /**
-     * See {@link #gte(Exp)}.
+     * @see #gte(Exp)
      */
     Filter greaterThanEqual(Object other);
 }

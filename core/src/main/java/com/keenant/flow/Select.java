@@ -37,7 +37,7 @@ public interface Select extends QueryPartBuilder {
     Select fields(Collection<Exp> fields);
 
     /**
-     * See {@link #fields(Collection)}.
+     * @see #fields(Collection)
      */
     default Select fields(Exp... fields) {
         return fields(Arrays.asList(fields));
