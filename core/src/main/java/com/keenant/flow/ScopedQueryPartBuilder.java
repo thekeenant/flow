@@ -1,8 +1,8 @@
 package com.keenant.flow;
 
 /**
- *
- *
+ * A {@link QueryPartBuilder}, but scoped to a particular database and dialect.
+ * 
  * @see QueryPartBuilder
  */
 public interface ScopedQueryPartBuilder extends QueryPartBuilder {

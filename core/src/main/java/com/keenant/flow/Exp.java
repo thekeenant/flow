@@ -133,17 +133,17 @@ public interface Exp extends QueryPartBuilder {
     Filter lte(Exp other);
 
     /**
-     * @see #gte(Exp)
+     * @see #lte(Exp)
      */
     Filter lte(Object other);
 
     /**
-     * @see #gte(Exp)
+     * @see #lte(Exp)
      */
     Filter lessThanEqual(Exp other);
 
     /**
-     * @see #gte(Exp)
+     * @see #lte(Exp)
      */
     Filter lessThanEqual(Object other);
 
