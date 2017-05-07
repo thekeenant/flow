@@ -4,9 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Data class that holds a parameterized SQL string.
- *
- * It may be a small component of a full query, or the full query itself.
+ * Data class that holds a partial or complete parameterized SQL string.
  */
 public interface QueryPart {
     String getSql();

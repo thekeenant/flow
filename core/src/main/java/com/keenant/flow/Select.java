@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * A select query.
  */
-public interface Select {
+public interface Select extends QueryPartBuilder {
     /**
      * Create a copy of this object.
      * @return the new select
@@ -56,13 +56,6 @@ public interface Select {
      * @return this
      */
     Select order(Exp order);
-
-    /**
-     * Build the complete query.
-     * @param dialect the dialect to use
-     * @return the parameterized query
-     */
-    QueryPart build(SQLDialect dialect);
 
     /**
      * Execute the query and put all records into memory. On large queries this can be very costly.

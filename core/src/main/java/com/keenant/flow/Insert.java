@@ -1,6 +1,6 @@
 package com.keenant.flow;
 
-public interface Insert {
+public interface Insert extends QueryPartBuilder {
     Insert cpy();
 
     Insert table(Exp table);
@@ -10,8 +10,6 @@ public interface Insert {
     Insert with(String field, Object value);
 
     Insert newRecord();
-
-    QueryPart build(SQLDialect dialect);
 
     void execute(DatabaseContext database, SQLDialect dialect);
 }
