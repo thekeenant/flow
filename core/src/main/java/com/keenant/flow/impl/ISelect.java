@@ -2,7 +2,7 @@ package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.ListExp;
-import com.keenant.flow.jdbc.QueryConfig;
+import com.keenant.flow.jdbc.FetchConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,8 +105,8 @@ public class ISelect implements Select {
         return new IQueryPart(sql.toString(), params);
     }
 
-    private Result execute(DatabaseContext database, SQLDialect dialect, QueryConfig config) {
-        return database.prepareQuery(build(dialect), config).execute();
+    private Result execute(DatabaseContext database, SQLDialect dialect, FetchConfig config) {
+        return database.prepareFetch(config, build(dialect)).execute();
     }
 
     @Override

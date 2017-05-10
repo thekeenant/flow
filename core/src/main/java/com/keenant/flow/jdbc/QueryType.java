@@ -1,22 +1,16 @@
 package com.keenant.flow.jdbc;
 
-import java.sql.ResultSet;
-
 /**
- * Some drivers support moving back and forth in a result set.
+ * There are two types of queries in JDBC, which have subtypes.
  */
 public enum QueryType {
-    FORWARD_ONLY(ResultSet.TYPE_FORWARD_ONLY),
-    SCROLL_INSENSITIVE(ResultSet.TYPE_SCROLL_INSENSITIVE),
-    SCROLL_SENSITIVE(ResultSet.TYPE_SCROLL_SENSITIVE);
+    /**
+     * A select query to the database.
+     */
+    FETCH,
 
-    private int value;
-
-    QueryType(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
+    /**
+     * Any type of database update such as a delete, create, update.
+     */
+    UPDATE;
 }

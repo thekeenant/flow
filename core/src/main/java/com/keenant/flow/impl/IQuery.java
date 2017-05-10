@@ -3,7 +3,8 @@ package com.keenant.flow.impl;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.Query;
 import com.keenant.flow.Result;
-import com.keenant.flow.jdbc.QueryConfig;
+import com.keenant.flow.jdbc.FetchConfig;
+import com.keenant.flow.jdbc.QueryType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,11 +12,11 @@ import java.sql.SQLException;
 
 public class IQuery implements Query {
     private final PreparedStatement statement;
-    private final QueryConfig config;
+    private final QueryType type;
 
-    public IQuery(PreparedStatement statement, QueryConfig config) {
+    public IQuery(PreparedStatement statement, QueryType type) {
         this.statement = statement;
-        this.config = config;
+        this.type = type;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class IQuery implements Query {
             ResultSet resultSet;
             ResultSet generated = null;
 
-            switch (config.getMode()) {
+            switch (type) {
                 case FETCH:
                     resultSet = statement.executeQuery();
                     break;

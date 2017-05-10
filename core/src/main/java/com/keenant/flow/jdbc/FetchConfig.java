@@ -1,30 +1,30 @@
 package com.keenant.flow.jdbc;
 
 /**
- * Configuration for creating and executing an SQL query. Use the {@link #builder(QueryMode)} method to
+ * Configuration for creating and executing an SQL query. Use the {@link #builder(QueryType)} method to
  * build a new config.
  */
-public final class QueryConfig {
-    private final QueryMode mode;
-    private final QueryType type;
+public final class FetchConfig {
+    private final QueryType mode;
+    private final QueryScroll type;
     private final QueryConcurrency concurrency;
     private final Integer timeout;
 
-    private QueryConfig(QueryMode mode, QueryType type, QueryConcurrency concurrency, Integer timeout) {
+    private FetchConfig(QueryType mode, QueryScroll type, QueryConcurrency concurrency, Integer timeout) {
         if (mode == null)
             throw new IllegalArgumentException("Query mode must not be null");
 
         this.mode = mode;
-        this.type = type == null ? QueryType.FORWARD_ONLY : type;
+        this.type = type == null ? QueryScroll.FORWARD_ONLY : type;
         this.concurrency = concurrency == null ? QueryConcurrency.READ_ONLY : concurrency;
         this.timeout = timeout;
     }
 
-    public QueryMode getMode() {
+    public QueryType getMode() {
         return mode;
     }
 
-    public QueryType getType() {
+    public QueryScroll getType() {
         return type;
     }
 
@@ -36,25 +36,19 @@ public final class QueryConfig {
         return timeout;
     }
 
-    public static Builder builder(QueryMode mode) {
-        return new Builder().mode(mode);
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static final class Builder {
-        private QueryMode mode;
-        private QueryType type;
+        private QueryScroll type;
         private QueryConcurrency concurrency;
         private Integer timeout;
 
         private Builder() {
         }
 
-        public Builder mode(QueryMode mode) {
-            this.mode = mode;
-            return this;
-        }
-
-        public Builder type(QueryType type) {
+        public Builder type(QueryScroll type) {
             this.type = type;
             return this;
         }
@@ -69,9 +63,8 @@ public final class QueryConfig {
             return this;
         }
 
-        public QueryConfig build() {
-            QueryConfig queryConfig = new QueryConfig(mode, type, concurrency, timeout);
-            return queryConfig;
+        public FetchConfig build() {
+            return new FetchConfig(QueryType.FETCH, type, concurrency, timeout);
         }
     }
 }

@@ -2,8 +2,8 @@ package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.ParamExp;
-import com.keenant.flow.jdbc.QueryConfig;
-import com.keenant.flow.jdbc.QueryMode;
+import com.keenant.flow.jdbc.FetchConfig;
+import com.keenant.flow.jdbc.QueryType;
 
 import java.util.*;
 
@@ -102,9 +102,7 @@ public class IInsert implements Insert {
     @Override
     public void execute(DatabaseContext database, SQLDialect dialect) {
         QueryPart part = build(dialect);
-        QueryConfig config = QueryConfig.builder(QueryMode.UPDATE).build();
-
-        Query query = database.prepareQuery(part, config);
+        Query query = database.prepareUpdate(part);
         query.execute();
     }
 }

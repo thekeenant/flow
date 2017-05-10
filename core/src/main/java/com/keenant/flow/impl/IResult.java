@@ -46,8 +46,12 @@ public class IResult implements Result {
     @Override
     public void close() {
         try {
-            resultSet.close();
-            generated.close();
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (generated != null) {
+                generated.close();
+            }
             statement.close();
         } catch (SQLException e) {
             // Todo

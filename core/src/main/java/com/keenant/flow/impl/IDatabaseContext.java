@@ -2,12 +2,15 @@ package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
 import com.keenant.flow.exception.DatabaseException;
-import com.keenant.flow.jdbc.QueryConfig;
-import com.keenant.flow.jdbc.QueryMode;
+import com.keenant.flow.jdbc.FetchConfig;
+import com.keenant.flow.jdbc.QueryScroll;
 import com.keenant.flow.jdbc.QueryType;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class IDatabaseContext implements DatabaseContext {
@@ -20,42 +23,65 @@ public class IDatabaseContext implements DatabaseContext {
     }
 
     @Override
-    public Query prepareQuery(String sql, List<Object> params, QueryConfig config) {
+    public Query prepareUpdate(String sql, Collection<?> params) {
         try {
-            PreparedStatement statement = connector.acquire().prepareStatement(sql, config.getType().getValue(), config.getConcurrency().getValue());
-            for (int i = 0; i < params.size(); i++) {
-                statement.setObject(i + 1, params.get(i));
+            PreparedStatement statement = connector.acquire().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            Iterator<?> iterator = params.iterator();
+            int i = 1;
+            while (iterator.hasNext()) {
+                statement.setObject(i, iterator.next());
+                i++;
             }
 
             // Create the query object, passing on the query config to it
-            return new IQuery(statement, config);
+            return new IQuery(statement, QueryType.UPDATE);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
     }
 
     @Override
-    public EagerCursor fetch(String sql, List<Object> params) {
-        if (dialect.supportsScrolling()) {
-            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                    .type(QueryType.SCROLL_INSENSITIVE)
-                    .build();
-            return prepareQuery(sql, params, config).execute().eagerCursor();
-        }
-        else {
-            QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                    .type(QueryType.FORWARD_ONLY)
-                    .build();
-            return prepareQuery(sql, params, config).execute().safeEagerCursor();
+    public Query prepareFetch(FetchConfig config, String sql, Collection<?> params) {
+        try {
+            PreparedStatement statement = connector.acquire().prepareStatement(sql, config.getType().getValue(), config.getConcurrency().getValue());
+
+            Iterator<?> iterator = params.iterator();
+            int i = 1;
+            while (iterator.hasNext()) {
+                statement.setObject(i, iterator.next());
+                i++;
+            }
+
+            // Create the query object, passing on the query config to it
+            return new IQuery(statement, QueryType.FETCH);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
         }
     }
 
     @Override
-    public Cursor fetchLazy(String sql, List<Object> params) {
-        QueryConfig config = QueryConfig.builder(QueryMode.FETCH)
-                .type(QueryType.FORWARD_ONLY)
+    public EagerCursor fetch(String sql, Collection<?> params) {
+        if (dialect.supportsScrolling()) {
+            FetchConfig config = FetchConfig.builder()
+                    .type(QueryScroll.INSENSITIVE)
+                    .build();
+            return prepareFetch(config, sql, params).execute().eagerCursor();
+        }
+        else {
+            FetchConfig config = FetchConfig.builder()
+                    .type(QueryScroll.FORWARD_ONLY)
+                    .build();
+            return prepareFetch(config, sql, params).execute().safeEagerCursor();
+        }
+    }
+
+    @Override
+    public Cursor fetchLazy(String sql, Collection<?> params) {
+        FetchConfig config = FetchConfig.builder()
+                .type(QueryScroll.FORWARD_ONLY)
                 .build();
-        return prepareQuery(sql, params, config).execute().lazyCursor();
+        return prepareFetch(config, sql, params).execute().lazyCursor();
     }
 
     @Override

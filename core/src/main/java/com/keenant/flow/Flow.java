@@ -9,8 +9,10 @@ import java.util.Collection;
 public class Flow {
     private static final Exp WILDCARD = new InlineExp("*");
 
-    public static DefaultConnector connector(String url) {
-        return new DefaultConnector(url);
+    public static DefaultConnector connect(String url) {
+        DefaultConnector connector = new DefaultConnector(url);
+        connector.acquire();
+        return connector;
     }
 
     public static DatabaseContext database(SQLDialect dialect, Connector connector) {
@@ -18,7 +20,7 @@ public class Flow {
     }
 
     public static DatabaseContext database(SQLDialect dialect, String url) {
-        return database(dialect, connector(url));
+        return database(dialect, connect(url));
     }
 
     public static Select selectFrom(Exp table) {
@@ -29,7 +31,13 @@ public class Flow {
         return new IInsert(table);
     }
 
-    // Todo: So many functions...
+    public static QueryPart parameterize(String sql, Object... params) {
+        return new IQueryPart(sql, params);
+    }
+
+    public static QueryPart parameterize(String sql, Collection<?> params) {
+        return new IQueryPart(sql, params);
+    }
 
     public static <T> Column<T> column(Field table, String name, Class<T> type) {
         return new IColumn<>(table, name, type);

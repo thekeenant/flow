@@ -33,15 +33,14 @@ Supported:
 * Insert query
     * Multi insert
 * Databases (Tested)
+    * MySQL
     * SQLite
 
 Planned:
-* Column API (for pseudo type-safe queries)
 * Update query
 * Delete query
 * Create table query
 * Databases
-    * MySQL
     * Postgres
 
 ## Introduction
@@ -67,7 +66,7 @@ your prefer.
 
 Let's perform a simple raw SQL query.
 
-> _Note: Try-with-resources in Java 8 makes it easy to cleanly close objects that implement `AutoCloseable`.
+> _Note: Try-with-resources in Java 7 makes it easy to cleanly close objects that implement `AutoCloseable`.
 > If you are not using try-with-resources, you must manually call `.close()` on the cursor once you are done._
 
 ```java

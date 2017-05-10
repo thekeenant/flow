@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import static com.keenant.flow.Flow.*;
 
-public class Examples {
+public class SQLiteExample {
     private static final Field USERS = field("users");
     private static final Column<Integer> ID = column(USERS, "id", Integer.class);
     private static final Column<String> NAME = column(USERS, "name", String.class);
