@@ -7,10 +7,31 @@ import com.keenant.flow.Transformer;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractRecord implements Record {
+    @Override
+    public Map<Integer, Object> toIndexMap() {
+        Map<Integer, Object> result = new LinkedHashMap<>(); // preserve insertion order
+        int current = 1;
+        while (hasField(current)) {
+            result.put(current, get(current).orElse(null));
+            current++;
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> toLabelMap() {
+        Map<String, Object> result = new LinkedHashMap<>(); // preserve insertion order
+        int current = 1;
+        while (hasField(current)) {
+            result.put(getFieldLabel(current), get(current).orElse(null));
+            current++;
+        }
+        return result;
+    }
+
     @Override
     public <T, U> Optional<U> get(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException {
         return get(getFieldIndex(column.getName()), column);

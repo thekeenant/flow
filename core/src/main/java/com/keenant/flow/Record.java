@@ -3,6 +3,7 @@ package com.keenant.flow;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -36,6 +37,19 @@ public interface Record {
      * @throws NoSuchElementException if the field label is not present
      */
     int getFieldIndex(String label) throws IllegalArgumentException, NoSuchElementException;
+
+    /**
+     * Get a field label by its index.
+     *
+     * @param index the field index
+     * @return the field
+     * @throws NoSuchElementException if the field label is not present
+     */
+    String getFieldLabel(int index) throws NoSuchElementException;
+
+    Map<Integer, Object> toIndexMap();
+
+    Map<String, Object> toLabelMap();
 
     <T, U> Optional<U> get(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException;
 

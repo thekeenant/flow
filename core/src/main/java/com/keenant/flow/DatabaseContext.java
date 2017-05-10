@@ -5,7 +5,6 @@ import com.keenant.flow.jdbc.FetchConfig;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Represents a database which can be accessed and manipulated. Any number of connections may be
@@ -44,6 +43,15 @@ public interface DatabaseContext extends AutoCloseable {
     Query prepareFetch(FetchConfig config, String sql, Collection<?> params);
 
     /**
+     * Uses the default fetch configuration.
+     *
+     * @see #prepareFetch(FetchConfig, String, Collection)
+     */
+    default Query prepareFetch(String sql, Collection<?> params) {
+        return prepareFetch(FetchConfig.DEFAULT, sql, params);
+    }
+
+    /**
      * @see #prepareFetch(FetchConfig, String, Collection)
      */
     default Query prepareFetch(FetchConfig config, QueryPart part) {
@@ -51,10 +59,28 @@ public interface DatabaseContext extends AutoCloseable {
     }
 
     /**
+     * Uses the default fetch configuration.
+     *
+     * @see #prepareFetch(FetchConfig, String, Collection)
+     */
+    default Query prepareFetch(QueryPart part) {
+        return prepareFetch(FetchConfig.DEFAULT, part);
+    }
+
+    /**
      * @see #prepareFetch(FetchConfig, String, Collection)
      */
     default Query prepareFetch(FetchConfig config, String sql, Object... params) {
         return prepareFetch(config, sql, Arrays.asList(params));
+    }
+
+    /**
+     * Uses the default fetch configuration.
+     *
+     * @see #prepareFetch(FetchConfig, String, Collection)
+     */
+    default Query prepareFetch(String sql, Object... params) {
+        return prepareFetch(FetchConfig.DEFAULT, sql, params);
     }
 
     /**

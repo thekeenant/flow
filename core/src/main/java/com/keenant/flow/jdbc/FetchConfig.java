@@ -5,7 +5,8 @@ package com.keenant.flow.jdbc;
  * build a new config.
  */
 public final class FetchConfig {
-    private final QueryType mode;
+    public static final FetchConfig DEFAULT = FetchConfig.builder().build();
+
     private final QueryScroll type;
     private final QueryConcurrency concurrency;
     private final Integer timeout;
@@ -14,14 +15,9 @@ public final class FetchConfig {
         if (mode == null)
             throw new IllegalArgumentException("Query mode must not be null");
 
-        this.mode = mode;
         this.type = type == null ? QueryScroll.FORWARD_ONLY : type;
         this.concurrency = concurrency == null ? QueryConcurrency.READ_ONLY : concurrency;
         this.timeout = timeout;
-    }
-
-    public QueryType getMode() {
-        return mode;
     }
 
     public QueryScroll getType() {

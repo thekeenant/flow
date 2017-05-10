@@ -122,6 +122,17 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
     }
 
     @Override
+    public String getFieldLabel(int index) throws NoSuchElementException {
+        for (String label : labels.keySet()) {
+            int current = labels.get(label);
+            if (current == index) {
+                return label;
+            }
+        }
+        throw new NoSuchElementException();
+    }
+
+    @Override
     public Optional<Object> get(int index) throws NoSuchElementException {
         return Optional.ofNullable(getCurrentRecord()[index - 1]);
     }

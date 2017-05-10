@@ -91,6 +91,20 @@ public class ICursor extends AbstractRecord implements Cursor {
         }
     }
 
+    private void createLabelToIndex() {
+        if (labelToIndex == null) {
+            try {
+                labelToIndex = new HashMap<>();
+                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                    labelToIndex.put(resultSet.getMetaData().getColumnLabel(i), i);
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException(e);
+                // Todo
+            }
+        }
+    }
+
     @Override
     public boolean hasField(int index) {
         try {
@@ -105,6 +119,7 @@ public class ICursor extends AbstractRecord implements Cursor {
         if (label == null)
             throw new IllegalArgumentException();
 
+        createLabelToIndex();
         return labelToIndex.containsKey(label);
     }
 
@@ -114,18 +129,7 @@ public class ICursor extends AbstractRecord implements Cursor {
             throw new IllegalArgumentException();
         }
 
-        if (labelToIndex == null) {
-            try {
-                labelToIndex = new HashMap<>();
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    labelToIndex.put(resultSet.getMetaData().getColumnLabel(i), i);
-                }
-            } catch (SQLException e) {
-                throw new DatabaseException(e);
-                // Todo
-            }
-        }
-
+        createLabelToIndex();
         Integer index = labelToIndex.get(label);
 
         if (index == null) {
@@ -133,6 +137,18 @@ public class ICursor extends AbstractRecord implements Cursor {
         }
 
         return index;
+    }
+
+    @Override
+    public String getFieldLabel(int index) throws NoSuchElementException {
+        createLabelToIndex();
+        for (String label : labelToIndex.keySet()) {
+            int current = labelToIndex.get(label);
+            if (current == index) {
+                return label;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     /**
