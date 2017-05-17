@@ -5,6 +5,7 @@ import com.keenant.flow.exception.DatabaseException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
@@ -13,6 +14,7 @@ import java.util.stream.StreamSupport;
 public class ICursor extends AbstractRecord implements Cursor {
     private final PreparedStatement statement;
     private final ResultSet resultSet;
+    private ResultSetMetaData metaData;
 
     private Map<String, Integer> labelToIndex;
 
@@ -23,6 +25,17 @@ public class ICursor extends AbstractRecord implements Cursor {
 
     protected ResultSet getResultSet() {
         return resultSet;
+    }
+    
+    protected ResultSetMetaData getMetaData() {
+        if (metaData == null) {
+            try {
+                metaData = resultSet.getMetaData();
+            } catch (SQLException e) {
+                throw new DatabaseException(e);
+            }
+        }
+        return metaData;
     }
 
     @Override
@@ -95,8 +108,8 @@ public class ICursor extends AbstractRecord implements Cursor {
         if (labelToIndex == null) {
             try {
                 labelToIndex = new HashMap<>();
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    labelToIndex.put(resultSet.getMetaData().getColumnLabel(i), i);
+                for (int i = 1; i <= getMetaData().getColumnCount(); i++) {
+                    labelToIndex.put(getMetaData().getColumnLabel(i), i);
                 }
             } catch (SQLException e) {
                 throw new DatabaseException(e);
@@ -108,7 +121,7 @@ public class ICursor extends AbstractRecord implements Cursor {
     @Override
     public boolean hasField(int index) {
         try {
-            return index >= 1 && index <= resultSet.getMetaData().getColumnCount();
+            return index >= 1 && index <= getMetaData().getColumnCount();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }

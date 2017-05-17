@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 public class SQLDialect {
     public static final SQLDialect SQLITE = new SQLDialect("SQLite", str -> '"' + str + '"', false);
-    public static final SQLDialect MYSQL = new SQLDialect("MySQL", str -> '`' + str + '`', false);
+    public static final SQLDialect MYSQL = new SQLDialect("MySQL", str -> '`' + str + '`', true);
 
     private final String name;
     private final Function<String, String> fieldWrapper;
@@ -23,6 +23,4 @@ public class SQLDialect {
     public boolean supportsScrolling() {
         return scrolling;
     }
-
-
 }

@@ -55,7 +55,10 @@ public class DefaultConnector implements Connector {
     @Override
     public Connection acquire() throws DatabaseException {
         try {
-            return current = DriverManager.getConnection(url);
+            if (current == null) {
+                current = DriverManager.getConnection(url);
+            }
+            return current;
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -63,19 +66,22 @@ public class DefaultConnector implements Connector {
 
     @Override
     public void dispose(Connection connection) {
+        if (connection == null) {
+            throw new IllegalArgumentException("Connection was null");
+        }
+
         if (Objects.equals(current, connection)) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new DatabaseException(e);
+            }
             current = null;
         }
     }
 
     @Override
     public void disposeAll() {
-        getConnection().ifPresent(conn -> {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                throw new DatabaseException(e);
-            }
-        });
+        getConnection().ifPresent(this::dispose);
     }
 }

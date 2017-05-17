@@ -5,6 +5,7 @@ import com.keenant.flow.Cursor;
 import com.keenant.flow.EagerCursor;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -17,6 +18,7 @@ import java.util.stream.StreamSupport;
 public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
     private final Statement statement;
     private final ResultSet resultSet;
+    private ResultSetMetaData metaData;
 
     private List<Object[]> records;
     private Map<String, Integer> labels;
@@ -26,6 +28,17 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
         this.statement = statement;
         this.resultSet = resultSet;
     }
+    
+    private ResultSetMetaData getMetaData() {
+        if (metaData == null) {
+            try {
+                metaData = resultSet.getMetaData();
+            } catch (SQLException e) {
+                throw new DatabaseException(e);
+            }
+        }
+        return metaData;
+    }
 
     void populateAndClose() {
         if (records == null || labels == null) {
@@ -34,14 +47,14 @@ public class SafeEagerCursor extends AbstractRecord implements EagerCursor {
 
             try {
                 // Labels
-                for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                    labels.put(resultSet.getMetaData().getColumnLabel(i), i);
+                for (int i = 1; i <= getMetaData().getColumnCount(); i++) {
+                    labels.put(getMetaData().getColumnLabel(i), i);
                 }
 
                 // Records
                 while (resultSet.next()) {
-                    Object[] record = new Object[resultSet.getMetaData().getColumnCount()];
-                    for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
+                    Object[] record = new Object[getMetaData().getColumnCount()];
+                    for (int i = 0; i < getMetaData().getColumnCount(); i++) {
                         record[i] = resultSet.getObject(i + 1);
                     }
                     records.add(record);
