@@ -20,33 +20,29 @@ public class DefaultConnector implements Connector {
         this.url = url;
     }
 
-    private IllegalStateException closedException() {
-        return new IllegalStateException("Connection not made");
-    }
-
-    public Optional<Connection> getConnection() {
+    private Optional<Connection> getConnection() {
         return Optional.ofNullable(current);
     }
 
-    public void setAutoCommit(boolean auto) throws IllegalStateException, DatabaseException {
+    public void setAutoCommit(boolean auto) throws DatabaseException {
         try {
-            getConnection().orElseThrow(this::closedException).setAutoCommit(auto);
+            acquire().setAutoCommit(auto);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
     }
 
-    public void commit() throws IllegalStateException, DatabaseException {
+    public void commit() throws DatabaseException {
         try {
-            getConnection().orElseThrow(this::closedException).commit();
+            acquire().commit();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
     }
 
-    public void rollback() throws IllegalStateException, DatabaseException {
+    public void rollback() throws DatabaseException {
         try {
-            getConnection().orElseThrow(this::closedException).rollback();
+            acquire().rollback();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }

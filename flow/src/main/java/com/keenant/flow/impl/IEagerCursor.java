@@ -9,13 +9,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class IEagerCursor extends ICursor implements EagerCursor {
+    private ResultSet resultSet;
+
     public IEagerCursor(PreparedStatement statement, ResultSet resultSet) {
         super(statement, resultSet);
+        this.resultSet = resultSet;
     }
 
     public void moveTo(int record) {
         try {
-            getResultSet().absolute(record);
+            resultSet.absolute(record);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -28,7 +31,7 @@ public class IEagerCursor extends ICursor implements EagerCursor {
 
     public void moveToFirst() {
         try {
-            getResultSet().first();
+            resultSet.first();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -41,7 +44,7 @@ public class IEagerCursor extends ICursor implements EagerCursor {
 
     public void moveToLast() {
         try {
-            getResultSet().last();
+            resultSet.last();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -50,10 +53,5 @@ public class IEagerCursor extends ICursor implements EagerCursor {
     public IEagerCursor last() {
         moveToLast();
         return this;
-    }
-
-    @Override
-    protected void ensureValid() {
-        // Always valid
     }
 }

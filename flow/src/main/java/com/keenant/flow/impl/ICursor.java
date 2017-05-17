@@ -17,17 +17,14 @@ public class ICursor extends AbstractRecord implements Cursor {
     private ResultSetMetaData metaData;
 
     private Map<String, Integer> labelToIndex;
+    private boolean invalidated;
 
     public ICursor(PreparedStatement statement, ResultSet resultSet) {
         this.statement = statement;
         this.resultSet = resultSet;
     }
 
-    protected ResultSet getResultSet() {
-        return resultSet;
-    }
-    
-    protected ResultSetMetaData getMetaData() {
+    private ResultSetMetaData getMetaData() {
         if (metaData == null) {
             try {
                 metaData = resultSet.getMetaData();
@@ -63,15 +60,23 @@ public class ICursor extends AbstractRecord implements Cursor {
         return this;
     }
 
+    /**
+     * @return the cursor record stream
+     * @throws IllegalStateException if a stream or iterator has already been created
+     */
     @Override
-    public Stream<Cursor> stream() {
+    public Stream<Cursor> stream() throws IllegalStateException {
         Stream<Cursor> stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator(), Spliterator.ORDERED),false);
         stream = stream.onClose(this::close);
         return stream;
     }
 
+    /**
+     * @return the cursor record iterator
+     * @throws IllegalStateException if a stream or iterator has already been created
+     */
     @Override
-    public Iterator<Cursor> iterator() {
+    public Iterator<Cursor> iterator() throws IllegalStateException {
         return new CursorIterator();
     }
 
@@ -85,12 +90,16 @@ public class ICursor extends AbstractRecord implements Cursor {
         }
     }
 
-    protected void ensureValid() {
-        // Todo
+    private void ensureValid() {
+        if (invalidated) {
+            throw new IllegalStateException("the cursor has already been invalidated, delegation to a stream or" +
+                    "iterator can only be done once per cursor");
+        }
     }
 
-    private void invalidate() {
-        // Todo
+    private void invalidate() throws IllegalStateException {
+        ensureValid();
+        invalidated = true;
     }
 
     @Override
