@@ -1,6 +1,7 @@
 package com.keenant.flow;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public interface QueryPart {
 
     List<Object> getParams();
 
-    QueryPart join(String sql, List<Object> params);
+    QueryPart join(String sql, Collection<Object> params);
 
     default QueryPart join(String sql, Object... params) {
         return join(sql, Arrays.asList(params));

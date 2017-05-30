@@ -7,7 +7,7 @@ import com.keenant.flow.SQLDialect;
 
 import java.util.stream.Stream;
 
-import static com.keenant.flow.Flow.database;
+import static com.keenant.flow.impl.Flow.database;
 
 public class MySQLExample {
     public static void main(String[] args) throws Exception {

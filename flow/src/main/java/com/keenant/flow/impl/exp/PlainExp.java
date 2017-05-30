@@ -5,16 +5,21 @@ import com.keenant.flow.SQLDialect;
 import com.keenant.flow.impl.AbstractExp;
 import com.keenant.flow.impl.IQueryPart;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * A raw SQL expression.
  */
-public class InlineExp extends AbstractExp {
+public class PlainExp extends AbstractExp {
     private final QueryPart part;
 
-    public InlineExp(String sql) {
-        this.part = new IQueryPart(sql);
+    public PlainExp(String sql, List<Object> params) {
+        this.part = new IQueryPart(sql, params);
+    }
+
+    public PlainExp(String sql, Object... params) {
+        this(sql, Arrays.asList(params));
     }
 
     @Override

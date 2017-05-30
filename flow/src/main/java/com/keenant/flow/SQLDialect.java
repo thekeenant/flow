@@ -3,8 +3,23 @@ package com.keenant.flow;
 import java.util.function.Function;
 
 public class SQLDialect {
-    public static final SQLDialect SQLITE = new SQLDialect("SQLite", str -> '"' + str + '"', false);
-    public static final SQLDialect MYSQL = new SQLDialect("MySQL", str -> '`' + str + '`', true);
+    /**
+     * SQLite SQL dialect.
+     */
+    public static final SQLDialect SQLITE = new SQLDialect(
+            "SQLite",
+            str -> '"' + str + '"',
+            false
+    );
+
+    /**
+     * MySQL SQL dialect.
+     */
+    public static final SQLDialect MYSQL = new SQLDialect(
+            "MySQL",
+            str -> '`' + str + '`',
+            true
+    );
 
     private final String name;
     private final Function<String, String> fieldWrapper;

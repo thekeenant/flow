@@ -14,10 +14,15 @@ import java.util.Optional;
  */
 public class DefaultConnector implements Connector {
     private final String url;
+    private final String username;
+    private final String password;
+
     private Connection current;
 
-    public DefaultConnector(String url) {
+    public DefaultConnector(String url, String username, String password) {
         this.url = url;
+        this.username = username;
+        this.password = password;
     }
 
     private Optional<Connection> getConnection() {
@@ -52,7 +57,7 @@ public class DefaultConnector implements Connector {
     public Connection acquire() throws DatabaseException {
         try {
             if (current == null) {
-                current = DriverManager.getConnection(url);
+                current = DriverManager.getConnection(url, username, password);
             }
             return current;
         } catch (SQLException e) {

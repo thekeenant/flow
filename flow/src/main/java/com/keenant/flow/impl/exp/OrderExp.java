@@ -2,7 +2,7 @@ package com.keenant.flow.impl.exp;
 
 import com.keenant.flow.Exp;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.Order;
+import com.keenant.flow.jdbc.Order;
 
 public class OrderExp extends AbstractUnaryExp {
     private final Order order;

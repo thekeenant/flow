@@ -1,7 +1,7 @@
 package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
-import com.keenant.flow.impl.exp.LCaseExp;
+import com.keenant.flow.impl.exp.LowerExp;
 import com.keenant.flow.impl.exp.ParamExp;
 import com.keenant.flow.impl.filter.CompareFilter;
 import com.keenant.flow.impl.filter.ExpFilter;
@@ -45,7 +45,7 @@ public abstract class AbstractExp implements Exp {
 
     @Override
     public Filter equalIgnoreCase(Exp other) {
-        return new LCaseExp(this).eq(new LCaseExp(this));
+        return new LowerExp(this).eq(new LowerExp(this));
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class AbstractExp implements Exp {
 
     @Override
     public Filter notEqualIgnoreCase(Exp other) {
-        return new LCaseExp(this).neq(new LCaseExp(this));
+        return new LowerExp(this).neq(new LowerExp(this));
     }
 
     @Override

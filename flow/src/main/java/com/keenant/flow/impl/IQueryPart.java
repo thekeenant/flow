@@ -4,12 +4,10 @@ import com.keenant.flow.QueryPart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 public class IQueryPart implements QueryPart {
-    public static final IQueryPart EMPTY = new IQueryPart("", Collections.emptyList());
-
     private final String sql;
     private final List<Object> params;
 
@@ -33,7 +31,7 @@ public class IQueryPart implements QueryPart {
     }
 
     @Override
-    public QueryPart join(String sql, List<Object> params) {
+    public QueryPart join(String sql, Collection<Object> params) {
         String joinedSql = this.sql + sql;
         List<Object> joinedParams = new ArrayList<>();
         joinedParams.addAll(params);

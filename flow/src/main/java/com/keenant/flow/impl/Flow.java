@@ -1,16 +1,27 @@
-package com.keenant.flow;
+package com.keenant.flow.impl;
 
-import com.keenant.flow.impl.*;
+import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.*;
+import com.keenant.flow.impl.filter.PlainFilter;
+import com.keenant.flow.jdbc.Order;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class Flow {
-    private static final Exp WILDCARD = new InlineExp("*");
+    private static final Exp WILDCARD = new PlainExp("*");
 
     public static DefaultConnector connect(String url) {
-        DefaultConnector connector = new DefaultConnector(url);
+        return connect(url, null, null);
+    }
+
+    public static DefaultConnector connect(String url, String username) {
+        return connect(url, username, null);
+    }
+
+    public static DefaultConnector connect(String url, String username, String password) {
+        DefaultConnector connector = new DefaultConnector(url, username, password);
         connector.acquire();
         return connector;
     }
@@ -43,8 +54,12 @@ public class Flow {
         return new IColumn<>(table, name, type);
     }
 
-    public static Exp wildcard() {
-        return WILDCARD;
+    public static PlainFilter filter(String sql, Object... params) {
+        return new PlainFilter(sql, params);
+    }
+
+    public static PlainFilter filter(String sql, List<Object> params) {
+        return new PlainFilter(sql, params);
     }
 
     public static AbsExp abs(Exp exp) {
@@ -75,16 +90,8 @@ public class Flow {
         return new Field(table, column);
     }
 
-    public static InlineExp inline(String sql) {
-        return new InlineExp(sql);
-    }
-
     public static LengthExp length(Exp exp) {
         return new LengthExp(exp);
-    }
-
-    public static LCaseExp lcase(Exp exp) {
-        return new LCaseExp(exp);
     }
 
     public static ListExp list(Collection<Exp> exps) {
@@ -93,6 +100,10 @@ public class Flow {
 
     public static ListExp list(Exp... exps) {
         return new ListExp(Arrays.asList(exps));
+    }
+
+    public static LowerExp lower(Exp exp) {
+        return new LowerExp(exp);
     }
 
     public static MaxExp max(Exp exp) {
@@ -119,11 +130,19 @@ public class Flow {
         return new ParamExp(object);
     }
 
+    public static PlainExp plain(String sql) {
+        return new PlainExp(sql);
+    }
+
     public static SumExp sum(Exp exp) {
         return new SumExp(exp);
     }
 
-    public static UCaseExp ucase(Exp exp) {
-        return new UCaseExp(exp);
+    public static UpperExp upper(Exp exp) {
+        return new UpperExp(exp);
+    }
+
+    public static Exp wildcard() {
+        return WILDCARD;
     }
 }

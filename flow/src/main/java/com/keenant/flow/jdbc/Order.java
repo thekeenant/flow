@@ -1,4 +1,4 @@
-package com.keenant.flow.impl;
+package com.keenant.flow.jdbc;
 
 public enum Order {
     ASC("ASC"),

@@ -12,8 +12,8 @@ public interface Transformer<T, U> {
             }
 
             @Override
-            public T from(U object) {
-                return from.apply(object);
+            public T from(U destObject) {
+                return from.apply(destObject);
             }
 
             @Override
@@ -30,7 +30,7 @@ public interface Transformer<T, U> {
 
     U to(T sourceObject);
 
-    T from(U object);
+    T from(U destObject);
 
     Class<T> getSourceType();
 
@@ -48,13 +48,13 @@ public interface Transformer<T, U> {
     }
 
     @SuppressWarnings("unchecked")
-    default Optional<T> fromOptional(Object object) {
-        if (object == null) {
+    default Optional<T> fromOptional(Object destObject) {
+        if (destObject == null) {
             return Optional.empty();
         }
-        if (!getType().isInstance(object)) {
+        if (!getType().isInstance(destObject)) {
             throw new ClassCastException();
         }
-        return Optional.of(from((U) object));
+        return Optional.of(from((U) destObject));
     }
 }

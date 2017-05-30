@@ -5,7 +5,7 @@ import com.keenant.flow.impl.exp.Field;
 
 import java.util.stream.Stream;
 
-import static com.keenant.flow.Flow.*;
+import static com.keenant.flow.impl.Flow.*;
 
 public class SQLiteExample {
     private static final Field USERS = field("users");
