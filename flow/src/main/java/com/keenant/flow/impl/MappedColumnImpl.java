@@ -3,12 +3,12 @@ package com.keenant.flow.impl;
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.Field;
 
-public class IMappedColumn<T, U> extends Field implements MappedColumn<T, U> {
+public class MappedColumnImpl<T, U> extends Field implements MappedColumn<T, U> {
     private final Field table;
     private final String name;
     private final Transformer<T, U> transformer;
 
-    public IMappedColumn(Field table, String name, Transformer<T, U> transformer) {
+    public MappedColumnImpl(Field table, String name, Transformer<T, U> transformer) {
         super(table, name);
         this.table = table;
         this.name = name;

@@ -3,7 +3,6 @@ package com.keenant.flow.impl.filter;
 import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractFilter;
 
 /**
  * A filter that is simply an expression.

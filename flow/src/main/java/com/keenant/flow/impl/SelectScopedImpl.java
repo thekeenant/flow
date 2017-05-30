@@ -5,19 +5,19 @@ import com.keenant.flow.exception.DatabaseException;
 
 import java.util.Collection;
 
-public class ISelectScoped implements SelectScoped {
+public class SelectScopedImpl implements SelectScoped {
     private final Select select;
     private final DatabaseContext database;
     private final SQLDialect dialect;
 
-    private ISelectScoped(Select select, DatabaseContext database, SQLDialect dialect) {
+    private SelectScopedImpl(Select select, DatabaseContext database, SQLDialect dialect) {
         this.select = select;
         this.database = database;
         this.dialect = dialect;
     }
 
-    public ISelectScoped(Exp table, DatabaseContext database, SQLDialect dialect) {
-        this(new ISelect(table), database, dialect);
+    public SelectScopedImpl(Exp table, DatabaseContext database, SQLDialect dialect) {
+        this(new SelectImpl(table), database, dialect);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ISelectScoped implements SelectScoped {
 
     @Override
     public SelectScoped cpy() {
-        return new ISelectScoped(select.cpy(), database, dialect);
+        return new SelectScopedImpl(select.cpy(), database, dialect);
     }
 
     @Override

@@ -4,24 +4,24 @@ import com.keenant.flow.*;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.impl.exp.ParamExp;
 
-public class IInsertScoped implements InsertScoped {
+public class InsertScopedImpl implements InsertScoped {
     private final Insert insert;
     private final DatabaseContext database;
     private final SQLDialect dialect;
 
-    private IInsertScoped(Insert insert, DatabaseContext database, SQLDialect dialect) {
+    private InsertScopedImpl(Insert insert, DatabaseContext database, SQLDialect dialect) {
         this.insert = insert;
         this.database = database;
         this.dialect = dialect;
     }
 
-    public IInsertScoped(Exp exp, DatabaseContext database, SQLDialect dialect) {
-        this(new IInsert(exp), database, dialect);
+    public InsertScopedImpl(Exp exp, DatabaseContext database, SQLDialect dialect) {
+        this(new InsertImpl(exp), database, dialect);
     }
 
     @Override
     public InsertScoped cpy() {
-        return new IInsertScoped(insert.cpy(), database, dialect);
+        return new InsertScopedImpl(insert.cpy(), database, dialect);
     }
 
     @Override

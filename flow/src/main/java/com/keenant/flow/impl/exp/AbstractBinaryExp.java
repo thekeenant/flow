@@ -3,8 +3,7 @@ package com.keenant.flow.impl.exp;
 import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractExp;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,6 @@ public abstract class AbstractBinaryExp extends AbstractExp {
         params.addAll(child1Part.getParams());
         params.addAll(child2Part.getParams());
 
-        return new IQueryPart(sql, params);
+        return new QueryPartImpl(sql, params);
     }
 }

@@ -27,7 +27,7 @@ public class Flow {
     }
 
     public static DatabaseContext database(SQLDialect dialect, Connector connector) {
-        return new IDatabaseContext(dialect, connector);
+        return new DatabaseContextImpl(dialect, connector);
     }
 
     public static DatabaseContext database(SQLDialect dialect, String url) {
@@ -35,23 +35,23 @@ public class Flow {
     }
 
     public static Select selectFrom(Exp table) {
-        return new ISelect(table);
+        return new SelectImpl(table);
     }
 
     public static Insert insertInto(Exp table) {
-        return new IInsert(table);
+        return new InsertImpl(table);
     }
 
     public static QueryPart parameterize(String sql, Object... params) {
-        return new IQueryPart(sql, params);
+        return new QueryPartImpl(sql, params);
     }
 
     public static QueryPart parameterize(String sql, Collection<?> params) {
-        return new IQueryPart(sql, params);
+        return new QueryPartImpl(sql, params);
     }
 
     public static <T> Column<T> column(Field table, String name, Class<T> type) {
-        return new IColumn<>(table, name, type);
+        return new ColumnImpl<>(table, name, type);
     }
 
     public static PlainFilter filter(String sql, Object... params) {

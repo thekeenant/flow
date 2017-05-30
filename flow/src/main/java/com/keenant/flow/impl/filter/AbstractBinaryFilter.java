@@ -3,8 +3,7 @@ package com.keenant.flow.impl.filter;
 import com.keenant.flow.Filter;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractFilter;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,6 @@ public abstract class AbstractBinaryFilter extends AbstractFilter {
         List<Object> params = new ArrayList<>();
         params.addAll(part1.getParams());
         params.addAll(part2.getParams());
-        return new IQueryPart(sql, params);
+        return new QueryPartImpl(sql, params);
     }
 }

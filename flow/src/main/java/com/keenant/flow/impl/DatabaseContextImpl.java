@@ -11,13 +11,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
-public class IDatabaseContext implements DatabaseContext {
+public class DatabaseContextImpl implements DatabaseContext {
     private final SQLDialect dialect;
     private final Connector connector;
 
-    public IDatabaseContext(SQLDialect dialect, Connector connector) {
+    public DatabaseContextImpl(SQLDialect dialect, Connector connector) {
         this.dialect = dialect;
         this.connector = connector;
     }
@@ -35,7 +34,7 @@ public class IDatabaseContext implements DatabaseContext {
             }
 
             // Create the query object, passing on the query config to it
-            return new IQuery(statement, QueryType.UPDATE);
+            return new QueryImpl(statement, QueryType.UPDATE);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -54,7 +53,7 @@ public class IDatabaseContext implements DatabaseContext {
             }
 
             // Create the query object, passing on the query config to it
-            return new IQuery(statement, QueryType.FETCH);
+            return new QueryImpl(statement, QueryType.FETCH);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
@@ -86,12 +85,12 @@ public class IDatabaseContext implements DatabaseContext {
 
     @Override
     public SelectScoped selectFrom(Exp table) {
-        return new ISelectScoped(table, this, dialect);
+        return new SelectScopedImpl(table, this, dialect);
     }
 
     @Override
     public InsertScoped insertInto(Exp table) {
-        return new IInsertScoped(table, this, dialect);
+        return new InsertScopedImpl(table, this, dialect);
     }
 
     @Override

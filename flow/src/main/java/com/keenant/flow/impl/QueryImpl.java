@@ -3,18 +3,17 @@ package com.keenant.flow.impl;
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.Query;
 import com.keenant.flow.Result;
-import com.keenant.flow.jdbc.FetchConfig;
 import com.keenant.flow.jdbc.QueryType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class IQuery implements Query {
+public class QueryImpl implements Query {
     private final PreparedStatement statement;
     private final QueryType type;
 
-    public IQuery(PreparedStatement statement, QueryType type) {
+    public QueryImpl(PreparedStatement statement, QueryType type) {
         this.statement = statement;
         this.type = type;
     }
@@ -38,7 +37,7 @@ public class IQuery implements Query {
                     throw new IllegalStateException("Invalid query mode");
             }
 
-            return new IResult(statement, resultSet, generated);
+            return new ResultImpl(statement, resultSet, generated);
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }

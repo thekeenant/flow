@@ -3,12 +3,12 @@ package com.keenant.flow.impl;
 import com.keenant.flow.Column;
 import com.keenant.flow.impl.exp.Field;
 
-public class IColumn<T> extends Field implements Column<T> {
+public class ColumnImpl<T> extends Field implements Column<T> {
     private final Field table;
     private final String name;
     private final Class<T> type;
 
-    public IColumn(Field table, String name, Class<T> type) {
+    public ColumnImpl(Field table, String name, Class<T> type) {
         super(table, name);
         this.table = table;
         this.name = name;

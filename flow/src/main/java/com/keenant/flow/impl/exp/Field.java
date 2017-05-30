@@ -2,8 +2,7 @@ package com.keenant.flow.impl.exp;
 
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractExp;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 public class Field extends AbstractExp {
     private final String field;
@@ -36,6 +35,6 @@ public class Field extends AbstractExp {
         if (column != null) {
             sql += "." + dialect.wrapField(column);
         }
-        return new IQueryPart(sql);
+        return new QueryPartImpl(sql);
     }
 }

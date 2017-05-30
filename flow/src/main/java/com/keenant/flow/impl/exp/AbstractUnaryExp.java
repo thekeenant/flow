@@ -3,8 +3,7 @@ package com.keenant.flow.impl.exp;
 import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractExp;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 /**
  * An expression that takes one parameter.
@@ -24,6 +23,6 @@ public abstract class AbstractUnaryExp extends AbstractExp {
 
         String sql = String.format(getSqlFormat(dialect), childPart.getSql());
 
-        return new IQueryPart(sql, childPart.getParams());
+        return new QueryPartImpl(sql, childPart.getParams());
     }
 }

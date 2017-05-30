@@ -8,10 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class IEagerCursor extends ICursor implements EagerCursor {
+public class EagerCursorImpl extends CursorImpl implements EagerCursor {
     private ResultSet resultSet;
 
-    public IEagerCursor(PreparedStatement statement, ResultSet resultSet) {
+    public EagerCursorImpl(PreparedStatement statement, ResultSet resultSet) {
         super(statement, resultSet);
         this.resultSet = resultSet;
     }
@@ -24,7 +24,7 @@ public class IEagerCursor extends ICursor implements EagerCursor {
         }
     }
 
-    public IEagerCursor move(int record) {
+    public EagerCursorImpl move(int record) {
         moveTo(record);
         return this;
     }
@@ -37,7 +37,7 @@ public class IEagerCursor extends ICursor implements EagerCursor {
         }
     }
 
-    public IEagerCursor first() {
+    public EagerCursorImpl first() {
         moveToFirst();
         return this;
     }
@@ -50,7 +50,7 @@ public class IEagerCursor extends ICursor implements EagerCursor {
         }
     }
 
-    public IEagerCursor last() {
+    public EagerCursorImpl last() {
         moveToLast();
         return this;
     }

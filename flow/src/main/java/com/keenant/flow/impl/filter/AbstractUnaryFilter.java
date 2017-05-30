@@ -3,8 +3,7 @@ package com.keenant.flow.impl.filter;
 import com.keenant.flow.Filter;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractFilter;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 public abstract class AbstractUnaryFilter extends AbstractFilter {
     private final Filter child;
@@ -21,6 +20,6 @@ public abstract class AbstractUnaryFilter extends AbstractFilter {
 
         String sql = String.format(getSqlFormat(dialect), part.getSql());
 
-        return new IQueryPart(sql, part.getParams());
+        return new QueryPartImpl(sql, part.getParams());
     }
 }

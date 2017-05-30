@@ -2,16 +2,14 @@ package com.keenant.flow.impl;
 
 import com.keenant.flow.*;
 import com.keenant.flow.impl.exp.ParamExp;
-import com.keenant.flow.jdbc.FetchConfig;
-import com.keenant.flow.jdbc.QueryType;
 
 import java.util.*;
 
-public class IInsert implements Insert {
+public class InsertImpl implements Insert {
     private Exp table;
     private final List<Map<String, Exp>> records;
 
-    public IInsert(Exp table) {
+    public InsertImpl(Exp table) {
         this.table = table;
         records = new ArrayList<>();
     }
@@ -30,7 +28,7 @@ public class IInsert implements Insert {
 
     @Override
     public Insert cpy() {
-        IInsert insert = new IInsert(table);
+        InsertImpl insert = new InsertImpl(table);
         for (Map<String, Exp> record : records) {
             insert.records.add(new HashMap<>(record));
         }
@@ -96,7 +94,7 @@ public class IInsert implements Insert {
         }
         sql.deleteCharAt(sql.length() - 1);
 
-        return new IQueryPart(sql.toString(), params);
+        return new QueryPartImpl(sql.toString(), params);
     }
 
     @Override

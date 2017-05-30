@@ -4,8 +4,7 @@ import com.keenant.flow.Comparator;
 import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractFilter;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +33,6 @@ public class CompareFilter extends AbstractFilter {
         params.addAll(lhs.getParams());
         params.addAll(rhs.getParams());
 
-        return new IQueryPart(sql, params);
+        return new QueryPartImpl(sql, params);
     }
 }

@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ICursor extends AbstractRecord implements Cursor {
+public class CursorImpl extends AbstractRecord implements Cursor {
     private final PreparedStatement statement;
     private final ResultSet resultSet;
     private ResultSetMetaData metaData;
@@ -19,7 +19,7 @@ public class ICursor extends AbstractRecord implements Cursor {
     private Map<String, Integer> labelToIndex;
     private boolean invalidated;
 
-    public ICursor(PreparedStatement statement, ResultSet resultSet) {
+    public CursorImpl(PreparedStatement statement, ResultSet resultSet) {
         this.statement = statement;
         this.resultSet = resultSet;
     }
@@ -200,7 +200,7 @@ public class ICursor extends AbstractRecord implements Cursor {
             }
 
             // Advance the cursor and store whether or not the next record exists
-            hasNext = ICursor.this.moveNext(true);
+            hasNext = CursorImpl.this.moveNext(true);
 
             // If it does, indicate that next() hasn't been called, and should be called, in
             // order to advance the cursor to the next record.
@@ -226,7 +226,7 @@ public class ICursor extends AbstractRecord implements Cursor {
             // indicate that next() has been called on this record
             nextUsed = true;
 
-            return ICursor.this;
+            return CursorImpl.this;
         }
     }
 }

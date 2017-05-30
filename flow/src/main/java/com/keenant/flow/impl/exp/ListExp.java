@@ -3,8 +3,7 @@ package com.keenant.flow.impl.exp;
 import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
-import com.keenant.flow.impl.AbstractExp;
-import com.keenant.flow.impl.IQueryPart;
+import com.keenant.flow.impl.QueryPartImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +30,6 @@ public class ListExp extends AbstractExp {
         sb.deleteCharAt(sb.length() - 1);
 
 
-        return new IQueryPart(sb.toString(), params);
+        return new QueryPartImpl(sb.toString(), params);
     }
 }

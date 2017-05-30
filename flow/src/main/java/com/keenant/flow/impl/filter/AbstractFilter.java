@@ -1,4 +1,4 @@
-package com.keenant.flow.impl;
+package com.keenant.flow.impl.filter;
 
 import com.keenant.flow.Filter;
 import com.keenant.flow.impl.filter.AndFilter;

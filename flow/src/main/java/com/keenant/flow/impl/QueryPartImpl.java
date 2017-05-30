@@ -7,16 +7,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class IQueryPart implements QueryPart {
+public class QueryPartImpl implements QueryPart {
     private final String sql;
     private final List<Object> params;
 
-    public IQueryPart(String sql, List<Object> params) {
+    public QueryPartImpl(String sql, List<Object> params) {
         this.sql = sql;
         this.params = params;
     }
 
-    public IQueryPart(String sql, Object... params) {
+    public QueryPartImpl(String sql, Object... params) {
         this(sql, Arrays.asList(params));
     }
 
@@ -36,11 +36,11 @@ public class IQueryPart implements QueryPart {
         List<Object> joinedParams = new ArrayList<>();
         joinedParams.addAll(params);
         joinedParams.addAll(params);
-        return new IQueryPart(joinedSql, joinedParams);
+        return new QueryPartImpl(joinedSql, joinedParams);
     }
 
     @Override
     public String toString() {
-        return "IQueryPart(sql=" + getSql() + ", params=" + getParams() + ")";
+        return "QueryPartImpl(sql=" + getSql() + ", params=" + getParams() + ")";
     }
 }

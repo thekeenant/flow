@@ -9,20 +9,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class ISelect implements Select {
+public class SelectImpl implements Select {
     private Exp table;
     private boolean distinct;
     private ListExp fields;
     private Filter filter;
     private Exp order;
 
-    public ISelect(Exp table) {
+    public SelectImpl(Exp table) {
         this.table = table;
     }
 
     @Override
     public Select cpy() {
-        ISelect select = new ISelect(table);
+        SelectImpl select = new SelectImpl(table);
         select.fields = fields; // immutable
         select.filter = filter; // immutable
         return select;
@@ -102,7 +102,7 @@ public class ISelect implements Select {
             params.addAll(orderPart.getParams());
         }
 
-        return new IQueryPart(sql.toString(), params);
+        return new QueryPartImpl(sql.toString(), params);
     }
 
     private Result execute(DatabaseContext database, SQLDialect dialect, FetchConfig config) {
