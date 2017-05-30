@@ -1,8 +1,4 @@
-package com.keenant.flow.filter;
-
-import com.keenant.flow.Filter;
-import com.keenant.flow.QueryPart;
-import com.keenant.flow.SQLDialect;
+package com.keenant.flow;
 
 public abstract class AbstractUnaryFilter extends AbstractFilter {
     private final Filter child;

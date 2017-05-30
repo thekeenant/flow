@@ -1,8 +1,4 @@
-package com.keenant.flow.filter;
-
-import com.keenant.flow.Filter;
-import com.keenant.flow.QueryPart;
-import com.keenant.flow.SQLDialect;
+package com.keenant.flow;
 
 import java.util.ArrayList;
 import java.util.List;

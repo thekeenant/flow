@@ -1,15 +1,14 @@
 package com.keenant.flow;
 
-import com.keenant.flow.*;
-import com.keenant.flow.exp.Field;
+import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.util.Transformer;
 
-public class MappedColumnImpl<T, U> extends Field implements MappedColumn<T, U> {
-    private final Field table;
+public class MappedColumnImpl<T, U> extends FieldExp implements MappedColumn<T, U> {
+    private final FieldExp table;
     private final String name;
     private final Transformer<T, U> transformer;
 
-    public MappedColumnImpl(Field table, String name, Transformer<T, U> transformer) {
+    public MappedColumnImpl(FieldExp table, String name, Transformer<T, U> transformer) {
         super(table, name);
         this.table = table;
         this.name = name;
@@ -17,7 +16,7 @@ public class MappedColumnImpl<T, U> extends Field implements MappedColumn<T, U> 
     }
 
     @Override
-    public Field getTable() {
+    public FieldExp getTable() {
         return table;
     }
 

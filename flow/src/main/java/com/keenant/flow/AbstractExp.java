@@ -1,6 +1,7 @@
-package com.keenant.flow.exp;
+package com.keenant.flow;
 
-import com.keenant.flow.*;
+import com.keenant.flow.exp.functions.LowerExp;
+import com.keenant.flow.exp.ParamExp;
 import com.keenant.flow.filter.CompareFilter;
 import com.keenant.flow.filter.ExpFilter;
 import com.keenant.flow.filter.NotFilter;

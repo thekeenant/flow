@@ -1,6 +1,6 @@
 package com.keenant.flow;
 
-import com.keenant.flow.exp.ListExp;
+import com.keenant.flow.exp.functions.ListExp;
 import com.keenant.flow.jdbc.FetchConfig;
 
 import java.util.ArrayList;

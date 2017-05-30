@@ -1,5 +1,6 @@
 package com.keenant.flow.filter;
 
+import com.keenant.flow.AbstractFilter;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
 

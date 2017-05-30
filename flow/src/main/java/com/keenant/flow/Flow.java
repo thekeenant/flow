@@ -1,6 +1,7 @@
 package com.keenant.flow;
 
 import com.keenant.flow.exp.*;
+import com.keenant.flow.exp.functions.*;
 import com.keenant.flow.filter.PlainFilter;
 import com.keenant.flow.jdbc.Order;
 
@@ -49,7 +50,7 @@ public class Flow {
         return new QueryPart(sql, params);
     }
 
-    public static <T> Column<T> column(Field table, String name, Class<T> type) {
+    public static <T> Column<T> column(FieldExp table, String name, Class<T> type) {
         return new Column<>(table, name, type);
     }
 
@@ -77,16 +78,16 @@ public class Flow {
         return new CountExp(exp);
     }
 
-    public static Field field(String field) {
-        return new Field(field);
+    public static FieldExp field(String field) {
+        return new FieldExp(field);
     }
 
-    public static Field field(String table, String column) {
-        return new Field(table, column);
+    public static FieldExp field(String table, String column) {
+        return new FieldExp(table, column);
     }
 
-    public static Field field(Field table, String column) {
-        return new Field(table, column);
+    public static FieldExp field(FieldExp table, String column) {
+        return new FieldExp(table, column);
     }
 
     public static LengthExp length(Exp exp) {

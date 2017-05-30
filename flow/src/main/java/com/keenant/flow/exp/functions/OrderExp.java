@@ -1,5 +1,6 @@
-package com.keenant.flow.exp;
+package com.keenant.flow.exp.functions;
 
+import com.keenant.flow.AbstractUnaryExp;
 import com.keenant.flow.Exp;
 import com.keenant.flow.SQLDialect;
 import com.keenant.flow.jdbc.Order;

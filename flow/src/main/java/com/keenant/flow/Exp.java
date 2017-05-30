@@ -1,5 +1,10 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exp.functions.*;
+import com.keenant.flow.jdbc.Order;
+
+import java.util.Collections;
+
 /**
  * A DSL (SQL) expression.
  */
@@ -167,4 +172,54 @@ public interface Exp extends QueryPartBuilder {
      * @see #gte(Exp)
      */
     Filter greaterThanEqual(Object other);
+
+    // Functions
+
+    default AbsExp abs() {
+        return new AbsExp(this);
+    }
+
+    default AvgExp avg() {
+        return new AvgExp(this);
+    }
+
+    default CountExp count() {
+        return new CountExp(this);
+    }
+
+    default LengthExp length() {
+        return new LengthExp(this);
+    }
+
+    default ListExp list() {
+        return new ListExp(Collections.singleton(this));
+    }
+
+    default LowerExp lower() {
+        return new LowerExp(this);
+    }
+
+    default MaxExp max() {
+        return new MaxExp(this);
+    }
+
+    default OrderExp order(Order order) {
+        return new OrderExp(this, order);
+    }
+
+    default OrderExp orderAsc() {
+        return order(Order.ASC);
+    }
+
+    default OrderExp orderDesc() {
+        return order(Order.DESC);
+    }
+
+    default SumExp sum() {
+        return new SumExp(this);
+    }
+
+    default UpperExp upper() {
+        return new UpperExp(this);
+    }
 }

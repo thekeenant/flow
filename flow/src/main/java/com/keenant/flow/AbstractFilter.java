@@ -1,6 +1,9 @@
-package com.keenant.flow.filter;
+package com.keenant.flow;
 
 import com.keenant.flow.Filter;
+import com.keenant.flow.filter.AndFilter;
+import com.keenant.flow.filter.NotFilter;
+import com.keenant.flow.filter.OrFilter;
 
 public abstract class AbstractFilter implements Filter {
     @Override
