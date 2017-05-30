@@ -1,18 +1,28 @@
 package com.keenant.flow;
 
-public interface Column<T> extends MappedColumn<T, T>  {
-    @Override
-    default T from(T object) {
-        return object;
+import com.keenant.flow.exp.Field;
+
+public class Column<T> extends Field {
+    private final Field table;
+    private final String name;
+    private final Class<T> type;
+
+    public Column(Field table, String name, Class<T> type) {
+        super(table, name);
+        this.table = table;
+        this.name = name;
+        this.type = type;
     }
 
-    @Override
-    default T to(T sourceObject) {
-        return sourceObject;
+    public Field getTable() {
+        return table;
     }
 
-    @Override
-    default Class<T> getSourceType() {
-        return getType();
+    public String getName() {
+        return name;
+    }
+
+    public Class<T> getType() {
+        return type;
     }
 }

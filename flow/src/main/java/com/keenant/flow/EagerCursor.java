@@ -1,20 +1,56 @@
+
 package com.keenant.flow;
 
-import java.util.NoSuchElementException;
+import com.keenant.flow.exception.DatabaseException;
 
-/**
- * A cursor that can traverse a result set more freely. This isn't supported by all databases.
- */
-public interface EagerCursor extends Cursor {
-    void moveTo(int record) throws NoSuchElementException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-    void moveToFirst() throws NoSuchElementException;
+public class EagerCursor extends Cursor {
+    private ResultSet resultSet;
 
-    void moveToLast() throws NoSuchElementException;
+    public EagerCursor(PreparedStatement statement, ResultSet resultSet) {
+        super(statement, resultSet);
+        this.resultSet = resultSet;
+    }
 
-    Cursor move(int record) throws NoSuchElementException;
+    public void moveTo(int record) {
+        try {
+            resultSet.absolute(record);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
 
-    Cursor first() throws NoSuchElementException;
+    public EagerCursor move(int record) {
+        moveTo(record);
+        return this;
+    }
 
-    Cursor last() throws NoSuchElementException;
+    public void moveToFirst() {
+        try {
+            resultSet.first();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    public EagerCursor first() {
+        moveToFirst();
+        return this;
+    }
+
+    public void moveToLast() {
+        try {
+            resultSet.last();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    public EagerCursor last() {
+        moveToLast();
+        return this;
+    }
 }

@@ -47,7 +47,7 @@ Planned:
 
 Connecting to a database is easy...
 
-> _Note: We assume you have statically imported `com.keenant.flow.impl.Flow.*`.
+> _Note: We assume you have statically imported `com.keenant.flow.Flow.*`.
 > This makes things much less verbose._
 
 ```java

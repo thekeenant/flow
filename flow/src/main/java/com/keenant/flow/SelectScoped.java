@@ -2,43 +2,87 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 
-import java.util.Arrays;
 import java.util.Collection;
 
-/**
- * A select query which is targeted for a specific database with a specific dialect.
- */
-public interface SelectScoped extends ScopedQueryPartBuilder, Select {
-    /**
-     * @see Select#fetch(DatabaseContext, SQLDialect)
-     */
-    EagerCursor fetch() throws DatabaseException;
+public class SelectScoped implements QueryPartBuilder {
+    private final Select select;
+    private final DatabaseContext database;
+    private final SQLDialect dialect;
 
-    /**
-     * @see Select#fetchLazy(DatabaseContext, SQLDialect)
-     */
-    Cursor fetchLazy() throws DatabaseException;
+    private SelectScoped(Select select, DatabaseContext database, SQLDialect dialect) {
+        this.select = select;
+        this.database = database;
+        this.dialect = dialect;
+    }
 
-    @Override
-    SelectScoped cpy();
+    public SelectScoped(Exp table, DatabaseContext database, SQLDialect dialect) {
+        this(new Select(table), database, dialect);
+    }
 
-    @Override
-    SelectScoped distinct(boolean distinct);
+    public DatabaseContext getDatabase() {
+        return database;
+    }
 
-    @Override
-    SelectScoped table(Exp table);
+    public SQLDialect getDialect() {
+        return dialect;
+    }
 
-    @Override
-    SelectScoped fields(Collection<Exp> fields);
+    public QueryPart build() {
+        return select.build(dialect);
+    }
 
-    @Override
-    default SelectScoped fields(Exp... fields) {
-        return fields(Arrays.asList(fields));
+    public EagerCursor fetch() {
+        return select.fetch(database, dialect);
+    }
+
+    public Cursor fetchLazy() throws DatabaseException {
+        return select.fetchLazy(database, dialect);
+    }
+
+    public SelectScoped cpy() {
+        return new SelectScoped(select.cpy(), database, dialect);
+    }
+
+    public SelectScoped distinct(boolean distinct) {
+        select.distinct(distinct);
+        return this;
+    }
+
+    public SelectScoped table(Exp table) {
+        select.table(table);
+        return this;
+    }
+
+    public SelectScoped fields(Collection<Exp> fields) {
+        select.fields(fields);
+        return this;
+    }
+
+    public SelectScoped fields(Exp... fields) {
+        select.fields(fields);
+        return this;
+    }
+
+    public SelectScoped where(Filter filter) {
+        select.where(filter);
+        return this;
+    }
+
+    public SelectScoped order(Exp order) {
+        select.order(order);
+        return this;
+    }
+
+    public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
+        return select.fetch(database, dialect);
+    }
+
+    public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) throws DatabaseException {
+        return select.fetchLazy(database, dialect);
     }
 
     @Override
-    SelectScoped where(Filter filter);
-
-    @Override
-    SelectScoped order(Exp order);
+    public QueryPart build(SQLDialect dialect) {
+        return select.build(dialect);
+    }
 }

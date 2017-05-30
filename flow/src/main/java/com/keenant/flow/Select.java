@@ -1,77 +1,110 @@
 package com.keenant.flow;
 
-import com.keenant.flow.exception.DatabaseException;
+import com.keenant.flow.exp.ListExp;
+import com.keenant.flow.jdbc.FetchConfig;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
-/**
- * A select query.
- */
-public interface Select extends QueryPartBuilder {
-    /**
-     * Create a copy of this object.
-     * @return the new select
-     */
-    Select cpy();
+public class Select {
+    private Exp table;
+    private boolean distinct;
+    private ListExp fields;
+    private Filter filter;
+    private Exp order;
 
-    /**
-     * Set if this should be SELECT DISTINCT.
-     * @param distinct true for DISTINCT
-     * @return this
-     */
-    Select distinct(boolean distinct);
+    public Select(Exp table) {
+        this.table = table;
+    }
 
-    /**
-     * Set the table to select from.
-     * @param table the table
-     * @return this
-     */
-    Select table(Exp table);
+    public Select cpy() {
+        Select select = new Select(table);
+        select.fields = fields; // immutable
+        select.filter = filter; // immutable
+        return select;
+    }
 
-    /**
-     * Set which fields to retrieve
-     * @param fields the fields
-     * @return this
-     */
-    Select fields(Collection<Exp> fields);
+    public Select distinct(boolean distinct) {
+        this.distinct = distinct;
+        return this;
+    }
 
-    /**
-     * @see #fields(Collection)
-     */
-    default Select fields(Exp... fields) {
+    public Select table(Exp table) {
+        this.table = table;
+        return this;
+    }
+
+    public Select fields(Collection<Exp> fields) {
+        this.fields = new ListExp(fields);
+        return this;
+    }
+
+    public Select fields(Exp... fields) {
         return fields(Arrays.asList(fields));
     }
 
-    /**
-     * Set the where condition for this query.
-     * @param filter the filtering condition expression
-     * @return this
-     */
-    Select where(Filter filter);
+    public Select where(Filter filter) {
+        this.filter = filter;
+        return this;
+    }
 
-    /**
-     * Set how to order the select.
-     * @param order the order expression
-     * @return this
-     */
-    Select order(Exp order);
+    public Select order(Exp order) {
+        this.order = order;
+        return this;
+    }
 
-    /**
-     * Execute the query and put all records into memory. On large queries this can be very costly.
-     * @param database the database
-     * @param dialect the dialect to use
-     * @return the cursor
-     * @throws DatabaseException if the execution fails
-     */
-    EagerCursor fetch(DatabaseContext database, SQLDialect dialect) throws DatabaseException;
+    public QueryPart build(SQLDialect dialect) {
+        QueryPart tablePart = table.build(dialect);
+        QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
+        QueryPart filterPart = filter == null ? null : filter.build(dialect);
+        QueryPart orderPart = order == null ? null : order.build(dialect);
 
-    /**
-     * Execute the query lazily, fetching each record one by one.
-     * @param database the database
-     * @param dialect the dialect to use
-     * @return the lazy cursor
-     * @throws DatabaseException if the execution fails
-     */
-    Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) throws DatabaseException;
+        StringBuilder sql = new StringBuilder();
+        List<Object> params = new ArrayList<>();
+
+
+        sql.append("SELECT ");
+
+        if (distinct) {
+            sql.append("DISTINCT ");
+        }
+
+        sql.append(fieldsPart.getSql());
+        params.addAll(fieldsPart.getParams());
+
+        sql.append(" FROM ");
+
+        sql.append(tablePart.getSql());
+        params.addAll(tablePart.getParams());
+
+        if (filterPart != null) {
+            sql.append(" WHERE ");
+
+            sql.append(filterPart.getSql());
+            params.addAll(filterPart.getParams());
+        }
+
+        if (orderPart != null) {
+            sql.append(" ORDER BY ");
+
+            sql.append(orderPart.getSql());
+            params.addAll(orderPart.getParams());
+        }
+
+        return new QueryPart(sql.toString(), params);
+    }
+
+    private Result execute(DatabaseContext database, SQLDialect dialect, FetchConfig config) {
+        return database.prepareFetch(config, build(dialect)).execute();
+    }
+
+    public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
+        return database.fetch(build(dialect));
+    }
+
+    public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) {
+        return database.fetchLazy(build(dialect));
+    }
 }

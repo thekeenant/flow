@@ -2,146 +2,139 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.FetchConfig;
+import com.keenant.flow.jdbc.QueryScroll;
+import com.keenant.flow.jdbc.QueryType;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 
-/**
- * Represents a database which can be accessed and manipulated. Any number of connections may be
- * made to the underlying database.
- */
-public interface DatabaseContext extends AutoCloseable {
-    /**
-     * Prepare an update query for execution.
-     * @param sql the sql string
-     * @param params the sql parameters (replaces ?'s in the sql string)
-     * @return the prepared query
-     */
-    Query prepareUpdate(String sql, Collection<?> params);
+public class DatabaseContext implements AutoCloseable {
+    private final SQLDialect dialect;
+    private final Connector connector;
 
-    /**
-     * @see #prepareUpdate(String, Collection)
-     */
-    default Query prepareUpdate(QueryPart part) {
+    public DatabaseContext(SQLDialect dialect, Connector connector) {
+        this.dialect = dialect;
+        this.connector = connector;
+    }
+
+    public Query prepareUpdate(String sql, Collection<Object> params) {
+        try {
+            PreparedStatement statement = connector.acquire().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            Iterator<?> iterator = params.iterator();
+            int i = 1;
+            while (iterator.hasNext()) {
+                statement.setObject(i, iterator.next());
+                i++;
+            }
+
+            // Create the query object, passing on the query config to it
+            return new Query(statement, QueryType.UPDATE);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
+    public Query prepareUpdate(QueryPart part) {
         return prepareUpdate(part.getSql(), part.getParams());
     }
 
-    /**
-     * @see #prepareUpdate(String, Collection)
-     */
-    default Query prepareUpdate(String sql, Object... params) {
-        return prepareUpdate(sql, Arrays.asList(params));
+    public Query prepareFetch(FetchConfig config, String sql, Collection<?> params) {
+        try {
+            @SuppressWarnings("MagicConstant")
+            PreparedStatement statement = connector.acquire().prepareStatement(
+                    sql,
+                    config.getType().getValue(),
+                    config.getConcurrency().getValue()
+            );
+
+            Iterator<?> iterator = params.iterator();
+            int i = 1;
+            while (iterator.hasNext()) {
+                statement.setObject(i, iterator.next());
+                i++;
+            }
+
+            // Create the query object, passing on the query config to it
+            return new Query(statement, QueryType.FETCH);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
     }
 
-    /**
-     * Prepare a fetch query for execution.
-     * @param config the query configuration
-     * @param sql the sql string
-     * @param params the sql parameters (replaces ?'s in the sql string)
-     * @return the prepared query
-     */
-    Query prepareFetch(FetchConfig config, String sql, Collection<?> params);
-
-    /**
-     * Uses the default fetch configuration.
-     *
-     * @see #prepareFetch(FetchConfig, String, Collection)
-     */
-    default Query prepareFetch(String sql, Collection<?> params) {
+    public Query prepareFetch(String sql, Collection<?> params) {
         return prepareFetch(FetchConfig.DEFAULT, sql, params);
     }
 
-    /**
-     * @see #prepareFetch(FetchConfig, String, Collection)
-     */
-    default Query prepareFetch(FetchConfig config, QueryPart part) {
-        return prepareFetch(config, part.getSql(), part.getParams());
-    }
-
-    /**
-     * Uses the default fetch configuration.
-     *
-     * @see #prepareFetch(FetchConfig, String, Collection)
-     */
-    default Query prepareFetch(QueryPart part) {
-        return prepareFetch(FetchConfig.DEFAULT, part);
-    }
-
-    /**
-     * @see #prepareFetch(FetchConfig, String, Collection)
-     */
-    default Query prepareFetch(FetchConfig config, String sql, Object... params) {
+    public Query prepareFetch(FetchConfig config, String sql, Object... params) {
         return prepareFetch(config, sql, Arrays.asList(params));
     }
 
-    /**
-     * Uses the default fetch configuration.
-     *
-     * @see #prepareFetch(FetchConfig, String, Collection)
-     */
-    default Query prepareFetch(String sql, Object... params) {
-        return prepareFetch(FetchConfig.DEFAULT, sql, params);
+    public Query prepareFetch(String sql, Object... params) {
+        return prepareFetch(FetchConfig.DEFAULT, sql, Arrays.asList(params));
     }
 
-    /**
-     * Perform a query which returns a cursor (i.e., select query)
-     * @param sql the select sql query
-     * @param params sql parameters
-     * @return an eager cursor
-     */
-    EagerCursor fetch(String sql, Collection<?> params);
-
-    /**
-     * @see #fetch(String, Collection)
-     */
-    default EagerCursor fetch(QueryPart part) {
-        return fetch(part.getSql(), part.getParams());
+    public Query prepareFetch(FetchConfig config, QueryPart part) {
+        return prepareFetch(config, part.getSql(), part.getParams());
     }
 
-    /**
-     * @see #fetch(String, Collection)
-     */
-    default EagerCursor fetch(String sql, Object... params) {
+    public Query prepareFetch(QueryPart part) {
+        return prepareFetch(FetchConfig.DEFAULT, part);
+    }
+
+    public EagerCursor fetch(String sql, Collection<?> params) {
+        if (dialect.supportsScrolling()) {
+            FetchConfig config = FetchConfig.builder()
+                    .type(QueryScroll.INSENSITIVE)
+                    .build();
+            return prepareFetch(config, sql, params).execute().eagerCursor();
+        }
+        else {
+            FetchConfig config = FetchConfig.builder()
+                    .type(QueryScroll.FORWARD_ONLY)
+                    .build();
+            return prepareFetch(config, sql, params).execute().safeEagerCursor();
+        }
+    }
+
+    public EagerCursor fetch(String sql, Object... params) {
         return fetch(sql, Arrays.asList(params));
     }
 
-    /**
-     * Perform a query which returns a lazy cursor (streaming each record, rather than
-     * JDBC loading them all into memory).
-     * @param sql the select sql query
-     * @param params sql parameters
-     * @return a lazy cursor
-     */
-    Cursor fetchLazy(String sql, Collection<?> params);
-
-    /**
-     * @see #fetchLazy(String, Collection)
-     */
-    default Cursor fetchLazy(QueryPart part) {
-        return fetchLazy(part.getSql(), part.getParams());
+    public EagerCursor fetch(QueryPart part) {
+        return fetch(part.getSql(), part.getParams());
     }
 
-    /**
-     * @see #fetchLazy(String, Collection)
-     */
-    default Cursor fetchLazy(String sql, Object... params) {
+    public Cursor fetchLazy(String sql, Collection<?> params) {
+        FetchConfig config = FetchConfig.builder()
+                .type(QueryScroll.FORWARD_ONLY)
+                .build();
+        return prepareFetch(config, sql, params).execute().lazyCursor();
+    }
+
+    public Cursor fetchLazy(String sql, Object... params) {
         return fetchLazy(sql, Arrays.asList(params));
     }
 
-    /**
-     * Construct the start of a select query.
-     * @param table the table to select from
-     * @return the select query
-     */
-    SelectScoped selectFrom(Exp table);
+    public Cursor fetchLazy(QueryPart part) {
+        return fetchLazy(part.getSql(), part.getParams());
+    }
 
-    /**
-     * Construct the start of an insert query.
-     * @param table the table to insert into
-     * @return the insert query
-     */
-    InsertScoped insertInto(Exp table);
+    public SelectScoped selectFrom(Exp table) {
+        return new SelectScoped(table, this, dialect);
+    }
+
+    public InsertScoped insertInto(Exp table) {
+        return new InsertScoped(table, this, dialect);
+    }
 
     @Override
-    void close() throws DatabaseException;
+    public void close() {
+        connector.disposeAll();
+    }
 }

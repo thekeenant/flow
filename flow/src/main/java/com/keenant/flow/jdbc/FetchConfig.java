@@ -1,7 +1,7 @@
 package com.keenant.flow.jdbc;
 
 /**
- * Configuration for creating and executing an SQL query. Use the {@link #builder(QueryType)} method to
+ * Configuration for creating and executing an SQL query. Use the {@link #builder()} method to
  * build a new config.
  */
 public final class FetchConfig {

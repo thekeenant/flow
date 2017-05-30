@@ -1,45 +1,52 @@
 package com.keenant.flow;
 
-/**
- * The result of an SQL query. This is roughly equivalent to a {@link java.sql.ResultSet} in the JDBC.
- */
-public interface Result extends AutoCloseable {
-    /**
-     * Create a cursor to traverse records that were fetched.
-     * @return the new cursor.
-     */
-    Cursor lazyCursor();
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-    /**
-     * Create a cursor to traverse records that were fetched all at once.
-     * It is eager, so it can move to any record (unless it is not supported).
-     * @return the new cursor
-     */
-    EagerCursor eagerCursor();
+public class Result implements AutoCloseable {
+    private final PreparedStatement statement;
+    private final ResultSet resultSet;
+    private final ResultSet generated;
 
-    /**
-     * Create a cursor to traverse records that were fetched all at once.
-     * This is an alternative to {@link #eagerCursor()}, but it should, in addition,
-     * support databases that do not have eager fetching.
-     *
-     * The cost to this is both in time and memory.
-     *
-     * @return the new cursor
-     */
-    EagerCursor safeEagerCursor();
+    public Result(PreparedStatement statement, ResultSet resultSet, ResultSet generated) {
+        this.statement = statement;
+        this.resultSet = resultSet;
+        this.generated = generated;
+    }
 
-    /**
-     * Create a cursor to traverse returned generated fields.
-     * @return the new cursor.
-     * @throws IllegalStateException if there is no generated results
-     */
-    Cursor generatedCursor() throws IllegalStateException;
+    public Cursor lazyCursor() {
+        return new Cursor(statement, resultSet);
+    }
 
-    /**
-     * CLose the underlying statement and result.
-     *
-     * No exceptions thrown.
-     */
+    public EagerCursor eagerCursor() {
+        return new EagerCursor(statement, resultSet);
+    }
+
+    public EagerCursor safeEagerCursor() {
+        SafeEagerCursor cursor = new SafeEagerCursor(statement, resultSet);
+        cursor.populateAndClose();
+        return cursor;
+    }
+
+    public Cursor generatedCursor() throws IllegalStateException {
+        if (generated == null)
+            throw new IllegalStateException("No generated records/fields");
+        return new Cursor(statement, generated);
+    }
+
     @Override
-    void close();
+    public void close() {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (generated != null) {
+                generated.close();
+            }
+            statement.close();
+        } catch (SQLException e) {
+            // Todo
+        }
+    }
 }

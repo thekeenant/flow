@@ -1,11 +1,11 @@
 package com.keenant.flow.examples;
 
 import com.keenant.flow.*;
-import com.keenant.flow.impl.exp.Field;
+import com.keenant.flow.exp.Field;
 
 import java.util.stream.Stream;
 
-import static com.keenant.flow.impl.Flow.*;
+import static com.keenant.flow.Flow.*;
 
 public class SQLiteExample {
     private static final Field USERS = field("users");
