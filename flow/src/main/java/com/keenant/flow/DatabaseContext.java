@@ -4,13 +4,11 @@ import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.FetchConfig;
 import com.keenant.flow.jdbc.QueryScroll;
 import com.keenant.flow.jdbc.QueryType;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 public class DatabaseContext implements AutoCloseable {
@@ -38,6 +36,10 @@ public class DatabaseContext implements AutoCloseable {
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
+    }
+
+    public Query prepareUpdate(String sql, Object... params) {
+        return prepareUpdate(sql, Arrays.asList(params));
     }
 
     public Query prepareUpdate(QueryPart part) {
@@ -127,6 +129,10 @@ public class DatabaseContext implements AutoCloseable {
 
     public SelectScoped selectFrom(Exp table) {
         return new SelectScoped(table, this, dialect);
+    }
+
+    public DeleteScoped deleteFrom(Exp table) {
+        return new DeleteScoped(table, this, dialect);
     }
 
     public InsertScoped insertInto(Exp table) {
