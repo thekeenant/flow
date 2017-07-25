@@ -1,5 +1,7 @@
 # Flow
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ff96f2fbc3894502a5acb846f3813a26)](https://www.codacy.com/app/thekeenant/flow?utm_source=github.com&utm_medium=referral&utm_content=thekeenant/flow&utm_campaign=badger)
+
 _A successor to the Quest database library ([v1](https://github.com/thekeenant/quest), 
 [v2](https://github.com/thekeenant/quest-v2))._
 
