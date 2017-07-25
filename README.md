@@ -1,7 +1,7 @@
-# Flow
-
-_A successor to the Quest database library ([v1](https://github.com/thekeenant/quest), 
-[v2](https://github.com/thekeenant/quest-v2))._
+# Flow 
+[![Build Status](https://travis-ci.org/thekeenant/flow.svg?branch=master)](https://travis-ci.org/thekeenant/flow)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ff96f2fbc3894502a5acb846f3813a26)](https://www.codacy.com/app/thekeenant/flow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekeenant/flow&amp;utm_campaign=Badge_Grade)
 
 A simple SQL database library for Java that takes advantage of some of the awesome
 functional features found in Java 8. It is designed to be:
