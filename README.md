@@ -32,16 +32,18 @@ Supported:
     * Order
 * Insert query
     * Multi insert
+* Update query
+* Delete query
 * Databases (Tested)
     * MySQL
     * SQLite
 
 Planned:
-* Update query
-* Delete query
+* JOIN
+* UNION/INTERSECT/EXCEPT
+* GROUP BY/HAVING
 * Create table query
-* Databases
-    * Postgres
+* Check Postgres/other SQL databases
 
 ## Introduction
 
