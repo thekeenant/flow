@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Select {
     private Exp table;
-    private boolean distinct;
     private ListExp fields;
     private Filter filter;
     private Exp order;
@@ -24,11 +23,6 @@ public class Select {
         select.fields = fields; // immutable
         select.filter = filter; // immutable
         return select;
-    }
-
-    public Select distinct(boolean distinct) {
-        this.distinct = distinct;
-        return this;
     }
 
     public Select table(Exp table) {
@@ -66,10 +60,6 @@ public class Select {
 
 
         sql.append("SELECT ");
-
-        if (distinct) {
-            sql.append("DISTINCT ");
-        }
 
         sql.append(fieldsPart.getSql());
         params.addAll(fieldsPart.getParams());
