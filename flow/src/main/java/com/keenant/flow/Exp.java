@@ -1,6 +1,10 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exp.FieldExp;
+import com.keenant.flow.exp.ParamExp;
 import com.keenant.flow.exp.functions.*;
+import com.keenant.flow.exp.AsExp;
+import com.keenant.flow.exp.OnExp;
 import com.keenant.flow.jdbc.Order;
 
 import java.util.Collections;
@@ -221,5 +225,34 @@ public interface Exp extends QueryPartBuilder {
 
     default UpperExp upper() {
         return new UpperExp(this);
+    }
+
+    // Keywords
+
+    default OnExp on(Filter filter) {
+        return new OnExp(this, filter);
+    }
+
+    default AsExp as(Exp as) {
+        return new AsExp(this, as);
+    }
+
+    default AsExp as(Object as) {
+        return as(new ParamExp(as));
+    }
+
+    default FieldExp qualify(Exp qualifier) {
+        return new FieldExp(this, qualifier);
+    }
+
+    /**
+     * Specify a table/column within this expression. It is the reverse of qualification.
+     * This becomes the qualifier, the {@param specifier} becomes the field.
+     *
+     * @param specifier the specific field that is nested within this
+     * @return the specifier qualified by this
+     */
+    default FieldExp specify(Exp specifier) {
+        return new FieldExp(specifier, this);
     }
 }

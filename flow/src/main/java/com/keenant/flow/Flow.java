@@ -2,6 +2,7 @@ package com.keenant.flow;
 
 import com.keenant.flow.exp.*;
 import com.keenant.flow.exp.functions.*;
+import com.keenant.flow.exp.DistinctExp;
 import com.keenant.flow.filter.PlainFilter;
 import com.keenant.flow.jdbc.Order;
 
@@ -76,6 +77,10 @@ public class Flow {
 
     public static CountExp count(Exp exp) {
         return new CountExp(exp);
+    }
+
+    public static DistinctExp distinct(Exp exp) {
+        return new DistinctExp(exp);
     }
 
     public static FieldExp field(String field) {
