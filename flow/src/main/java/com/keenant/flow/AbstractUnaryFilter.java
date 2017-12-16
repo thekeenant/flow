@@ -1,20 +1,21 @@
 package com.keenant.flow;
 
 public abstract class AbstractUnaryFilter extends AbstractFilter {
-    private final Filter child;
 
-    public AbstractUnaryFilter(Filter child) {
-        this.child = child;
-    }
+  private final Filter child;
 
-    protected abstract String getSqlFormat(SQLDialect dialect);
+  public AbstractUnaryFilter(Filter child) {
+    this.child = child;
+  }
 
-    @Override
-    public QueryPart build(SQLDialect dialect) {
-        QueryPart part = child.build(dialect);
+  protected abstract String getSqlFormat(SQLDialect dialect);
 
-        String sql = String.format(getSqlFormat(dialect), part.getSql());
+  @Override
+  public QueryPart build(SQLDialect dialect) {
+    QueryPart part = child.build(dialect);
 
-        return new QueryPart(sql, part.getParams());
-    }
+    String sql = String.format(getSqlFormat(dialect), part.getSql());
+
+    return new QueryPart(sql, part.getParams());
+  }
 }

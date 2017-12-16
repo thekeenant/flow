@@ -4,25 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBinaryFilter extends AbstractFilter {
-    private final Filter filter1;
-    private final Filter filter2;
 
-    public AbstractBinaryFilter(Filter filter1, Filter filter2) {
-        this.filter1 = filter1;
-        this.filter2 = filter2;
-    }
+  private final Filter filter1;
+  private final Filter filter2;
 
-    protected abstract String getSqlFormat(SQLDialect dialect);
+  public AbstractBinaryFilter(Filter filter1, Filter filter2) {
+    this.filter1 = filter1;
+    this.filter2 = filter2;
+  }
 
-    @Override
-    public QueryPart build(SQLDialect dialect) {
-        QueryPart part1 = filter1.build(dialect);
-        QueryPart part2 = filter2.build(dialect);
+  protected abstract String getSqlFormat(SQLDialect dialect);
 
-        String sql = String.format(getSqlFormat(dialect), part1.getSql(), part2.getSql());
-        List<Object> params = new ArrayList<>();
-        params.addAll(part1.getParams());
-        params.addAll(part2.getParams());
-        return new QueryPart(sql, params);
-    }
+  @Override
+  public QueryPart build(SQLDialect dialect) {
+    QueryPart part1 = filter1.build(dialect);
+    QueryPart part2 = filter2.build(dialect);
+
+    String sql = String.format(getSqlFormat(dialect), part1.getSql(), part2.getSql());
+    List<Object> params = new ArrayList<>();
+    params.addAll(part1.getParams());
+    params.addAll(part2.getParams());
+    return new QueryPart(sql, params);
+  }
 }

@@ -1,56 +1,55 @@
-
 package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EagerCursor extends Cursor {
-    private ResultSet resultSet;
 
-    public EagerCursor(PreparedStatement statement, ResultSet resultSet) {
-        super(statement, resultSet);
-        this.resultSet = resultSet;
-    }
+  private ResultSet resultSet;
 
-    public void moveTo(int record) {
-        try {
-            resultSet.absolute(record);
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-    }
+  public EagerCursor(PreparedStatement statement, ResultSet resultSet) {
+    super(statement, resultSet);
+    this.resultSet = resultSet;
+  }
 
-    public EagerCursor move(int record) {
-        moveTo(record);
-        return this;
+  public void moveTo(int record) {
+    try {
+      resultSet.absolute(record);
+    } catch (SQLException e) {
+      throw new DatabaseException(e);
     }
+  }
 
-    public void moveToFirst() {
-        try {
-            resultSet.first();
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-    }
+  public EagerCursor move(int record) {
+    moveTo(record);
+    return this;
+  }
 
-    public EagerCursor first() {
-        moveToFirst();
-        return this;
+  public void moveToFirst() {
+    try {
+      resultSet.first();
+    } catch (SQLException e) {
+      throw new DatabaseException(e);
     }
+  }
 
-    public void moveToLast() {
-        try {
-            resultSet.last();
-        } catch (SQLException e) {
-            throw new DatabaseException(e);
-        }
-    }
+  public EagerCursor first() {
+    moveToFirst();
+    return this;
+  }
 
-    public EagerCursor last() {
-        moveToLast();
-        return this;
+  public void moveToLast() {
+    try {
+      resultSet.last();
+    } catch (SQLException e) {
+      throw new DatabaseException(e);
     }
+  }
+
+  public EagerCursor last() {
+    moveToLast();
+    return this;
+  }
 }

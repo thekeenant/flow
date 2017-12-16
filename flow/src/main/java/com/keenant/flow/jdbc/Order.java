@@ -1,17 +1,17 @@
 package com.keenant.flow.jdbc;
 
 public enum Order {
-    ASC("ASC"),
+  ASC("ASC"),
 
-    DESC("DESC");
+  DESC("DESC");
 
-    private final String sql;
+  private final String sql;
 
-    Order(String sql) {
-        this.sql = sql;
-    }
+  Order(String sql) {
+    this.sql = sql;
+  }
 
-    public String getSql() {
-        return sql;
-    }
+  public String getSql() {
+    return sql;
+  }
 }
