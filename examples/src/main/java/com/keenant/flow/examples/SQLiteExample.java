@@ -4,6 +4,7 @@ import com.keenant.flow.*;
 import com.keenant.flow.exp.FieldExp;
 
 import java.util.stream.Stream;
+import javax.print.attribute.standard.MediaSize.NA;
 
 import static com.keenant.flow.Flow.*;
 
@@ -15,6 +16,26 @@ public class SQLiteExample {
 
     public static void main(String[] args) throws Exception {
         try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
+            db.prepareUpdate("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255), age INTEGER)")
+                .execute();
+
+            // Safely check number of users
+            try (EagerCursor cursor = db.selectFrom(USERS).fields(count(wildcard())).fetch()) {
+                long userCount = cursor.first().getNumber(1).orElse(0).longValue();
+
+                // Add some data
+                if (userCount == 0) {
+                    db.insertInto(USERS)
+                        .with(NAME, "Adam")
+                        .with(AGE, 21)
+                        .nextRecord()
+                        .with(NAME, "Jimmy")
+                        .with(AGE, 18)
+                        .execute()
+                        .close();
+                }
+            }
+
             // Raw query
             try (Cursor cursor = db.fetch("SELECT AVG(LENGTH(name)) FROM users")) {
                 double value = cursor.next().getNonNullDouble(1);
@@ -46,21 +67,6 @@ public class SQLiteExample {
                     System.out.println(name + " is " + age + " years old");
                 });
             }
-
-            // name = 'Adam'
-            Filter adam = NAME.eq("Adam");
-
-            // age <= 21
-            Filter young = AGE.lte(21);
-
-            // name = 'Adam' AND age <= 21
-            Filter youngAdam = adam.and(young);
-
-            // (name = 'Adam' AND age < 21) OR age > 75
-            Filter youngAdamOrElderly = youngAdam.or(AGE.gt(75));
-
-            // LENGTH(name) >= 10
-            Filter longNames = length(NAME).gte(10);
         }
     }
 }

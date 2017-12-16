@@ -87,14 +87,6 @@ public class Flow {
         return new FieldExp(field);
     }
 
-    public static FieldExp field(String table, String column) {
-        return new FieldExp(table, column);
-    }
-
-    public static FieldExp field(FieldExp table, String column) {
-        return new FieldExp(table, column);
-    }
-
     public static LengthExp length(Exp exp) {
         return new LengthExp(exp);
     }

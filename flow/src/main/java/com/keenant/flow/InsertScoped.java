@@ -33,15 +33,21 @@ public class InsertScoped implements QueryPartBuilder {
     }
 
     public InsertScoped with(String field, Object value) {
-        return with(field, new ParamExp(value));
+        insert.with(field, value);
+        return this;
     }
 
-    public void execute() throws DatabaseException {
-        insert.execute(database, dialect);
+    public <T> InsertScoped with(Column<T> column, T value) {
+        insert.with(column, value);
+        return this;
     }
 
-    public InsertScoped newRecord() {
-        insert.newRecord();
+    public Result execute() throws DatabaseException {
+        return insert.execute(database, dialect);
+    }
+
+    public InsertScoped nextRecord() {
+        insert.nextRecord();
         return this;
     }
 
@@ -60,9 +66,5 @@ public class InsertScoped implements QueryPartBuilder {
     @Override
     public QueryPart build(SQLDialect dialect) {
         return insert.build(dialect);
-    }
-
-    public void execute(DatabaseContext database, SQLDialect dialect) {
-        insert.execute(database, dialect);
     }
 }

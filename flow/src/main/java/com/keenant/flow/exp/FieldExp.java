@@ -15,7 +15,7 @@ public class FieldExp extends AbstractExp {
     private final Exp qualifier;
 
     public FieldExp(String field) {
-        this(new ParamExp(field));
+        this(new PlainExp(field));
     }
 
     public FieldExp(Exp field) {

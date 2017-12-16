@@ -244,15 +244,4 @@ public interface Exp extends QueryPartBuilder {
     default FieldExp qualify(Exp qualifier) {
         return new FieldExp(this, qualifier);
     }
-
-    /**
-     * Specify a table/column within this expression. It is the reverse of qualification.
-     * This becomes the qualifier, the {@param specifier} becomes the field.
-     *
-     * @param specifier the specific field that is nested within this
-     * @return the specifier qualified by this
-     */
-    default FieldExp specify(Exp specifier) {
-        return new FieldExp(specifier, this);
-    }
 }

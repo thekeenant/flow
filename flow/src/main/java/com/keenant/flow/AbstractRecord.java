@@ -1,13 +1,13 @@
 package com.keenant.flow;
 
-import com.keenant.flow.MappedColumn;
-import com.keenant.flow.Record;
 import com.keenant.flow.util.Transformer;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public abstract class AbstractRecord implements Record {
     @Override
@@ -30,16 +30,6 @@ public abstract class AbstractRecord implements Record {
             current++;
         }
         return result;
-    }
-
-    @Override
-    public <T, U> Optional<U> get(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException {
-        return get(getFieldIndex(column.getName()), column);
-    }
-
-    @Override
-    public <T, U> U getNonNull(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException {
-        return getNonNull(getFieldIndex(column.getName()), column);
     }
 
     @Override
