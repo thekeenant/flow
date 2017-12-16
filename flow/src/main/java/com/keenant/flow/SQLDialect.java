@@ -3,39 +3,40 @@ package com.keenant.flow;
 import java.util.function.Function;
 
 public class SQLDialect {
-    /**
-     * SQLite SQL dialect.
-     */
-    public static final SQLDialect SQLITE = new SQLDialect(
-            "SQLite",
-            str -> '"' + str + '"',
-            false
-    );
 
-    /**
-     * MySQL SQL dialect.
-     */
-    public static final SQLDialect MYSQL = new SQLDialect(
-            "MySQL",
-            str -> '`' + str + '`',
-            true
-    );
+  /**
+   * SQLite SQL dialect.
+   */
+  public static final SQLDialect SQLITE = new SQLDialect(
+      "SQLite",
+      str -> '"' + str + '"',
+      false
+  );
 
-    private final String name;
-    private final Function<String, String> fieldWrapper;
-    private final boolean scrolling;
+  /**
+   * MySQL SQL dialect.
+   */
+  public static final SQLDialect MYSQL = new SQLDialect(
+      "MySQL",
+      str -> '`' + str + '`',
+      true
+  );
 
-    public SQLDialect(String name, Function<String, String> fieldWrapper, boolean scrolling) {
-        this.name = name;
-        this.fieldWrapper = fieldWrapper;
-        this.scrolling = scrolling;
-    }
+  private final String name;
+  private final Function<String, String> fieldWrapper;
+  private final boolean scrolling;
 
-    public String wrapField(String field) {
-        return fieldWrapper.apply(field);
-    }
+  public SQLDialect(String name, Function<String, String> fieldWrapper, boolean scrolling) {
+    this.name = name;
+    this.fieldWrapper = fieldWrapper;
+    this.scrolling = scrolling;
+  }
 
-    public boolean supportsScrolling() {
-        return scrolling;
-    }
+  public String wrapField(String field) {
+    return fieldWrapper.apply(field);
+  }
+
+  public boolean supportsScrolling() {
+    return scrolling;
+  }
 }

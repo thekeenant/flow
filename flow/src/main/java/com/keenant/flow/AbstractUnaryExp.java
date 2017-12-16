@@ -4,20 +4,21 @@ package com.keenant.flow;
  * An expression that takes one parameter.
  */
 public abstract class AbstractUnaryExp extends AbstractExp {
-    private final Exp child;
 
-    public AbstractUnaryExp(Exp child) {
-        this.child = child;
-    }
+  private final Exp child;
 
-    protected abstract String getSqlFormat(SQLDialect dialect);
+  public AbstractUnaryExp(Exp child) {
+    this.child = child;
+  }
 
-    @Override
-    public QueryPart build(SQLDialect dialect) {
-        QueryPart childPart = child.build(dialect);
+  protected abstract String getSqlFormat(SQLDialect dialect);
 
-        String sql = String.format(getSqlFormat(dialect), childPart.getSql());
+  @Override
+  public QueryPart build(SQLDialect dialect) {
+    QueryPart childPart = child.build(dialect);
 
-        return new QueryPart(sql, childPart.getParams());
-    }
+    String sql = String.format(getSqlFormat(dialect), childPart.getSql());
+
+    return new QueryPart(sql, childPart.getParams());
+  }
 }
