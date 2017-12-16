@@ -1,7 +1,6 @@
 package com.keenant.flow;
 
 import com.keenant.flow.util.Transformer;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -52,10 +51,6 @@ public interface Record {
     Map<Integer, Object> toIndexMap();
 
     Map<String, Object> toLabelMap();
-
-    <T, U> Optional<U> get(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException;
-
-    <T, U> U getNonNull(MappedColumn<T, U> column) throws NoSuchElementException, ClassCastException, IllegalStateException;
 
     <T, U> Optional<U> get(int field, Transformer<T, U> transformer) throws NoSuchElementException, ClassCastException;
 

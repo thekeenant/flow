@@ -1,5 +1,7 @@
 package com.keenant.flow;
 
+import static com.keenant.flow.Flow.field;
+
 import com.keenant.flow.exp.FieldExp;
 
 public class Column<T> extends FieldExp {
@@ -8,7 +10,7 @@ public class Column<T> extends FieldExp {
     private final Class<T> type;
 
     public Column(FieldExp table, String name, Class<T> type) {
-        super(table, name);
+        super(field(name), table);
         this.table = table;
         this.name = name;
         this.type = type;

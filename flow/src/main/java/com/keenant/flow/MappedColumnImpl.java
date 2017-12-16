@@ -1,5 +1,7 @@
 package com.keenant.flow;
 
+import static com.keenant.flow.Flow.field;
+
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.util.Transformer;
 
@@ -9,7 +11,7 @@ public class MappedColumnImpl<T, U> extends FieldExp implements MappedColumn<T, 
     private final Transformer<T, U> transformer;
 
     public MappedColumnImpl(FieldExp table, String name, Transformer<T, U> transformer) {
-        super(table, name);
+        super(field(name), table);
         this.table = table;
         this.name = name;
         this.transformer = transformer;

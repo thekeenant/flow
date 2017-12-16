@@ -10,10 +10,10 @@ import java.util.List;
 
 public class Select {
     private Exp table;
-    private boolean distinct;
     private ListExp fields;
     private Filter filter;
     private Exp order;
+    private Collection<Exp> joins;
 
     public Select(Exp table) {
         this.table = table;
@@ -24,11 +24,6 @@ public class Select {
         select.fields = fields; // immutable
         select.filter = filter; // immutable
         return select;
-    }
-
-    public Select distinct(boolean distinct) {
-        this.distinct = distinct;
-        return this;
     }
 
     public Select table(Exp table) {
@@ -55,6 +50,16 @@ public class Select {
         return this;
     }
 
+    public Select join(Collection<Exp> joins) {
+        this.joins = joins;
+        return this;
+    }
+
+    public Select join(Exp... joins) {
+        this.joins = Arrays.asList(joins);
+        return this;
+    }
+
     public QueryPart build(SQLDialect dialect) {
         QueryPart tablePart = table.build(dialect);
         QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
@@ -66,10 +71,6 @@ public class Select {
 
 
         sql.append("SELECT ");
-
-        if (distinct) {
-            sql.append("DISTINCT ");
-        }
 
         sql.append(fieldsPart.getSql());
         params.addAll(fieldsPart.getParams());
@@ -91,6 +92,15 @@ public class Select {
 
             sql.append(orderPart.getSql());
             params.addAll(orderPart.getParams());
+        }
+
+        if (joins != null) {
+            this.joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
+                sql.append(joinPart.getSql());
+                params.addAll(joinPart.getParams());
+                sql.append(" ");
+            });
+
         }
 
         return new QueryPart(sql.toString(), params);

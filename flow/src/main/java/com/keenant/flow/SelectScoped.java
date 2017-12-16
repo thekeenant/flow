@@ -2,6 +2,7 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public class SelectScoped implements QueryPartBuilder {
@@ -43,11 +44,6 @@ public class SelectScoped implements QueryPartBuilder {
         return new SelectScoped(select.cpy(), database, dialect);
     }
 
-    public SelectScoped distinct(boolean distinct) {
-        select.distinct(distinct);
-        return this;
-    }
-
     public SelectScoped table(Exp table) {
         select.table(table);
         return this;
@@ -70,6 +66,16 @@ public class SelectScoped implements QueryPartBuilder {
 
     public SelectScoped order(Exp order) {
         select.order(order);
+        return this;
+    }
+
+    public SelectScoped join(Collection<Exp> joins) {
+        select.join(joins);
+        return this;
+    }
+
+    public SelectScoped join(Exp... joins) {
+        select.join(joins);
         return this;
     }
 

@@ -11,6 +11,7 @@ public class Insert {
     public Insert(Exp table) {
         this.table = table;
         records = new ArrayList<>();
+        records.add(new HashMap<>());
     }
 
     private Map<String, Exp> currentRecord() {
@@ -47,7 +48,11 @@ public class Insert {
         return with(field, new ParamExp(value));
     }
 
-    public Insert newRecord() {
+    public <T> Insert with(Column<T> column, T value) {
+        return with(column.getName(), value);
+    }
+
+    public Insert nextRecord() {
         records.add(new HashMap<>());
         return this;
     }
@@ -90,9 +95,9 @@ public class Insert {
         return new QueryPart(sql.toString(), params);
     }
 
-    public void execute(DatabaseContext database, SQLDialect dialect) {
+    public Result execute(DatabaseContext database, SQLDialect dialect) {
         QueryPart part = build(dialect);
         Query query = database.prepareUpdate(part);
-        query.execute();
+        return query.execute();
     }
 }
