@@ -12,5 +12,5 @@ public enum QueryType {
     /**
      * Any type of database update such as a delete, create, update.
      */
-    UPDATE;
+    UPDATE
 }

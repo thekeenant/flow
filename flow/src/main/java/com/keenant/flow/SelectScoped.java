@@ -2,7 +2,6 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class SelectScoped implements QueryPartBuilder {

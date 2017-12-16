@@ -1,7 +1,6 @@
 package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
-import com.keenant.flow.exp.ParamExp;
 
 public class InsertScoped implements QueryPartBuilder {
     private final Insert insert;

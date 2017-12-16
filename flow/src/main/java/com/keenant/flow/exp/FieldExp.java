@@ -6,8 +6,6 @@ import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class FieldExp extends AbstractExp {

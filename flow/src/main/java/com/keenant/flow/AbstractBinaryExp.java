@@ -20,7 +20,7 @@ public abstract class AbstractBinaryExp extends AbstractExp {
     @Override
     public QueryPart build(SQLDialect dialect) {
         QueryPart child1Part = child1.build(dialect);
-        QueryPart child2Part = child1.build(dialect);
+        QueryPart child2Part = child2.build(dialect);
 
         String sql = String.format(getSqlFormat(dialect), child1Part.getSql(), child2Part.getSql());
 

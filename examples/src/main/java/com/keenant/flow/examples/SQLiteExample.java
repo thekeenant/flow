@@ -1,12 +1,22 @@
 package com.keenant.flow.examples;
 
-import com.keenant.flow.*;
+import static com.keenant.flow.Flow.avg;
+import static com.keenant.flow.Flow.column;
+import static com.keenant.flow.Flow.count;
+import static com.keenant.flow.Flow.database;
+import static com.keenant.flow.Flow.field;
+import static com.keenant.flow.Flow.length;
+import static com.keenant.flow.Flow.orderAsc;
+import static com.keenant.flow.Flow.wildcard;
+
+import com.keenant.flow.Column;
+import com.keenant.flow.Cursor;
+import com.keenant.flow.DatabaseContext;
+import com.keenant.flow.EagerCursor;
+import com.keenant.flow.SQLDialect;
+import com.keenant.flow.SelectScoped;
 import com.keenant.flow.exp.FieldExp;
-
 import java.util.stream.Stream;
-import javax.print.attribute.standard.MediaSize.NA;
-
-import static com.keenant.flow.Flow.*;
 
 public class SQLiteExample {
     private static final FieldExp USERS = field("users");
