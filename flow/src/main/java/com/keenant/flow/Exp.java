@@ -3,8 +3,6 @@ package com.keenant.flow;
 import com.keenant.flow.exp.AsExp;
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.exp.OnExp;
-import com.keenant.flow.exp.ParamExp;
-import com.keenant.flow.exp.PlainExp;
 import com.keenant.flow.exp.functions.AbsExp;
 import com.keenant.flow.exp.functions.AvgExp;
 import com.keenant.flow.exp.functions.CountExp;

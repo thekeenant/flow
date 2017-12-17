@@ -16,7 +16,6 @@ import com.keenant.flow.EagerCursor;
 import com.keenant.flow.SQLDialect;
 import com.keenant.flow.SelectScoped;
 import com.keenant.flow.exp.FieldExp;
-import com.keenant.flow.exp.PlainExp;
 import java.util.stream.Stream;
 
 public class SQLiteExample {
