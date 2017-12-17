@@ -4,7 +4,6 @@ import com.keenant.flow.exception.DatabaseException;
 import java.util.Collection;
 
 public class SelectScoped implements QueryPartBuilder {
-
   private final Select select;
   private final DatabaseContext database;
   private final SQLDialect dialect;

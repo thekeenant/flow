@@ -22,13 +22,13 @@ import java.util.stream.StreamSupport;
  * An eager cursor that works on databases that don't support scroll insensitivity (SQLite).
  */
 public class SafeEagerCursor extends EagerCursor {
-
   private final Statement statement;
   private final ResultSet resultSet;
   private ResultSetMetaData metaData;
 
   private List<Object[]> records;
-  private Map<String, Integer> labels;
+  private int fieldCount;
+  private Map<String, List<Integer>> labels;
   private int current;
 
   public SafeEagerCursor(PreparedStatement statement, ResultSet resultSet) {
@@ -50,13 +50,18 @@ public class SafeEagerCursor extends EagerCursor {
 
   void populateAndClose() {
     if (records == null || labels == null) {
-      Map<String, Integer> labels = new HashMap<>();
+      Map<String, List<Integer>> labels = new HashMap<>();
       List<Object[]> records = new ArrayList<>();
+      int fieldCount = 0;
 
       try {
         // Labels
         for (int i = 1; i <= getMetaData().getColumnCount(); i++) {
-          labels.put(getMetaData().getColumnLabel(i), i);
+          String label = getMetaData().getColumnLabel(i);
+          List<Integer> existingIndexes = labels.getOrDefault(label, new ArrayList<>());
+          existingIndexes.add(i);
+          labels.put(label, existingIndexes);
+          fieldCount++;
         }
 
         // Records
@@ -73,6 +78,7 @@ public class SafeEagerCursor extends EagerCursor {
 
       this.records = records;
       this.labels = labels;
+      this.fieldCount = fieldCount;
       close();
     }
   }
@@ -129,7 +135,7 @@ public class SafeEagerCursor extends EagerCursor {
 
   @Override
   public boolean hasField(int index) {
-    return labels.containsValue(index);
+    return index >= 1 && index <= fieldCount;
   }
 
   @Override
@@ -139,13 +145,20 @@ public class SafeEagerCursor extends EagerCursor {
 
   @Override
   public int getFieldIndex(String label) throws IllegalArgumentException, NoSuchElementException {
-    return labels.get(label);
+    List<Integer> indexes = labels.get(label);
+    if (label == null)
+      throw new IllegalArgumentException("Label cannot be null");
+    if (indexes == null)
+      throw new NoSuchElementException();
+    if (indexes.size() > 1)
+      throw new IllegalArgumentException("Label maps to multiple indexes");
+    return labels.get(label).get(0);
   }
 
   @Override
   public String getFieldLabel(int index) throws NoSuchElementException {
     for (String label : labels.keySet()) {
-      int current = labels.get(label);
+      int current = getFieldIndex(label);
       if (current == index) {
         return label;
       }

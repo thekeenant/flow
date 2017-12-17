@@ -10,24 +10,12 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public abstract class AbstractRecord implements Record {
-
   @Override
   public Map<Integer, Object> toIndexMap() {
     Map<Integer, Object> result = new LinkedHashMap<>(); // preserve insertion order
     int current = 1;
     while (hasField(current)) {
       result.put(current, get(current).orElse(null));
-      current++;
-    }
-    return result;
-  }
-
-  @Override
-  public Map<String, Object> toLabelMap() {
-    Map<String, Object> result = new LinkedHashMap<>(); // preserve insertion order
-    int current = 1;
-    while (hasField(current)) {
-      result.put(getFieldLabel(current), get(current).orElse(null));
       current++;
     }
     return result;

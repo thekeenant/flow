@@ -16,6 +16,7 @@ import com.keenant.flow.EagerCursor;
 import com.keenant.flow.SQLDialect;
 import com.keenant.flow.SelectScoped;
 import com.keenant.flow.exp.FieldExp;
+import com.keenant.flow.exp.PlainExp;
 import java.util.stream.Stream;
 
 public class SQLiteExample {
@@ -71,7 +72,9 @@ public class SQLiteExample {
       }
 
       // Flow stream
-      SelectScoped query = db.selectFrom(USERS).fields(NAME, AGE).where(ID.lt(50))
+      SelectScoped query = db.selectFrom(USERS)
+          .fields(NAME, AGE)
+          .where(ID.lt(50))
           .order(orderAsc(AGE));
       try (Stream<Cursor> stream = query.fetch().stream()) {
         stream.forEach(current -> {

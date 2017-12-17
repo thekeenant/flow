@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBinaryFilter extends AbstractFilter {
-
   private final Filter filter1;
   private final Filter filter2;
 

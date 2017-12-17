@@ -7,7 +7,6 @@ import java.util.List;
  * An expression that takes two parameters.
  */
 public abstract class AbstractBinaryExp extends AbstractExp {
-
   private final Exp child1;
   private final Exp child2;
 
