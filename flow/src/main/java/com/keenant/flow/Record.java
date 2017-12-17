@@ -12,7 +12,6 @@ import java.util.Optional;
  * Represents something that may currently point to a record/row in the database.
  */
 public interface Record {
-
   /**
    * Check if a field exists.
    *
@@ -35,7 +34,7 @@ public interface Record {
    *
    * @param label the field label
    * @return the field
-   * @throws IllegalArgumentException if the field label provided is null
+   * @throws IllegalArgumentException if the field label provided is null, or has multiple indexes
    * @throws NoSuchElementException if the field label is not present
    */
   int getFieldIndex(String label) throws IllegalArgumentException, NoSuchElementException;
@@ -50,8 +49,6 @@ public interface Record {
   String getFieldLabel(int index) throws NoSuchElementException;
 
   Map<Integer, Object> toIndexMap();
-
-  Map<String, Object> toLabelMap();
 
   <T, U> Optional<U> get(int field, Transformer<T, U> transformer)
       throws NoSuchElementException, ClassCastException;

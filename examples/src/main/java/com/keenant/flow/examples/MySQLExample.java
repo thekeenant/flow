@@ -17,7 +17,7 @@ public class MySQLExample {
         "jdbc:mysql://localhost/flow?user=root&password=password")) {
       Query query = db.prepareFetch("SELECT * FROM people");
       try (Stream<Cursor> stream = query.execute().eagerCursor().stream()) {
-        stream.forEach(c -> System.out.println(c.toLabelMap()));
+        stream.forEach(c -> System.out.println(c.toIndexMap()));
       }
     }
   }

@@ -4,6 +4,7 @@ import com.keenant.flow.exp.AsExp;
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.exp.OnExp;
 import com.keenant.flow.exp.ParamExp;
+import com.keenant.flow.exp.PlainExp;
 import com.keenant.flow.exp.functions.AbsExp;
 import com.keenant.flow.exp.functions.AvgExp;
 import com.keenant.flow.exp.functions.CountExp;
@@ -246,11 +247,24 @@ public interface Exp extends QueryPartBuilder {
     return new AsExp(this, as);
   }
 
-  default AsExp as(Object as) {
-    return as(new ParamExp(as));
-  }
-
   default FieldExp qualify(Exp qualifier) {
     return new FieldExp(this, qualifier);
+  }
+
+  default FieldExp specify(Exp child) {
+    return specify(child, true);
+  }
+
+  default FieldExp specify(Exp child, boolean overrideQualifier) {
+    Exp result = child;
+
+    if (child instanceof FieldExp) {
+      FieldExp childField = (FieldExp) child;
+      if (overrideQualifier) {
+        result = childField.getField();
+      }
+    }
+
+    return new FieldExp(result, this);
   }
 }

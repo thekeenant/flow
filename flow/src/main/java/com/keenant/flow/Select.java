@@ -79,6 +79,16 @@ public class Select {
     sql.append(tablePart.getSql());
     params.addAll(tablePart.getParams());
 
+    if (joins != null) {
+      sql.append(" JOIN ");
+      this.joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
+        sql.append(joinPart.getSql());
+        params.addAll(joinPart.getParams());
+        sql.append(" ");
+      });
+      sql.deleteCharAt(sql.length() - 1);
+    }
+
     if (filterPart != null) {
       sql.append(" WHERE ");
 
@@ -91,15 +101,6 @@ public class Select {
 
       sql.append(orderPart.getSql());
       params.addAll(orderPart.getParams());
-    }
-
-    if (joins != null) {
-      this.joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
-        sql.append(joinPart.getSql());
-        params.addAll(joinPart.getParams());
-        sql.append(" ");
-      });
-
     }
 
     return new QueryPart(sql.toString(), params);

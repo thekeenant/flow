@@ -6,9 +6,9 @@ import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FieldExp extends AbstractExp {
-
   private final Exp field;
   private final Exp qualifier;
 
@@ -23,6 +23,14 @@ public class FieldExp extends AbstractExp {
   public FieldExp(Exp field, Exp qualifier) {
     this.field = field;
     this.qualifier = qualifier;
+  }
+
+  public Exp getField() {
+    return field;
+  }
+
+  public Optional<Exp> getQualifier() {
+    return Optional.ofNullable(qualifier);
   }
 
   /**

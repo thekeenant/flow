@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EagerCursor extends Cursor {
-
   private ResultSet resultSet;
 
   public EagerCursor(PreparedStatement statement, ResultSet resultSet) {
