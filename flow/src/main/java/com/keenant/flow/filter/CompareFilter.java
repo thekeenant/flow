@@ -25,9 +25,9 @@ public class CompareFilter extends AbstractFilter {
     QueryPart lhs = leftSide.build(dialect);
     QueryPart rhs = rightSide.build(dialect);
 
-    String sql = lhs.getSql();
+    String sql = "(" + lhs.getSql() + ")";
     sql += " " + comparator.getSql() + " ";
-    sql += rhs.getSql();
+    sql += "(" + rhs.getSql() + ")";
 
     List<Object> params = new ArrayList<>();
     params.addAll(lhs.getParams());

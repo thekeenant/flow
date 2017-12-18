@@ -7,7 +7,6 @@ import com.keenant.flow.filter.ExpFilter;
 import com.keenant.flow.filter.NotFilter;
 
 public abstract class AbstractExp implements Exp {
-
   @Override
   public Filter filter() {
     return new ExpFilter(this);
@@ -16,6 +15,11 @@ public abstract class AbstractExp implements Exp {
   @Override
   public Filter not() {
     return new NotFilter(filter());
+  }
+
+  @Override
+  public Filter in(Exp other) {
+    return new CompareFilter(this, other, Comparator.IN);
   }
 
   @Override

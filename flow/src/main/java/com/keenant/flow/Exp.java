@@ -33,6 +33,12 @@ public interface Exp extends QueryPartBuilder {
 
   /**
    * @param other the right-hand-side
+   * @return the IN filter
+   */
+  Filter in(Exp other);
+
+  /**
+   * @param other the right-hand-side
    * @return the LIKE filter
    */
   Filter like(Exp other);

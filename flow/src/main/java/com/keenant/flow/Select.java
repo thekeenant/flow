@@ -7,13 +7,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class Select {
-
+public class Select extends AbstractExp {
   private Exp table;
   private ListExp fields;
   private Filter filter;
   private Exp order;
   private Collection<Exp> joins;
+  private ListExp groups;
+  private Filter having;
 
   public Select(Exp table) {
     this.table = table;
@@ -56,7 +57,20 @@ public class Select {
   }
 
   public Select join(Exp... joins) {
-    this.joins = Arrays.asList(joins);
+    return join(Arrays.asList(joins));
+  }
+
+  public Select groupBy(Collection<Exp> groups) {
+    this.groups = new ListExp(groups);
+    return this;
+  }
+
+  public Select groupBy(Exp... groups) {
+    return groupBy(Arrays.asList(groups));
+  }
+
+  public Select having(Filter having) {
+    this.having = having;
     return this;
   }
 
@@ -64,7 +78,9 @@ public class Select {
     QueryPart tablePart = table.build(dialect);
     QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
     QueryPart filterPart = filter == null ? null : filter.build(dialect);
+    QueryPart groupPart = groups == null ? null : groups.build(dialect);
     QueryPart orderPart = order == null ? null : order.build(dialect);
+    QueryPart havingPart = having == null ? null : having.build(dialect);
 
     StringBuilder sql = new StringBuilder();
     List<Object> params = new ArrayList<>();
@@ -80,8 +96,8 @@ public class Select {
     params.addAll(tablePart.getParams());
 
     if (joins != null) {
-      sql.append(" JOIN ");
-      this.joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
+      joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
+        sql.append(" JOIN ");
         sql.append(joinPart.getSql());
         params.addAll(joinPart.getParams());
         sql.append(" ");
@@ -94,6 +110,18 @@ public class Select {
 
       sql.append(filterPart.getSql());
       params.addAll(filterPart.getParams());
+    }
+
+    if (groupPart != null) {
+      sql.append(" GROUP BY ");
+      sql.append(groupPart.getSql());
+      params.addAll(groupPart.getParams());
+    }
+
+    if (havingPart != null) {
+      sql.append(" HAVING ");
+      sql.append(havingPart.getSql());
+      params.addAll(havingPart.getParams());
     }
 
     if (orderPart != null) {

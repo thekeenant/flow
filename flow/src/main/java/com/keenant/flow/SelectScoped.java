@@ -77,6 +77,21 @@ public class SelectScoped implements QueryPartBuilder {
     return this;
   }
 
+  public SelectScoped groupBy(Collection<Exp> groups) {
+    select.groupBy(groups);
+    return this;
+  }
+
+  public SelectScoped groupBy(Exp... groups) {
+    select.groupBy(groups);
+    return this;
+  }
+
+  public SelectScoped having(Filter having) {
+    select.having(having);
+    return this;
+  }
+
   public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
     return select.fetch(database, dialect);
   }
