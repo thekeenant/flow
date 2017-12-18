@@ -100,9 +100,13 @@ public class Insert {
     return new QueryPart(sql.toString(), params);
   }
 
-  public Result execute(DatabaseContext database, SQLDialect dialect) {
+  public Result executeAndReturn(DatabaseContext database, SQLDialect dialect) {
     QueryPart part = build(dialect);
     Query query = database.prepareUpdate(part);
     return query.execute();
+  }
+
+  public void execute(DatabaseContext database, SQLDialect dialect) {
+    executeAndReturn(database, dialect);
   }
 }

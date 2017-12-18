@@ -16,17 +16,18 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Cursor extends AbstractRecord implements AutoCloseable {
+  protected final PreparedStatement statement;
+  protected final ResultSet resultSet;
+  private final Runnable releaser;
 
-  private final PreparedStatement statement;
-  private final ResultSet resultSet;
   private ResultSetMetaData metaData;
-
   private Map<String, Integer> labelToIndex;
   private boolean invalidated;
 
-  public Cursor(PreparedStatement statement, ResultSet resultSet) {
+  public Cursor(PreparedStatement statement, ResultSet resultSet, Runnable releaser) {
     this.statement = statement;
     this.resultSet = resultSet;
+    this.releaser = releaser;
   }
 
   private ResultSetMetaData getMetaData() {
@@ -87,8 +88,9 @@ public class Cursor extends AbstractRecord implements AutoCloseable {
     try {
       resultSet.close();
       statement.close();
+      releaser.run();
     } catch (SQLException e) {
-      throw new DatabaseException(e);
+      // Ignore
     }
   }
 

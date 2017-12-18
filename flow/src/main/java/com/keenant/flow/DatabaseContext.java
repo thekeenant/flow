@@ -4,6 +4,7 @@ import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.jdbc.FetchConfig;
 import com.keenant.flow.jdbc.QueryScroll;
 import com.keenant.flow.jdbc.QueryType;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,8 +24,8 @@ public class DatabaseContext implements AutoCloseable {
 
   public Query prepareUpdate(String sql, Collection<Object> params) {
     try {
-      PreparedStatement statement = connector.acquire()
-          .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      Connection connection = connector.acquire();
+      PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
       Iterator<?> iterator = params.iterator();
       int i = 1;
@@ -34,7 +35,7 @@ public class DatabaseContext implements AutoCloseable {
       }
 
       // Create the query object, passing on the query config to it
-      return new Query(statement, QueryType.UPDATE);
+      return new Query(statement, QueryType.UPDATE, connector.releaser(connection));
     } catch (SQLException e) {
       throw new DatabaseException(e);
     }
@@ -50,8 +51,10 @@ public class DatabaseContext implements AutoCloseable {
 
   public Query prepareFetch(FetchConfig config, String sql, Collection<?> params) {
     try {
+      Connection connection = connector.acquire();
+
       @SuppressWarnings("MagicConstant")
-      PreparedStatement statement = connector.acquire().prepareStatement(
+      PreparedStatement statement = connection.prepareStatement(
           sql,
           config.getType().getValue(),
           config.getConcurrency().getValue()
@@ -65,7 +68,7 @@ public class DatabaseContext implements AutoCloseable {
       }
 
       // Create the query object, passing on the query config to it
-      return new Query(statement, QueryType.FETCH);
+      return new Query(statement, QueryType.FETCH, connector.releaser(connection));
     } catch (SQLException e) {
       throw new DatabaseException(e);
     }
@@ -142,6 +145,6 @@ public class DatabaseContext implements AutoCloseable {
 
   @Override
   public void close() {
-    connector.disposeAll();
+    connector.releaseAll();
   }
 }

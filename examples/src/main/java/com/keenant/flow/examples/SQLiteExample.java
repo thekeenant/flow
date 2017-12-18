@@ -29,7 +29,7 @@ public class SQLiteExample {
     try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {
       db.prepareUpdate(
           "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(255), age INTEGER)")
-          .execute();
+          .executeAndClose();
 
       // Safely check number of users
       try (EagerCursor cursor = db.selectFrom(USERS).fields(count(wildcard())).fetch()) {

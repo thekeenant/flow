@@ -43,7 +43,7 @@ public class InsertScoped implements QueryPartBuilder {
   }
 
   public Result execute() throws DatabaseException {
-    return insert.execute(database, dialect);
+    return insert.executeAndReturn(database, dialect);
   }
 
   public InsertScoped nextRecord() {

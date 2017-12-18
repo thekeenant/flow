@@ -2,6 +2,7 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 import java.sql.Connection;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -9,11 +10,14 @@ import java.util.function.Supplier;
  * Provides an opened database connection.
  *
  * The implementation can choose what connection is provided for each call to {@link #acquire()},
- * examples: <ul> <li>The same connection each time, until it is disposed</li> <li>A random
- * connection from a pool of connections</li> <li>A new connection for each thread</li> </ul>
+ * examples:
+ * <ul>
+ *   <li>The same connection each time, until it is disposed</li>
+ *   <li>A random connection from a pool of connections</li>
+ *   <li>A new connection for each thread</li>
+ * </ul>
  */
 public interface Connector {
-
   /**
    * Construct an anonymous connector. This is handy in Java 8 when implementing interfaces that
    * have multiple methods, since you can now use functional programming!
@@ -32,34 +36,38 @@ public interface Connector {
       }
 
       @Override
-      public void dispose(Connection connection) {
+      public void release(Connection connection) {
         dispose.accept(connection);
       }
 
       @Override
-      public void disposeAll() {
+      public void releaseAll() {
         disposeAll.run();
       }
     };
   }
 
   /**
-   * Open a new database connection.
+   * Provide the caller with a connection to the database.
    *
-   * @return a new connection
+   * @return a connection
    * @throws DatabaseException if the connection fails
    */
   Connection acquire() throws DatabaseException;
 
   /**
-   * Dispose a connection.
+   * Release an acquired connection.
    *
    * @param connection the connection
    */
-  void dispose(Connection connection);
+  void release(Connection connection);
+
+  default Runnable releaser(Connection connection) {
+    return () -> release(connection);
+  }
 
   /**
    * Dispose of all connections.
    */
-  void disposeAll();
+  void releaseAll();
 }

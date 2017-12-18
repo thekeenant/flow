@@ -22,8 +22,6 @@ import java.util.stream.StreamSupport;
  * An eager cursor that works on databases that don't support scroll insensitivity (SQLite).
  */
 public class SafeEagerCursor extends EagerCursor {
-  private final Statement statement;
-  private final ResultSet resultSet;
   private ResultSetMetaData metaData;
 
   private List<Object[]> records;
@@ -31,10 +29,8 @@ public class SafeEagerCursor extends EagerCursor {
   private Map<String, List<Integer>> labels;
   private int current;
 
-  public SafeEagerCursor(PreparedStatement statement, ResultSet resultSet) {
-    super(statement, resultSet);
-    this.statement = statement;
-    this.resultSet = resultSet;
+  public SafeEagerCursor(PreparedStatement statement, ResultSet resultSet, Runnable releaser) {
+    super(statement, resultSet, releaser);
   }
 
   private ResultSetMetaData getMetaData() {
@@ -196,16 +192,6 @@ public class SafeEagerCursor extends EagerCursor {
   @Override
   public Iterator<Cursor> iterator() {
     return new CursorIterator();
-  }
-
-  @Override
-  public void close() {
-    try {
-      statement.close();
-      resultSet.close();
-    } catch (SQLException e) {
-      throw new DatabaseException(e);
-    }
   }
 
   private class CursorIterator implements Iterator<Cursor> {

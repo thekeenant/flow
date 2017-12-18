@@ -34,9 +34,7 @@ public class Flow {
   }
 
   public static DefaultConnector connect(String url, String username, String password) {
-    DefaultConnector connector = new DefaultConnector(url, username, password);
-    connector.acquire();
-    return connector;
+    return new DefaultConnector(url, username, password);
   }
 
   public static DatabaseContext database(SQLDialect dialect, Connector connector) {
