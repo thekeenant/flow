@@ -25,11 +25,10 @@ version iteration until a full release.
 ## Roadmap
 
 Supported:
-
 * Select query
     * Specify fields
-    * Filters
-    * Order
+    * Nested queries
+    * `GROUP BY`, `HAVING`, `JOIN`, `WHERE`, `ORDER BY`,
 * Insert query
     * Multi insert
 * Update query
@@ -39,11 +38,10 @@ Supported:
     * SQLite
 
 Planned:
-* JOIN
 * UNION/INTERSECT/EXCEPT
-* GROUP BY/HAVING
 * Create table query
 * Check Postgres/other SQL databases
+* Transactions
 
 ## Introduction
 
