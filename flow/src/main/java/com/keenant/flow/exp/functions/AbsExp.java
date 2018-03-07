@@ -5,7 +5,6 @@ import com.keenant.flow.Exp;
 import com.keenant.flow.SQLDialect;
 
 public class AbsExp extends AbstractUnaryExp {
-
   public AbsExp(Exp child) {
     super(child);
   }

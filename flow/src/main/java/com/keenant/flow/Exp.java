@@ -1,18 +1,10 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exp.AliasExp;
 import com.keenant.flow.exp.AsExp;
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.exp.OnExp;
-import com.keenant.flow.exp.functions.AbsExp;
-import com.keenant.flow.exp.functions.AvgExp;
-import com.keenant.flow.exp.functions.CountExp;
-import com.keenant.flow.exp.functions.LengthExp;
-import com.keenant.flow.exp.functions.ListExp;
-import com.keenant.flow.exp.functions.LowerExp;
-import com.keenant.flow.exp.functions.MaxExp;
-import com.keenant.flow.exp.functions.OrderExp;
-import com.keenant.flow.exp.functions.SumExp;
-import com.keenant.flow.exp.functions.UpperExp;
+import com.keenant.flow.exp.functions.*;
 import com.keenant.flow.jdbc.Order;
 import java.util.Collections;
 
@@ -241,14 +233,38 @@ public interface Exp extends QueryPartBuilder {
     return new UpperExp(this);
   }
 
+  default MathExp add(Exp value) {
+    return new MathExp(this, value, Operator.ADD);
+  }
+
+  default MathExp sub(Exp value) {
+    return new MathExp(this, value, Operator.SUBTRACT);
+  }
+
+  default MathExp div(Exp value) {
+    return new MathExp(this, value, Operator.DIVIDE);
+  }
+
+  default MathExp mult(Exp value) {
+    return new MathExp(this, value, Operator.MULTIPLY);
+  }
+
+  default MathExp mod(Exp value) {
+    return new MathExp(this, value, Operator.MODULO);
+  }
+
   // Keywords
 
   default OnExp on(Filter filter) {
     return new OnExp(this, filter);
   }
 
-  default AsExp as(Exp as) {
-    return new AsExp(this, as);
+  default AsExp as(AliasExp alias) {
+    return new AsExp(this, alias);
+  }
+
+  default AsExp as(String alias) {
+    return as(new AliasExp(alias));
   }
 
   default FieldExp qualify(Exp qualifier) {

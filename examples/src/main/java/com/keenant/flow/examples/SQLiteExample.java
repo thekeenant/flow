@@ -1,14 +1,5 @@
 package com.keenant.flow.examples;
 
-import static com.keenant.flow.Flow.avg;
-import static com.keenant.flow.Flow.column;
-import static com.keenant.flow.Flow.count;
-import static com.keenant.flow.Flow.database;
-import static com.keenant.flow.Flow.field;
-import static com.keenant.flow.Flow.length;
-import static com.keenant.flow.Flow.orderAsc;
-import static com.keenant.flow.Flow.wildcard;
-
 import com.keenant.flow.Column;
 import com.keenant.flow.Cursor;
 import com.keenant.flow.DatabaseContext;
@@ -17,6 +8,8 @@ import com.keenant.flow.SQLDialect;
 import com.keenant.flow.SelectScoped;
 import com.keenant.flow.exp.FieldExp;
 import java.util.stream.Stream;
+
+import static com.keenant.flow.Flow.*;
 
 public class SQLiteExample {
 
@@ -82,6 +75,7 @@ public class SQLiteExample {
           System.out.println(name + " is " + age + " years old");
         });
       }
+
     }
   }
 }
