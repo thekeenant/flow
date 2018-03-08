@@ -15,6 +15,7 @@ import com.keenant.flow.SQLDialect;
 import com.keenant.flow.Select;
 import com.keenant.flow.SelectScoped;
 import com.keenant.flow.exp.AliasExp;
+import java.util.stream.Stream;
 
 public class MySQLExample {
 
@@ -24,17 +25,24 @@ public class MySQLExample {
     try (DatabaseContext db = database(SQLDialect.MYSQL,
         "jdbc:mysql://localhost/madgrades_dev?user=root&password=password")) {
 
-      AliasExp sectionCount = alias("section_count");
-
+      AliasExp sectionCountAlias = alias("section_count");
       SelectScoped query = db.
-          select(COURSES.UUID, max(COURSE_OFFERINGS.NAME), count(SECTIONS.NUMBER).as(sectionCount))
+          select(COURSES.UUID, max(COURSE_OFFERINGS.NAME), count(SECTIONS.NUMBER).as(sectionCountAlias))
               .from(COURSES)
               .join(COURSE_OFFERINGS.on(COURSE_OFFERINGS.COURSE_UUID.eq(COURSES.UUID)))
               .join(SECTIONS.on(SECTIONS.COURSE_OFFERING_UUID.eq(COURSE_OFFERINGS.UUID)))
               .groupBy(COURSES.UUID)
-              .having(sectionCount.greaterThan(1000));
+              .having(sectionCountAlias.greaterThan(1000));
 
-      System.out.println(query.build());
+      try (Stream<Cursor> stream = query.stream()) {
+        stream.forEach(cursor -> {
+          String courseUuid = cursor.getNonNullString(1);
+          String courseName = cursor.getString(2).orElse("Unknown Name");
+          int sectionCount = cursor.getNonNullNumber(3).intValue();
+
+          // ...
+        });
+      }
 
       try (Cursor cursor = query.fetch()) {
         System.out.println("Largest Courses:");

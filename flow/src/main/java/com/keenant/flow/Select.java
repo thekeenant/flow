@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Select extends AbstractExp {
   private final Exp table;
@@ -138,6 +139,14 @@ public class Select extends AbstractExp {
 
   public EagerCursor fetch(DatabaseContext database, SQLDialect dialect) {
     return database.fetch(build(dialect));
+  }
+
+  public Stream<Cursor> stream(DatabaseContext database, SQLDialect dialect) {
+    return fetch(database, dialect).stream();
+  }
+
+  public Stream<Cursor> streamLazy(DatabaseContext database, SQLDialect dialect) {
+    return fetchLazy(database, dialect).stream();
   }
 
   public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) {

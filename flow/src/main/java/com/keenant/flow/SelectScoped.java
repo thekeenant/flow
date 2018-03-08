@@ -2,8 +2,8 @@ package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
 import com.keenant.flow.exp.functions.ListExp;
-
 import java.util.Collection;
+import java.util.stream.Stream;
 
 public class SelectScoped implements QueryPartBuilder {
   private final Select select;
@@ -36,8 +36,16 @@ public class SelectScoped implements QueryPartBuilder {
     return select.fetch(database, dialect);
   }
 
+  public Stream<Cursor> stream() {
+    return fetch().stream();
+  }
+
   public Cursor fetchLazy() throws DatabaseException {
     return select.fetchLazy(database, dialect);
+  }
+
+  public Stream<Cursor> streamLazy() {
+    return fetchLazy().stream();
   }
 
   public SelectScoped cpy() {
@@ -83,8 +91,16 @@ public class SelectScoped implements QueryPartBuilder {
     return select.fetch(database, dialect);
   }
 
+  public Stream<Cursor> stream(DatabaseContext database, SQLDialect dialect) {
+    return select.stream(database, dialect);
+  }
+
   public Cursor fetchLazy(DatabaseContext database, SQLDialect dialect) throws DatabaseException {
     return select.fetchLazy(database, dialect);
+  }
+
+  public Stream<Cursor> streamLazy(DatabaseContext database, SQLDialect dialect) {
+    return select.streamLazy(database, dialect);
   }
 
   @Override
