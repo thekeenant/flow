@@ -13,4 +13,6 @@ public class JoinExp extends AbstractUnaryExp {
   protected String getSqlFormat(SQLDialect dialect) {
     return "JOIN %s";
   }
+
+
 }

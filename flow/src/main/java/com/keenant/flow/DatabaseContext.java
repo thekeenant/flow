@@ -132,6 +132,10 @@ public class DatabaseContext implements AutoCloseable {
     return fetchLazy(part.getSql(), part.getParams());
   }
 
+  public SelectPrefixScoped select() {
+    return select(Flow.wildcard());
+  }
+
   public SelectPrefixScoped select(Exp... fields) {
     return new SelectPrefixScoped(new ListExp(fields), this, dialect);
   }

@@ -14,9 +14,9 @@ import static com.keenant.flow.Flow.*;
 public class SQLiteExample {
 
   private static final FieldExp USERS = field("users");
-  private static final Column<Integer> ID = column(USERS, "id", Integer.class);
-  private static final Column<String> NAME = column(USERS, "name", String.class);
-  private static final Column<Integer> AGE = column(USERS, "age", Integer.class);
+  private static final Column<Integer> ID = column(USERS, "id");
+  private static final Column<String> NAME = column(USERS, "name");
+  private static final Column<Integer> AGE = column(USERS, "age");
 
   public static void main(String[] args) throws Exception {
     try (DatabaseContext db = database(SQLDialect.SQLITE, "jdbc:sqlite:sample.db")) {

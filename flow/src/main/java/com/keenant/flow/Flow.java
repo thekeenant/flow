@@ -1,5 +1,6 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exp.AliasExp;
 import com.keenant.flow.exp.DistinctExp;
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.exp.ParamExp;
@@ -20,6 +21,7 @@ import com.keenant.flow.jdbc.Order;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 public class Flow {
 
@@ -45,6 +47,10 @@ public class Flow {
     return database(dialect, connect(url));
   }
 
+  public static SelectPrefix select() {
+    return select(wildcard());
+  }
+
   public static SelectPrefix select(Exp... fields) {
     return new SelectPrefix(new ListExp(fields));
   }
@@ -61,8 +67,8 @@ public class Flow {
     return new QueryPart(sql, params);
   }
 
-  public static <T> Column<T> column(FieldExp table, String name, Class<T> type) {
-    return new Column<>(table, name, type);
+  public static <T> Column<T> column(FieldExp table, String name) {
+    return new Column<>(table, name);
   }
 
   public static PlainFilter filter(String sql, Object... params) {
@@ -71,6 +77,15 @@ public class Flow {
 
   public static PlainFilter filter(String sql, List<Object> params) {
     return new PlainFilter(sql, params);
+  }
+
+  public static AliasExp alias() {
+    String unique = UUID.randomUUID().toString().replace("-", "");
+    return alias(unique);
+  }
+
+  public static AliasExp alias(String name) {
+    return new AliasExp(name);
   }
 
   public static AbsExp abs(Exp exp) {

@@ -73,6 +73,7 @@ public class Select extends AbstractExp {
     return this;
   }
 
+  @Override
   public QueryPart build(SQLDialect dialect) {
     QueryPart tablePart = table.build(dialect);
     QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
@@ -100,7 +101,6 @@ public class Select extends AbstractExp {
         sql.append(joinPart.getSql());
         params.addAll(joinPart.getParams());
       });
-      sql.deleteCharAt(sql.length() - 1);
     }
 
     if (filterPart != null) {

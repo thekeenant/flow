@@ -29,10 +29,10 @@ public class ListExp extends AbstractExp {
     for (Exp exp : expressions) {
       QueryPart part = exp.build(dialect);
       sb.append(part.getSql());
-      sb.append(",");
+      sb.append(", ");
       params.addAll(part.getParams());
     }
-    sb.deleteCharAt(sb.length() - 1);
+    sb.delete(sb.length() - 2, sb.length());
 
     return new QueryPart(sb.toString(), params);
   }

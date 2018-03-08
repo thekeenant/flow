@@ -4,7 +4,6 @@ package com.keenant.flow;
  * An expression that takes one parameter.
  */
 public abstract class AbstractUnaryExp extends AbstractExp {
-
   private final Exp child;
 
   public AbstractUnaryExp(Exp child) {

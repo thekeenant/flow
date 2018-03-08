@@ -34,7 +34,7 @@ public class OnExp extends AbstractExp {
       sql += " ON " + onPart.getSql();
       params.addAll(onPart.getParams());
     }
-
+    
     return new QueryPart(sql, params);
   }
 }

@@ -4,8 +4,10 @@ import com.keenant.flow.exp.AliasExp;
 import com.keenant.flow.exp.AsExp;
 import com.keenant.flow.exp.FieldExp;
 import com.keenant.flow.exp.OnExp;
+import com.keenant.flow.exp.ParamExp;
 import com.keenant.flow.exp.functions.*;
 import com.keenant.flow.jdbc.Order;
+import java.lang.reflect.Parameter;
 import java.util.Collections;
 
 /**
@@ -237,20 +239,56 @@ public interface Exp extends QueryPartBuilder {
     return new MathExp(this, value, Operator.ADD);
   }
 
+  default MathExp add(Object value) {
+    return add(new ParamExp(value));
+  }
+
+  default MathExp plus(Exp value) {
+    return add(value);
+  }
+
+  default MathExp plus(Object value) {
+    return add(value);
+  }
+
   default MathExp sub(Exp value) {
     return new MathExp(this, value, Operator.SUBTRACT);
+  }
+
+  default MathExp sub(Object value) {
+    return sub(new ParamExp(value));
+  }
+
+  default MathExp minus(Exp value) {
+    return sub(value);
+  }
+
+  default MathExp minus(Object value) {
+    return sub(new ParamExp(value));
   }
 
   default MathExp div(Exp value) {
     return new MathExp(this, value, Operator.DIVIDE);
   }
 
+  default MathExp div(Object value) {
+    return div(new ParamExp(value));
+  }
+
   default MathExp mult(Exp value) {
     return new MathExp(this, value, Operator.MULTIPLY);
   }
 
+  default MathExp mult(Object value) {
+    return mult(new ParamExp(value));
+  }
+
   default MathExp mod(Exp value) {
     return new MathExp(this, value, Operator.MODULO);
+  }
+
+  default MathExp mod(Object value) {
+     return mod(new ParamExp(value));
   }
 
   // Keywords
