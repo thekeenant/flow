@@ -3,8 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ff96f2fbc3894502a5acb846f3813a26)](https://www.codacy.com/app/thekeenant/flow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekeenant/flow&amp;utm_campaign=Badge_Grade)
 
-A simple SQL database library for Java that takes advantage of some of the awesome
-functional features found in Java 8. It is designed to be:
+A simple database library for Java that is SQL first. Write SQL using Java and take advantage of some of the awesome functional features found in Java 8. It is designed to be:
 
 * **Powerful**: Flow does not limit you, you can still do anything you want with your database,
   even if that means writing raw SQL queries! With a single line you can perform complex operations 
@@ -21,6 +20,46 @@ functional features found in Java 8. It is designed to be:
 
 Flow is not complete. It also lacks documentation, and as such, features will break upon every 
 version iteration until a full release.
+
+## Example
+
+```java
+AliasExp sectionCountAlias = alias("section_count");
+SelectScoped query = db.
+    select(COURSES.UUID, max(COURSE_OFFERINGS.NAME), count(SECTIONS.NUMBER).as(sectionCountAlias))
+        .from(COURSES)
+        .join(COURSE_OFFERINGS.on(COURSE_OFFERINGS.COURSE_UUID.eq(COURSES.UUID)))
+        .join(SECTIONS.on(SECTIONS.COURSE_OFFERING_UUID.eq(COURSE_OFFERINGS.UUID)))
+        .groupBy(COURSES.UUID)
+        .having(sectionCountAlias.greaterThan(1000));
+
+```
+
+SQL Equivalent:
+
+```sql
+SELECT courses.uuid, MAX(course_offerings.name), COUNT(sections.number) AS section_count 
+FROM courses 
+JOIN course_offerings ON (course_offerings.course_uuid) = (courses.uuid) 
+JOIN sections         ON (sections.course_offering_uuid) = (course_offerings.uuid)
+GROUP BY courses.uuid
+HAVING (section_count) > (1000);
+```
+
+Iterate:
+
+```java
+try (Stream<Cursor> stream = query.stream()) {
+  stream.forEach(cursor -> {
+    String courseUuid = cursor.getNonNullString(1);
+    String courseName = cursor.getString(2).orElse("Unknown Name");
+    int sectionCount = cursor.getNonNullNumber(3).intValue();
+
+    // ...
+  });
+}
+```
+
 
 ## Roadmap
 
