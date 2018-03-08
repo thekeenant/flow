@@ -1,6 +1,7 @@
 package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
+import com.keenant.flow.exp.functions.ListExp;
 import com.keenant.flow.jdbc.FetchConfig;
 import com.keenant.flow.jdbc.QueryScroll;
 import com.keenant.flow.jdbc.QueryType;
@@ -131,8 +132,8 @@ public class DatabaseContext implements AutoCloseable {
     return fetchLazy(part.getSql(), part.getParams());
   }
 
-  public SelectScoped selectFrom(Exp table) {
-    return new SelectScoped(table, this, dialect);
+  public SelectPrefixScoped select(Exp... fields) {
+    return new SelectPrefixScoped(new ListExp(fields), this, dialect);
   }
 
   public DeleteScoped deleteFrom(Exp table) {

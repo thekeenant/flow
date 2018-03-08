@@ -25,7 +25,7 @@ public class SQLiteExample {
           .executeAndClose();
 
       // Safely check number of users
-      try (EagerCursor cursor = db.selectFrom(USERS).fields(count(wildcard())).fetch()) {
+      try (EagerCursor cursor = db.select(count()).from(USERS).fetch()) {
         long userCount = cursor.first().getNumber(1).orElse(0).longValue();
 
         // Add some data
@@ -48,7 +48,7 @@ public class SQLiteExample {
       }
 
       // Flow query
-      try (Cursor cursor = db.selectFrom(USERS).fields(avg(length(NAME))).fetch()) {
+      try (Cursor cursor = db.select(avg(length(NAME))).from(USERS).fetch()) {
         double value = cursor.next().getNonNullDouble(1);
         System.out.println("Average Name Length: " + value);
       }
@@ -64,10 +64,11 @@ public class SQLiteExample {
       }
 
       // Flow stream
-      SelectScoped query = db.selectFrom(USERS)
-          .fields(NAME, AGE)
+      SelectScoped query = db.select(NAME, AGE)
+          .from(USERS)
           .where(ID.lt(50))
           .order(orderAsc(AGE));
+
       try (Stream<Cursor> stream = query.fetch().stream()) {
         stream.forEach(current -> {
           String name = current.getString("name").orElse("(No Name)");

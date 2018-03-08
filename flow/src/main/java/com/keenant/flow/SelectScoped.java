@@ -1,6 +1,8 @@
 package com.keenant.flow;
 
 import com.keenant.flow.exception.DatabaseException;
+import com.keenant.flow.exp.functions.ListExp;
+
 import java.util.Collection;
 
 public class SelectScoped implements QueryPartBuilder {
@@ -14,8 +16,8 @@ public class SelectScoped implements QueryPartBuilder {
     this.dialect = dialect;
   }
 
-  public SelectScoped(Exp table, DatabaseContext database, SQLDialect dialect) {
-    this(new Select(table), database, dialect);
+  public SelectScoped(Exp table, ListExp fields, DatabaseContext database, SQLDialect dialect) {
+    this(new Select(table, fields), database, dialect);
   }
 
   public DatabaseContext getDatabase() {
@@ -40,21 +42,6 @@ public class SelectScoped implements QueryPartBuilder {
 
   public SelectScoped cpy() {
     return new SelectScoped(select.cpy(), database, dialect);
-  }
-
-  public SelectScoped table(Exp table) {
-    select.table(table);
-    return this;
-  }
-
-  public SelectScoped fields(Collection<Exp> fields) {
-    select.fields(fields);
-    return this;
-  }
-
-  public SelectScoped fields(Exp... fields) {
-    select.fields(fields);
-    return this;
   }
 
   public SelectScoped where(Filter filter) {

@@ -45,8 +45,8 @@ public class Flow {
     return database(dialect, connect(url));
   }
 
-  public static Select selectFrom(Exp table) {
-    return new Select(table);
+  public static SelectPrefix select(Exp... fields) {
+    return new SelectPrefix(new ListExp(fields));
   }
 
   public static Insert insertInto(Exp table) {

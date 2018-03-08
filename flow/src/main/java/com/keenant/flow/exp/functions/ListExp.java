@@ -5,6 +5,7 @@ import com.keenant.flow.Exp;
 import com.keenant.flow.QueryPart;
 import com.keenant.flow.SQLDialect;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,10 @@ public class ListExp extends AbstractExp {
 
   public ListExp(Collection<Exp> expressions) {
     this.expressions = expressions;
+  }
+
+  public ListExp(Exp... expressions) {
+    this(Arrays.asList(expressions));
   }
 
   @Override

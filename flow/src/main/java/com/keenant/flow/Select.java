@@ -1,58 +1,54 @@
 package com.keenant.flow;
 
+import com.keenant.flow.exp.JoinExp;
 import com.keenant.flow.exp.functions.ListExp;
 import com.keenant.flow.jdbc.FetchConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Select extends AbstractExp {
-  private Exp table;
-  private ListExp fields;
+  private final Exp table;
+  private final ListExp fields;
   private Filter filter;
   private Exp order;
-  private Collection<Exp> joins;
+  private Collection<JoinExp> joins;
   private ListExp groups;
   private Filter having;
 
-  public Select(Exp table) {
+  public Select(Exp table, ListExp fields) {
     this.table = table;
+    this.fields = fields;
   }
 
   public Select cpy() {
-    Select select = new Select(table);
-    select.fields = fields; // immutable
+    Select select = new Select(table, fields);
     select.filter = filter; // immutable
+    select.order = order;
+    select.joins = new ArrayList<>(joins);
+    select.groups = groups;
+    select.having = having;
     return select;
   }
 
-  public Select table(Exp table) {
-    this.table = table;
-    return this;
-  }
-
-  public Select fields(Collection<Exp> fields) {
-    this.fields = new ListExp(fields);
-    return this;
-  }
-
-  public Select fields(Exp... fields) {
-    return fields(Arrays.asList(fields));
-  }
-
   public Select where(Filter filter) {
-    this.filter = filter;
+    this.filter = this.filter == null ? filter : this.filter.and(filter);
     return this;
   }
 
   public Select order(Exp order) {
-    this.order = order;
+    this.order = this.order == null ? order : new ListExp(this.order, order);
     return this;
   }
 
   public Select join(Collection<Exp> joins) {
-    this.joins = joins;
+    Collection<JoinExp> joinExps = joins.stream().map(JoinExp::new).collect(Collectors.toList());
+    if (this.joins == null)
+      this.joins = joinExps;
+    else
+      this.joins.addAll(joinExps);
     return this;
   }
 
@@ -61,7 +57,10 @@ public class Select extends AbstractExp {
   }
 
   public Select groupBy(Collection<Exp> groups) {
-    this.groups = new ListExp(groups);
+    if (this.groups == null)
+      this.groups = new ListExp(groups);
+    else
+      this.groups = new ListExp(this.groups, new ListExp(groups));
     return this;
   }
 
@@ -70,7 +69,7 @@ public class Select extends AbstractExp {
   }
 
   public Select having(Filter having) {
-    this.having = having;
+    this.having = this.having == null ? having : this.having.and(having);
     return this;
   }
 
@@ -79,8 +78,8 @@ public class Select extends AbstractExp {
     QueryPart fieldsPart = fields == null ? Flow.wildcard().build(dialect) : fields.build(dialect);
     QueryPart filterPart = filter == null ? null : filter.build(dialect);
     QueryPart groupPart = groups == null ? null : groups.build(dialect);
-    QueryPart orderPart = order == null ? null : order.build(dialect);
     QueryPart havingPart = having == null ? null : having.build(dialect);
+    QueryPart orderPart = order == null ? null : order.build(dialect);
 
     StringBuilder sql = new StringBuilder();
     List<Object> params = new ArrayList<>();
@@ -97,10 +96,9 @@ public class Select extends AbstractExp {
 
     if (joins != null) {
       joins.stream().map(j -> j.build(dialect)).forEach(joinPart -> {
-        sql.append(" JOIN ");
+        sql.append(" ");
         sql.append(joinPart.getSql());
         params.addAll(joinPart.getParams());
-        sql.append(" ");
       });
       sql.deleteCharAt(sql.length() - 1);
     }
