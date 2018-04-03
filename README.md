@@ -21,6 +21,27 @@ A simple database library for Java that is SQL first. Write SQL using Java and t
 Flow is not complete. It also lacks documentation, and as such, features will break upon every 
 version iteration until a full release.
 
+## Maven
+
+Gradle works too!
+
+```xml
+<repositories>
+  <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+	    <groupId>com.github.thekeenant.flow</groupId>
+	    <artifactId>examples</artifactId>
+	    <version>v0.1</version>
+	</dependency>
+</dependencies>
+```
+
 ## Example
 
 ```java
