@@ -28,17 +28,17 @@ Gradle works too!
 ```xml
 <repositories>
   <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
   </repository>
 </repositories>
 
 <dependencies>
   <dependency>
-	    <groupId>com.github.thekeenant.flow</groupId>
-	    <artifactId>examples</artifactId>
-	    <version>v0.1</version>
-	</dependency>
+    <groupId>com.github.thekeenant.flow</groupId>
+    <artifactId>examples</artifactId>
+    <version>v0.1</version>
+  </dependency>
 </dependencies>
 ```
 
