@@ -3,20 +3,21 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ff96f2fbc3894502a5acb846f3813a26)](https://www.codacy.com/app/thekeenant/flow?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thekeenant/flow&amp;utm_campaign=Badge_Grade)
 
-A simple database library for Java that is SQL first. Write SQL using Java and take advantage of some of the awesome functional features found in Java 8. It is designed to be:
+A simple database library for Java that is SQL first. Flow is designed to be:
 
-* **Powerful**: Flow does not limit you, you can still do anything you want with your database,
+* **Powerful**: Flow does not limit you in any respect. You can still do anything you want with your database,
   even if that means writing raw SQL queries! With a single line you can perform complex operations 
   on a database, taking advantage of Java 8's `Stream`, and functional programming features.
 * **Simple**: Just add Flow as a dependency to your project and you are set. No fancy IDE
-  or setup is required. No code generation is needed. It is just a Java library.
-* **Familiar**: Operations in Java using Flow resemble SQL to some degree. This makes working with
-  databases fun and easy!
-* **Safe**: Making Flow do precisely what you want is straightforward. It's easy to recognize errors
+  or setup is required. No code generation is needed. It is just a Java 8 library you can add to your project
+  with Maven, Gradle, etc.
+* **Familiar**: Operations in Java using Flow mimic SQL. This makes it easy to switch over to Flow and feel comfortable
+while using it.
+* **Safe**: It is more challenging to make syntactic mistakes when writing SQL queries using Flow. It is also easy to recognize errors
   in queries during development and fix them before they cost your project or company time and/or money.
 * **Efficient**: Flow is a light-weight abstraction of JDBC. Thus, it inherently has increased time
-  and memory complexity. We have yet to test Flow against other libraries, but our goal here is 
-  to make queries stay within 5-10% the memory usage and performance of JDBC.
+  and memory complexity, but it is very slight. The benefits above outweigh this small
+  cost for the vast majority of cases. If you need something more efficient, you are pretty much limited to bare-bones JDBC.
 
 Flow is not complete. It also lacks documentation, and as such, features will break upon every 
 version iteration until a full release.
@@ -37,7 +38,7 @@ Gradle works too!
   <dependency>
     <groupId>com.github.thekeenant.flow</groupId>
     <artifactId>examples</artifactId>
-    <version>v0.1</version>
+    <version>0.1</version>
   </dependency>
 </dependencies>
 ```
