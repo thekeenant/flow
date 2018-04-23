@@ -37,7 +37,7 @@ Gradle works too!
 <dependencies>
   <dependency>
     <groupId>com.github.thekeenant.flow</groupId>
-    <artifactId>examples</artifactId>
+    <artifactId>flow</artifactId>
     <version>0.1</version>
   </dependency>
 </dependencies>
